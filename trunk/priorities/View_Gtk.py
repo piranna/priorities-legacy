@@ -130,18 +130,17 @@ class View:
 		self.__CleanTree()
 
 		objectives = []
-		req_coords = []
-		obj_coords = []
+		req_coords = {}
+		obj_coords = {}
 
 		def GetCoordinates(objective, requeriment=None):
 			if(requeriment):
-				for req in req_coords:
-					if req[0] == objective and req[1] == requeriment:
-						return req[2]
+				req = req_coords.get(objective, None)
+				if req:
+					return req.get(requeriment, None)
 			else:
-				for obj in obj_coords:
-					if obj[0] == objective:
-						return obj[1]
+				return obj_coords.get(objective, None)
+
 			return None
 
 		self.layout.set_size(self.x_step/2,self.y_step/2)
@@ -191,7 +190,9 @@ class View:
 							# Put requeriment button
 							coords = (x,y)
 							self.layout.put(requeriment_button, int(coords[0]),int(coords[1]))
-							req_coords.append((objective['objective_id'],objective['requeriment'], coords))
+							if not req_coords.has_key(objective['objective_id']):
+								req_coords[objective['objective_id']] = {}
+							req_coords[objective['objective_id']][objective['requeriment']] = coords
 
 							UpdateLayoutSize(x+self.x_step,y+self.y_step)
 
@@ -312,7 +313,7 @@ class View:
 
 						# Put objective button
 						self.layout.put(button, int(x),int(y))
-						obj_coords.append((objective['objective_id'], (x,y)))
+						obj_coords[objective['objective_id']] = (x,y)
 
 						UpdateLayoutSize(x+self.x_step,y+self.y_step)
 
@@ -385,3 +386,4 @@ class View:
 
 	def __on_Main_destroy(self, widget, data=None):
 		gtk.main_quit()
+

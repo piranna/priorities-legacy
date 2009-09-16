@@ -1,6 +1,6 @@
 0.7:
 ====
-Convertir req_coords y obj_coords en diccionarios
+[2009-09-16] Convertir req_coords y obj_coords en diccionarios
 Eliminar objetivo con boton derecho
 
 Pasar de getopts a optparse
@@ -57,3 +57,4 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
+
