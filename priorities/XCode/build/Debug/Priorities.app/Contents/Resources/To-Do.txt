@@ -1,0 +1,49 @@
+AddObjective:
+=============
+* [Hackeo en Glade] Cancelar cierre de ventana al pulsar cuadro de cierre
+
+
+Preferences:
+============
+i Arreglar checkbox insensitivity selector de base de datos
+
+
+[BUG] Modificacion de objetivos
+[BUG] Cancelar modificacion de objetivos
+
+Eliminar dependencias no satisfechas de objetivos satisfechos
+?	Detectar si un objetivo esta satisfecho (codigo valido para colores)
+
+? Poner efectos en los botones
+	Fecha de caducidad de objetivos
+
+? Implementar formularios GTK y codigo
+i Excepcion al cargar GTK
+
+
+Beta
+----
+
+Opcion de mostrar cuadricula en GTK
+
+Dibujar alternativas en modo texto
+Dibujar lineas en modo texto
+Arreglar problema con los espacios al añadir requerimientos en modo texto
+
+
+Limpiar, simplificar y personalizar consultas SQL y funciones
+
+? Estudiar distribucion de botones
+?	Calcular longitud del nivel mas ancho
+	Distribuir los demas proporcionalmente
+	Con las alternativas, registrarlas y distribuirlas a posteriori
+
+Quitar foco a todos los botones en GTK
+
+Cuando se añade un requerimiento, comprobar si ya esta introducido y cambiar sus valores al igual que se hace con los objetivos
+
+Reordenar manualmente los objetivos (Drag & Drop)
+	Recordar cambio de posiciones (¿cambio de ids?)
+
+
+Cambiar los requisitos eliminando los viejos en lugar de añadir los nuevos
