@@ -1,0 +1,59 @@
+0.7:
+====
+Convertir req_coords y obj_coords en diccionarios
+Eliminar objetivo con boton derecho
+
+Pasar de getopts a optparse
+Usar (exclusivamente) opciones largas
+Usar opciones afirmativas y negativas
+
+[BUG] Cancelar modificacion de objetivos
+
+? Fecha de caducidad de objetivos
+	Aumentar nivel de prioridad por la fecha
+
+? Estudiar distribucion de botones
+?	Calcular longitud del nivel mas ancho
+	Distribuir los demas proporcionalmente
+	Con las alternativas, registrarlas y distribuirlas a posteriori
+	Distribucion de requerimientos en un mismo nivel debajo de sus alternativas
+	Gravity de los botones
+
+
+0.8:
+====
+Cambiar los requisitos eliminando los viejos en lugar de añadir los nuevos
+Cuando se añade un requerimiento, comprobar si ya esta introducido y cambiar sus valores al igual que se hace con los objetivos
+
+
+0.9:
+====
+Dibujar alternativas en modo texto
+Dibujar lineas en modo texto
+Arreglar problema con los espacios al añadir requerimientos en modo texto
+
+
+1.0:
+====
+Usar menu
+Exportar a texto plano
+Cargar/importar archivo de exportacion en GTK desde terminal y desde menu
+i Arreglar checkbox insensitivity selector de base de datos (En Ubuntu funciona, ¿problema de Fedora?)
+i Cerrar dialog con insert
+Limpiar, simplificar y personalizar consultas SQL y funciones
+Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
+
+
+Post 1.0:
+=========
+Textmode completo
+NCurses
+
+
+Wont-fix:
+=========
+* [Hackeo en Glade] Cancelar cierre de ventana al pulsar cuadro de cierre
+i Excepcion al cargar GTK
+Quitar foco a todos los botones en GTK
+Reordenar manualmente los objetivos (Drag & Drop)
+	Recordar cambio de posiciones (¿cambio de ids?)
