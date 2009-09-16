@@ -1,0 +1,10 @@
+AddObjective Dinero [('Trabajo', 'Loteria')]
+#AddObjective Trabajo [('Universidad',)]
+AddObjective Trabajo [('Universidad','FP')]
+AddObjective Novia [('Universidad',)]
+AddObjective Loteria
+AddObjective Universidad -c1
+AddObjective Coche [('Dinero:10000',), ('Carnet',)]
+AddObjective Carnet -c1 [('Dinero:300',)]
+ShowTree
+
