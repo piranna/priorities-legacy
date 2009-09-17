@@ -65,6 +65,7 @@ class View(cmd.Cmd):
 		expiration = None
 		requeriments = []
 
+
 		# Objective
 		if line[0]=="'":
 			line = line[1:].split("'",1)
@@ -74,11 +75,13 @@ class View(cmd.Cmd):
 			line = line.split(None,1)
 		objective = line[0].strip()
 
+
 		if len(line)>1:
 			# Requeriments
 			line = line[1].split('[',1)
 			if len(line)>1:
 				requeriments = eval('['+line[1].strip())
+
 
 			# Options
 			for option in line[0].split():
@@ -86,6 +89,7 @@ class View(cmd.Cmd):
 					quantity=option[2:]
 				elif option[:2]=="-e":
 					expiration=option[2:]
+
 
 		self.__controller.AddObjective(objective, quantity, expiration, requeriments)
 
