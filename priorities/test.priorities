@@ -1,7 +1,7 @@
 AddObjective Dinero [('Trabajo', 'Loteria')]
 #AddObjective Trabajo [('Universidad',)]
 AddObjective Trabajo [('Universidad','FP')]
-AddObjective Novia [('Universidad',)]
+AddObjective 'Novia Amparo la bella' [('Universidad Rey JuanCarlos',)]
 AddObjective Loteria
 AddObjective Universidad -c1
 AddObjective Coche [('Dinero:10000',), ('Carnet',)]
