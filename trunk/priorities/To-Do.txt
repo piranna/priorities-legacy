@@ -26,7 +26,6 @@ Usar opciones afirmativas y negativas
 ====
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
-Arreglar problema con los espacios al añadir requerimientos en modo texto
 
 
 1.0:

@@ -2,6 +2,8 @@
 
 import sys
 
+#from optparse import OptionParser
+
 
 def usage():
 	print("usage:",sys.argv[0],
@@ -41,6 +43,8 @@ if __name__ == "__main__":
 
 	# Check arguments
 	opts,args = CheckArgs(sys.argv[1:])
+#	parser = OptionParser()
+#	parser.add_option(None,"--database")
 
 	# Parse arguments
 	for o,a in opts:
