@@ -562,7 +562,7 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="btnCancel">
+              <object class="GtkButton" id="btnCancel1">
                 <property name="label" translatable="yes">Cancelar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -597,7 +597,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">btnCancel</action-widget>
+      <action-widget response="0">btnCancel1</action-widget>
       <action-widget response="1">btnAcept</action-widget>
     </action-widgets>
   </object>
