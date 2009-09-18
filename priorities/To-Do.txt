@@ -12,7 +12,7 @@ Usar opciones afirmativas y negativas
 0.8:
 ====
 ? Fecha de caducidad de objetivos
-	Aumentar nivel de prioridad por la fecha
+?	Aumentar nivel de prioridad por la fecha
 
 ? Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
@@ -43,6 +43,11 @@ Post 1.0:
 =========
 Textmode completo
 NCurses
+
+
+Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
+================
+Localizacion de tareas/cambio de prioridades por proximidad fisica
 
 
 2.0:
