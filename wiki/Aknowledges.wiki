@@ -1,0 +1,3 @@
+#Aknowledges of external material
+
+* [http://kedeligdata.blogspot.com/ Mads Darø Kristensen] for the MacOS X versions of PyGTK (they are TOO difficult to get since gtk-osx project is almost defunct :-( ), and specially for deploying to me a Snow Leopard version when i need it :-). Yo can get them for [http://kedeligdata.blogspot.com/2009/09/fresh-pygtk-build-for-leopardintel.html Leopard Intel], [http://kedeligdata.blogspot.com/2009/03/pygtk-natively-on-mac.html Leopard PowerPC] and [http://kedeligdata.blogspot.com/2009/09/native-mac-pygtk-for-snow-leopard.html Snow Leopard] directly from his blog.
