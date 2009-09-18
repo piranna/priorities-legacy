@@ -56,22 +56,18 @@ class Preferences:
 		cbInabordable = builder.get_object("cbInabordable")
 		cbInabordable.connect('color-set', self.__on_colorbutton_colorset)
 		cbInabordable.set_color(gtk.gdk.color_parse(self.preferences['color_unabordable']))
-#		cbInabordable.set_title('color_unabordable')
 
 		cbInProcess = builder.get_object("cbInProcess")
 		cbInProcess.connect('color-set', self.__on_colorbutton_colorset)
 		cbInProcess.set_color(gtk.gdk.color_parse(self.preferences['color_inprocess']))
-#		cbInProcess.set_title('color_inprocess')
 
 		cbAvailable = builder.get_object("cbAvailable")
 		cbAvailable.connect('color-set', self.__on_colorbutton_colorset)
 		cbAvailable.set_color(gtk.gdk.color_parse(self.preferences['color_available']))
-#		cbAvailable.set_title('color_available')
 
 		cbSatisfacted = builder.get_object("cbSatisfacted")
 		cbSatisfacted.connect('color-set', self.__on_colorbutton_colorset)
 		cbSatisfacted.set_color(gtk.gdk.color_parse(self.preferences['color_satisfacted']))
-#		cbSatisfacted.set_title('color_satisfacted')
 
 
 	def __on_chkDefaultDB_toggled(self, widget):

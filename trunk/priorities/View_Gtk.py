@@ -119,6 +119,7 @@ class View:
 
 		# Arrows
 		for arrow in self.__req_arrows:
+#			print "\t",arrow
 			# Arrow line
 			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
 												int(arrow[1][0]),int(arrow[1][1]))
@@ -242,19 +243,19 @@ class View:
 								if(show==1 and objective['expiration'] and objective['expiration']<datetime.datetime):
 									print show,objective['expiration'],datetime.datetime
 									return None
-								return gtk.gdk.Color(32767,32767,65535)
+								return gtk.gdk.color_parse(self.preferences['color_satisfacted'])
 							return None
 
 						# Green - Available
 						elif self.__controller.IsAvailable(objective['objective_id']):
-							return gtk.gdk.Color(32767,65535,32767)
+							return gtk.gdk.color_parse(self.preferences['color_available'])
 
 						# Yellow - InProgress
-						elif self.__controller.IsInprogress(objective['objective_id']):
-							return gtk.gdk.Color(65535,65535,32767)
+						elif self.__controller.IsInprocess(objective['objective_id']):
+							return gtk.gdk.color_parse(self.preferences['color_inprocess'])
 
-						# Red - Inabordable
-						return gtk.gdk.Color(65535,32767,32767)
+						# Red - Unabordable
+						return gtk.gdk.color_parse(self.preferences['color_unabordable'])
 
 
 					color = GetColor()
