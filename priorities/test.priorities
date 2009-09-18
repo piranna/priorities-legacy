@@ -1,9 +1,9 @@
 AddObjective Dinero [('Trabajo', 'Loteria')]
-#AddObjective Trabajo [('Universidad',)]
-AddObjective Trabajo [('Universidad','FP')]
+#AddObjective Trabajo [('Universidad Rey JuanCarlos',)]
+AddObjective Trabajo [('Universidad Rey JuanCarlos','FP')]
 AddObjective 'Novia Amparo la bella' [('Universidad Rey JuanCarlos',)]
 AddObjective Loteria
-AddObjective Universidad -c1
+AddObjective 'Universidad Rey JuanCarlos' -c1
 AddObjective Coche [('Dinero:10000',), ('Carnet',)]
 AddObjective Carnet -c1 [('Dinero:300',)]
 ShowTree

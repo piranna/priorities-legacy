@@ -62,4 +62,3 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
-

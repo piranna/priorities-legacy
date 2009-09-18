@@ -43,6 +43,7 @@ class Controller:
 			checked.append(objective_id)
 
 			for row in self.__model.DirectDependencies(objective_id):
+				print "\t",row
 				if row['alternative']:
 					if row['alternative'] in checked:
 						depth = GetDepth(row['alternative'], dependencies)+1
@@ -64,6 +65,12 @@ class Controller:
 		for row in self.__model.DirectDependencies(objective_id):
 			if row['objective_id'] not in checked:
 				PrivateRecursiveDependencies(row['objective_id'], dependencies, checked)
+
+		for dependencie in dependencies:
+			print
+			for a in dependencie:
+				print a
+		print
 
 		return dependencies
 
@@ -160,7 +167,7 @@ class Controller:
 				return False
 		return True
 
-	def IsInprogress(self, objective_id):
+	def IsInprocess(self, objective_id):
 		for requeriment in self.DirectDependencies(objective_id):
 			if self.IsSatisfacted(requeriment['alternative']):
 				return True

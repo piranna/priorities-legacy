@@ -11,10 +11,10 @@ def Load():
 	preferences['useDefaultDB']				= True
 	preferences['database']					= config_dir+"/personal.sqlite"
 
-	preferences['color_unabordable']		= "#FF0000"
-	preferences['color_inprocess']			= "#FFFF00"
-	preferences['color_available']			= "#00FF00"
-	preferences['color_satisfacted']		= "#0000FF"
+	preferences['color_unabordable']		= "#FF7777"
+	preferences['color_inprocess']			= "#FFFF77"
+	preferences['color_available']			= "#77FF77"
+	preferences['color_satisfacted']		= "#7777FF"
 
 	preferences['showSharp']				= False
 	preferences['showExceededDependencies']	= 1
