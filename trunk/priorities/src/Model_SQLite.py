@@ -79,9 +79,9 @@ class Model:
 		if objective_id:
 			sql += "WHERE objectives.id=="+str(objective_id)
 
-		sql += " ORDER BY objective_id,requeriment,priority"
+#		sql += " ORDER BY objective_id,requeriment,priority"
 #		sql += " ORDER BY objective,requeriment,priority"
-#		sql += " ORDER BY expiration DESC, objective_id,requeriment,priority ASC"
+		sql += " ORDER BY expiration DESC, objective_id,requeriment,priority ASC"
 
 
 		return self.connection.execute(sql)
@@ -229,3 +229,4 @@ class Model:
 			WHERE objective==?
 			''',
 			(objective,))
+

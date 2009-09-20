@@ -84,7 +84,7 @@ class View:
 			def ArrowPoint(arrow, angle, lenght):
 				angle = math.radians(angle)
 
-				print arrow,angle,lenght
+#				print arrow,angle,lenght
 				cotan = math.atan((arrow[0][0]-arrow[1][0])/(arrow[0][1]-arrow[1][1]))+angle
 
 				return (arrow[1][0]+math.sin(cotan)*lenght, arrow[1][1]+math.cos(cotan)*lenght)
@@ -119,12 +119,13 @@ class View:
 
 		# Arrows
 		for arrow in self.__req_arrows:
-#			print "\t",arrow
+			print "\t",arrow
 			# Arrow line
 			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
 												int(arrow[1][0]),int(arrow[1][1]))
 			# Arrow head
 #			DrawHead(arrow)
+		print
 
 
 	def __CreateTree(self):
@@ -229,7 +230,7 @@ class View:
 					# Requeriment without alternatives
 					else:
 						coords = GetCoordinates(objective['alternative'])
-						print coords,objective
+#						print coords,objective
 
 				# Objective
 				if objective['objective_id'] not in objectives:
@@ -241,7 +242,7 @@ class View:
 							show = self.preferences['showExceededDependencies']
 							if(show):
 								if(show==1 and objective['expiration'] and objective['expiration']<datetime.datetime):
-									print show,objective['expiration'],datetime.datetime
+#									print show,objective['expiration'],datetime.datetime
 									return None
 								return gtk.gdk.color_parse(self.preferences['color_satisfacted'])
 							return None
@@ -330,7 +331,7 @@ class View:
 				and objective['requeriment'] not in level_requeriments[objective['objective_id']]):
 					self.__req_arrows.append((GetCoordinates(objective['objective_id']), coords))
 					level_requeriments[objective['objective_id']].append(objective['requeriment'])
-					print self.__req_arrows
+#					print self.__req_arrows
 
 			y += self.y_step
 
