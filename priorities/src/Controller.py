@@ -7,49 +7,58 @@ class Controller:
 
 
 	# Get all the requeriments tree of an objective.
-	# If objective_id is not defined return the all objectives tree
+	# If objective_id is not defined return the all-objectives tree
 	def RecursiveDependencies(self, objective_id=None):
-		def PrivateRecursiveDependencies(objective_id, dependencies, checked=[]):
-			def GetDepth(objective_id, dependencies):
+
+		dependencies = []
+		checked = []
+
+		# Get all the requeriments tree of an objective
+		# storing them in dependencies and returning the current top level
+		def PrivateRecursiveDependencies(objective_id):
+
+			# Append data to the indexed array of array
+			def Insert_array_tree_2d(data, index, array):
+				while len(array)<=index:
+					array.append([])
+				array[index].append(data)
+
+			# Change the level where an objective is stored inside an array
+			def SetDepth(depth, objective_id, array):
+				level = 0
+				for array_level in array:
+					if level != depth:
+						index = 0
+						for dependency in array_level:
+							if dependency['objective_id']==objective_id:
+								Insert_array_tree_2d(array_level.pop(index), depth, array)
+								return
+							index += 1
+					level += 1
+
+			# Get the depth of an objective_id inside an array
+			# If not, return the array length
+			def GetDepth(objective_id, array):
 				depth = 0
-				for level in dependencies:
-					for dependency in level:
+				for array_level in array:
+					for dependency in array_level:
 						if dependency['objective_id']==objective_id:
 							return depth
 					depth += 1
 				return depth
 
 
-			def Insert_array_tree_2d(data, depth, requeriments):
-				while len(requeriments)<=depth:
-					requeriments.append([])
-				requeriments[depth].append(data)
-
-
-			def SetDepth(depth, objective_id, dependencies):
-				level = 0
-				for dependency_level in dependencies:
-					if level != depth:
-						index = 0
-						for dependency in dependency_level:
-							if dependency['objective_id']==objective_id:
-								Insert_array_tree_2d(dependency_level.pop(index), depth, dependencies)
-							index += 1
-					level += 1
-
-
 			depth=0
-
 			checked.append(objective_id)
 
 			for row in self.__model.DirectDependencies(objective_id):
-				print "\t",row
+				print "\tPRD ",row
 				if row['alternative']:
 					if row['alternative'] in checked:
 						depth = GetDepth(row['alternative'], dependencies)+1
 
 					else:
-						r_depth = PrivateRecursiveDependencies(row['alternative'], dependencies, checked)
+						r_depth = PrivateRecursiveDependencies(row['alternative'])
 						if r_depth > depth:
 							depth = r_depth
 
@@ -59,18 +68,18 @@ class Controller:
 			return depth+1
 
 
-		dependencies = []
-		checked = []
-
 		for row in self.__model.DirectDependencies(objective_id):
 			if row['objective_id'] not in checked:
-				PrivateRecursiveDependencies(row['objective_id'], dependencies, checked)
+				PrivateRecursiveDependencies(row['objective_id'])
 
-		for dependencie in dependencies:
+########
+		for level in dependencies:
 			print
-			for a in dependencie:
-				print a
+			print level
+			for dependencie in level:
+				print "RD ",dependencie
 		print
+########
 
 		return dependencies
 
@@ -175,3 +184,4 @@ class Controller:
 
 	def DelRequeriments(self, objective_name):
 		return self.__model.DelRequeriments(objective_name)
+
