@@ -11,11 +11,10 @@ class Controller:
 	def RecursiveDependencies(self, objective_id=None):
 
 		dependencies = []
-		checked = []
 
 		# Get all the requeriments tree of an objective
 		# storing them in dependencies and returning the current top level
-		def PrivateRecursiveDependencies(objective_id):
+		def PrivateRecursiveDependencies(objective_id,checked=[]):
 
 			# Append data to the indexed array of array
 			def Insert_array_tree_2d(data, index, array):
@@ -48,29 +47,42 @@ class Controller:
 				return depth
 
 
+			# Init top level
 			depth=0
-			checked.append(objective_id)
 
-			for row in self.__model.DirectDependencies(objective_id):
-				print "\tPRD ",row
-				if row['alternative']:
-					if row['alternative'] in checked:
-						depth = GetDepth(row['alternative'], dependencies)+1
+			# If
+			# set objective as checked
+			if objective_id not in checked:
+				checked.append(objective_id)
 
-					else:
-						r_depth = PrivateRecursiveDependencies(row['alternative'])
-						if r_depth > depth:
-							depth = r_depth
+				for row in self.__model.DirectDependencies(objective_id):
+					print "\tPRD ",row
 
-				SetDepth(depth, row['objective_id'], dependencies)
-				Insert_array_tree_2d(row, depth, dependencies)
+					# If objective has an alternative,
+					# get the new depth
+					if row['alternative']:
 
+						# If alternative have been checked,
+						# get its next level 
+						if row['alternative'] in checked:
+							depth = GetDepth(row['alternative'], dependencies)+1
+
+						# Else check if we have to get it's new level or not
+						else:
+							r_depth = PrivateRecursiveDependencies(row['alternative'])
+							if r_depth >= depth:
+								depth = r_depth
+
+					SetDepth(depth, row['objective_id'], dependencies)
+					Insert_array_tree_2d(row, depth, dependencies)
+					print
+
+			# Return next top level
 			return depth+1
 
 
 		for row in self.__model.DirectDependencies(objective_id):
-			if row['objective_id'] not in checked:
-				PrivateRecursiveDependencies(row['objective_id'])
+			PrivateRecursiveDependencies(row['objective_id'])
 
 ########
 		for level in dependencies:
