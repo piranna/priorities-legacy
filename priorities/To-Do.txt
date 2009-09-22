@@ -1,6 +1,7 @@
 0.7:
 ====
 Eliminar objetivo con boton derecho
+	Eliminar objetivo desde ventana AddObjective
 
 Pasar de getopts a optparse
 Usar (exclusivamente) opciones largas
