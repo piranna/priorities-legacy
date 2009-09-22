@@ -325,8 +325,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="show_hidden">True</property>
                         <property name="use_preview_label">False</property>
+                        <property name="show_hidden">True</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
@@ -361,6 +361,21 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="chkShowArrowHeads">
+                    <property name="label" translatable="yes">Mostrar cabeza de las flechas</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkHBox" id="hbox2">
                     <property name="visible">True</property>
                     <child>
@@ -383,7 +398,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -415,7 +430,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
