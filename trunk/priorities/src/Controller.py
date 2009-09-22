@@ -24,6 +24,7 @@ class Controller:
 
 			# Change the level where an objective is stored inside an array
 			def SetDepth(depth, objective_id, array):
+#				print "\tSetDepth",depth,objective_id
 				level = 0
 				for array_level in array:
 					if level != depth:
@@ -44,19 +45,21 @@ class Controller:
 						if dependency['objective_id']==objective_id:
 							return depth
 					depth += 1
-				return depth
+				return -1
 
 
 			# Init top level
 			depth=0
 
-			# If
+			# If objective is not checked
 			# set objective as checked
+			# and get it's dependencies
 			if objective_id not in checked:
 				checked.append(objective_id)
 
+#				print
 				for row in self.__model.DirectDependencies(objective_id):
-					print "\tPRD ",row
+#					print "\tPRD ",row
 
 					# If objective has an alternative,
 					# get the new depth
@@ -73,9 +76,13 @@ class Controller:
 							if r_depth >= depth:
 								depth = r_depth
 
-					SetDepth(depth, row['objective_id'], dependencies)
+#						if GetDepth(row['objective_id'],dependencies) < depth:
+#							SetDepth(depth, row['objective_id'], dependencies)
+					g_depth = GetDepth(row['objective_id'],dependencies)
+#					print g_depth,depth
+					if g_depth > depth:
+						depth = g_depth
 					Insert_array_tree_2d(row, depth, dependencies)
-					print
 
 			# Return next top level
 			return depth+1
@@ -85,12 +92,12 @@ class Controller:
 			PrivateRecursiveDependencies(row['objective_id'])
 
 ########
-		for level in dependencies:
-			print
-			print level
-			for dependencie in level:
-				print "RD ",dependencie
-		print
+#		for level in dependencies:
+#			print
+#			print level
+#			for dependencie in level:
+#				print "RD ",dependencie
+#		print
 ########
 
 		return dependencies
