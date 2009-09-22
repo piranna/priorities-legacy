@@ -17,10 +17,13 @@ class Controller:
 		def PrivateRecursiveDependencies(objective_id,checked=[]):
 
 			# Append data to the indexed array of array
-			def Insert_array_tree_2d(data, index, array):
+			def Insert_array_tree_2d(data, index, array, head=False):
 				while len(array)<=index:
 					array.append([])
-				array[index].append(data)
+				if head:
+					array[index].insert(0,data)
+				else:
+					array[index].append(data)
 
 			# Change the level where an objective is stored inside an array
 			def SetDepth(depth, objective_id, array):
@@ -66,7 +69,7 @@ class Controller:
 					if row['alternative']:
 
 						# If alternative have been checked,
-						# get its next level 
+						# get its next level
 						if row['alternative'] in checked:
 							depth = GetDepth(row['alternative'], dependencies)+1
 
@@ -82,7 +85,10 @@ class Controller:
 #					print g_depth,depth
 					if g_depth > depth:
 						depth = g_depth
-					Insert_array_tree_2d(row, depth, dependencies)
+					if row['expiration']:
+						Insert_array_tree_2d(row, depth, dependencies, True)
+					else:
+						Insert_array_tree_2d(row, depth, dependencies)
 
 			# Return next top level
 			return depth+1
@@ -92,12 +98,12 @@ class Controller:
 			PrivateRecursiveDependencies(row['objective_id'])
 
 ########
-#		for level in dependencies:
-#			print
-#			print level
-#			for dependencie in level:
-#				print "RD ",dependencie
-#		print
+		for level in dependencies:
+			print
+			print level
+			for dependencie in level:
+				print "RD ",dependencie
+		print
 ########
 
 		return dependencies

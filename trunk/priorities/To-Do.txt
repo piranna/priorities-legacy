@@ -13,9 +13,6 @@ Cambiar Insert_array_tree_2d a un mapa ordenado
 
 0.8:
 ====
-? Fecha de caducidad de objetivos
-	Devolver fechas de caducidad en orden (primero menor a mayor, despues nulos)
-
 ? Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
 	Distribuir los demas proporcionalmente
