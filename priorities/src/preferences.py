@@ -17,6 +17,8 @@ def Load():
 	preferences['color_satisfacted']		= "#7777FF"
 
 	preferences['showSharp']				= False
+	preferences['showArrowHeads']				= True
+
 	preferences['showExceededDependencies']	= 1
 
 	preferences['expirationWarning']		= 1
@@ -41,8 +43,9 @@ def Load():
 		file.close()
 
 		# Re-define boolean preferences
-		preferences['useDefaultDB']	= (preferences['useDefaultDB']=="True")
-		preferences['showSharp']	= (preferences['showSharp']=="True")
+		preferences['useDefaultDB']		= (preferences['useDefaultDB']=="True")
+		preferences['showSharp']		= (preferences['showSharp']=="True")
+		preferences['showArrowHeads']	= (preferences['showArrowHeads']=="True")
 
 		# Re-define integer preferences
 		preferences['showExceededDependencies']	= int(preferences['showExceededDependencies'])
@@ -70,3 +73,4 @@ def Store(preferences):
 
 	except:
 		print "no file to store"
+

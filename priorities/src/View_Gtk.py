@@ -124,7 +124,8 @@ class View:
 			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
 												int(arrow[1][0]),int(arrow[1][1]))
 			# Arrow head
-#			DrawHead(arrow)
+			if self.preferences["showArrowHeads"]:
+				DrawHead(arrow)
 #		print
 
 

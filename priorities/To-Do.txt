@@ -22,8 +22,6 @@ Usar opciones afirmativas y negativas
 
 0.9:
 ====
-Opcion para mostrar las cabezas de las flechas
-
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 

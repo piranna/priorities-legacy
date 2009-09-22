@@ -33,6 +33,11 @@ class Preferences:
 		chkShowSharp.connect('toggled', self.__on_chkShowSharp_toggled)
 		chkShowSharp.set_active(self.preferences['showSharp'])
 
+		# Show arrow heads
+		chkShowArrowHeads = builder.get_object("chkShowArrowHeads")
+		chkShowArrowHeads.connect('toggled', self.__on_chkShowArrowHeads_toggled)
+		chkShowArrowHeads.set_active(self.preferences['showArrowHeads'])
+
 		# Show satisfacted dependencies
 		model_scrit = gtk.ListStore(str)
 		model_scrit.append(("Nunca",))
@@ -87,6 +92,10 @@ class Preferences:
 		self.preferences["showSharp"] = widget.get_active()
 
 
+	def __on_chkShowArrowHeads_toggled(self, widget):
+		self.preferences["showArrowHeads"] = widget.get_active()
+
+
 	def __on_cbShowExceededDependencies_changed(self, widget):
 		print "__on_showExceededDependencies_toggled",widget.get_active()
 		self.preferences["showExceededDependencies"] = widget.get_active()
@@ -95,3 +104,4 @@ class Preferences:
 	def __on_sbExpirationWarning_valuechanged(self, widget):
 		print "__on_sbExpirationWarning_valuechanged",widget.get_value_as_int()
 		self.preferences["expirationWarning"] = widget.get_value_as_int()
+
