@@ -91,11 +91,11 @@ class View:
 
 			arrowPoint = ArrowPoint(arrow, 15, 15)
 			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
-																	int(arrowPoint[0]),int(arrowPoint[1]))
+												int(arrowPoint[0]),int(arrowPoint[1]))
 
 			arrowPoint = ArrowPoint(arrow, -15, 15)
 			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
-																	int(arrowPoint[0]),int(arrowPoint[1]))
+												int(arrowPoint[0]),int(arrowPoint[1]))
 
 
 		# Background sharp
@@ -119,13 +119,13 @@ class View:
 
 		# Arrows
 		for arrow in self.__req_arrows:
-			print "\t",arrow
+#			print "\t",arrow
 			# Arrow line
 			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
 												int(arrow[1][0]),int(arrow[1][1]))
 			# Arrow head
 #			DrawHead(arrow)
-		print
+#		print
 
 
 	def __CreateTree(self):

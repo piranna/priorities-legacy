@@ -14,7 +14,6 @@ Cambiar Insert_array_tree_2d a un mapa ordenado
 0.8:
 ====
 ? Fecha de caducidad de objetivos
-?	Aumentar nivel de prioridad por la fecha
 	Devolver fechas de caducidad en orden (primero menor a mayor, despues nulos)
 
 ? Estudiar distribucion de botones
@@ -27,6 +26,8 @@ Cambiar Insert_array_tree_2d a un mapa ordenado
 
 0.9:
 ====
+Opcion para mostrar las cabezas de las flechas
+
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
