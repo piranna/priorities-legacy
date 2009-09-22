@@ -8,7 +8,6 @@ Usar opciones afirmativas y negativas
 
 [BUG] Cancelar modificacion de objetivos
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
-Cambiar Insert_array_tree_2d a un mapa ordenado
 
 
 0.8:
@@ -63,4 +62,5 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
+Cambiar Insert_array_tree_2d a un mapa ordenado
 
