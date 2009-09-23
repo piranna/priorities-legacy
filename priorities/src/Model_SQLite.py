@@ -56,7 +56,8 @@ class Model:
 	def GetObjective(self,objective_id):
 		query = self.connection.execute('''
 			SELECT * FROM objectives
-				WHERE objectives.id == ?
+			WHERE objectives.id == ?
+			LIMIT 1
 			''',
 			(objective_id,))
 		query = query.fetchone()
@@ -65,7 +66,7 @@ class Model:
 		return None
 
 
-	def DirectDependencies(self, objective_id=None):
+	def DirectDependencies(self, objective_id=None, requeriment=None):
 #		sql = '''
 #			SELECT objectives.quantity AS objective_quantity,expiration,
 		sql = '''
@@ -78,6 +79,8 @@ class Model:
 
 		if objective_id:
 			sql += "WHERE objectives.id=="+str(objective_id)
+		if requeriment:
+			sql += "AND requeriment=="+str(requeriment)
 
 #		sql += " ORDER BY objective_id,requeriment,priority"
 #		sql += " ORDER BY objective,requeriment,priority"
@@ -214,6 +217,7 @@ class Model:
 		query = self.connection.execute('''
 			SELECT name FROM objectives
 				WHERE id==?
+				LIMIT 1
 			''',
 			(objective,))
 		query = query.fetchone()
@@ -222,29 +226,72 @@ class Model:
 		return None
 
 
-	def DelRequeriments(self, objective):
-		objective = self.GetId(objective)
+	def DelRequeriments_ById(self, objective_id):
 		return self.connection.execute('''
 			DELETE FROM requeriments
 			WHERE objective==?
 			''',
-			(objective,))
+			(objective_id,))
+
+
+	def DelRequeriments_ByName(self, objective_name):
+		return self.DelRequeriments_ById(self.GetId(objective_name))
+
+
+#	def GetRequeriment(self, objective,alternative):
+#		query = self.connection.execute('''
+#			SELECT requeriment FROM requeriments
+#			WHERE objective==?
+#			AND alternative==?
+#			LIMIT 1
+#			''',
+#			(objective,alternative))
+#		query = query.fetchone()
+#		if query:
+#			return query['requeriment']
+#		return None
 
 
 	def DeleteObjective(self, objective_id):
 		# Delete requeriment
-		self.DelRequeriments(objective_id)
+		self.DelRequeriments_ById(objective_id)
 
-		# Delete dependents
-		return self.connection.execute('''
+		# Re-adjust priorities
+		for dependent in self.DirectDependents(objective_id):
+			self.connection.execute('''
+				UPDATE requeriments
+				SET priority=priority-1
+				WHERE objective==?
+				AND requeriment==?
+				''',
+				(dependent['objective'],dependent['requeriment']))
+
+		# Delete alternatives
+		self.connection.execute('''
 			DELETE FROM requeriments
 			WHERE alternative==?
 			''',
 			(objective_id,))
 
+#		# Delete dependents
+#		self.connection.execute('''
+#			DELETE FROM requeriments
+#			WHERE alternative==?
+#			''',
+#			(objective_id,))
+#
+#		# Downgrade dependents
+#		self.connection.execute('''
+#			UPDATE requeriments
+#			SET priority=priority-1
+#			WHERE alternative==?
+#			''',
+#			(objective_id,))
+
 		# Delete objective
-		return self.connection.execute('''
+		self.connection.execute('''
 			DELETE FROM objectives
 			WHERE id==?
 			''',
 			(objective_id,))
+

@@ -75,6 +75,13 @@ class Controller:
 		for row in self.__model.DirectDependencies(objective_id):
 			PrivateRecursiveDependencies(row['objective_id'])
 
+####
+		for level in dependencies:
+			for dependency in level:
+				print dependency
+			print
+####
+
 		return dependencies
 
 
@@ -177,8 +184,9 @@ class Controller:
 		return False
 
 	def DelRequeriments(self, objective_name):
-		return self.__model.DelRequeriments(objective_name)
+		return self.__model.DelRequeriments_ByName(objective_name)
 
 
 	def DeleteObjective(self, objective_id):
 		return self.__model.DeleteObjective(objective_id)
+
