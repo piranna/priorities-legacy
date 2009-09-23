@@ -112,6 +112,8 @@ class AddObjective:
 		if self.__objective:
 			self.__controller.DeleteObjective(self.__objective)
 
+		return True
+
 
 	def __Cancel(self):
 		print "Cancel"
@@ -149,3 +151,4 @@ class AddObjective:
 
 	def __on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
+
