@@ -1,7 +1,11 @@
 0.7:
 ====
 Eliminar objetivo con boton derecho
-	Eliminar objetivo desde ventana AddObjective
+*	Eliminar objetivo desde ventana AddObjective
+	Actualizar prioridad de requerimientos
+
+? Implementar hora en expiracion
+	Guardar y cargar datos correctamente
 
 Pasar de getopts a optparse
 Usar (exclusivamente) opciones largas
@@ -23,6 +27,8 @@ Usar opciones afirmativas y negativas
 
 0.9:
 ====
+Editar alternativas directamente (¿AddObjective o nueva ventana?)
+
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
@@ -30,9 +36,9 @@ Dibujar lineas en modo texto
 1.0:
 ====
 Usar menu
-Exportar/importar a texto plano
+	Exportar/importar a texto plano
+
 Cargar/importar archivo de exportacion en GTK desde terminal y desde menu
-i Arreglar checkbox insensitivity selector de base de datos (En Ubuntu funciona, ¿problema de Fedora?)
 i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
@@ -62,4 +68,3 @@ Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Cambiar Insert_array_tree_2d a un mapa ordenado
-

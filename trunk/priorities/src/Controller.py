@@ -179,3 +179,6 @@ class Controller:
 	def DelRequeriments(self, objective_name):
 		return self.__model.DelRequeriments(objective_name)
 
+
+	def DeleteObjective(self, objective_id):
+		return self.__model.DeleteObjective(objective_id)

@@ -230,3 +230,21 @@ class Model:
 			''',
 			(objective,))
 
+
+	def DeleteObjective(self, objective_id):
+		# Delete requeriment
+		self.DelRequeriments(objective_id)
+
+		# Delete dependents
+		return self.connection.execute('''
+			DELETE FROM requeriments
+			WHERE alternative==?
+			''',
+			(objective_id,))
+
+		# Delete objective
+		return self.connection.execute('''
+			DELETE FROM objectives
+			WHERE id==?
+			''',
+			(objective_id,))
