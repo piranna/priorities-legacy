@@ -181,10 +181,63 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkCalendar" id="calExpiration">
+                      <object class="GtkVBox" id="vbCalendarHour">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkCalendar" id="calExpiration">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="year">2009</property>
+                            <property name="month">8</property>
+                            <property name="day">23</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox1">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkSpinButton" id="sbHour">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="adjustment">adjHour</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="sbMinute">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="adjustment">adjMinute</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="sbSecond">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="adjustment">adjSecond</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                     <child type="label">
@@ -255,8 +308,8 @@
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">Cancelar</property>
+              <object class="GtkButton" id="btnDelete">
+                <property name="label" translatable="yes">Eliminar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -268,11 +321,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="btnCancel">
+                <property name="label" translatable="yes">Cancelar</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnAccept">
                 <property name="label" translatable="yes">Aceptar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
@@ -280,7 +345,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -293,6 +358,7 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="2">btnDelete</action-widget>
       <action-widget response="0">btnCancel</action-widget>
       <action-widget response="1">btnAccept</action-widget>
     </action-widgets>
@@ -309,7 +375,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkHBox" id="hbox1">
+          <object class="GtkHBox" id="hbox2">
             <property name="visible">True</property>
             <property name="spacing">2</property>
             <child>
@@ -325,8 +391,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="use_preview_label">False</property>
                         <property name="show_hidden">True</property>
+                        <property name="use_preview_label">False</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
@@ -376,7 +442,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox2">
+                  <object class="GtkHBox" id="hbox3">
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkLabel" id="label6">
@@ -402,7 +468,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox3">
+                  <object class="GtkHBox" id="hbox4">
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkLabel" id="label7">
@@ -634,4 +700,16 @@
     <property name="step_increment">1</property>
   </object>
   <object class="GtkTextBuffer" id="txtbufRequeriments"/>
+  <object class="GtkAdjustment" id="adjHour">
+    <property name="upper">23</property>
+    <property name="step_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjMinute">
+    <property name="upper">59</property>
+    <property name="step_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjSecond">
+    <property name="upper">59</property>
+    <property name="step_increment">1</property>
+  </object>
 </interface>

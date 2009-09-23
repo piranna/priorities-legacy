@@ -5,6 +5,7 @@ import gtk
 class AddObjective:
 	def __init__(self, controller, objective=None):
 		self.__controller = controller
+		self.__objective = objective
 
 		builder = gtk.Builder()
 		builder.add_from_file("View_Gtk.glade")
@@ -19,9 +20,12 @@ class AddObjective:
 		self.txtRequeriments = builder.get_object("txtRequirements")
 		txtBuffer = self.txtRequeriments.get_buffer()
 
+		self.vbCalendarHour = builder.get_object("vbCalendarHour")
+
 		self.chkExpiration = builder.get_object("chkExpiration")
 		self.chkExpiration.connect('toggled', self.__on_chkExpiration_toggled)
 
+		# Set data
 		if objective:
 			objective = self.__controller.GetObjective_byId(objective)
 
@@ -52,6 +56,7 @@ class AddObjective:
 						dependencies += self.__controller.GetName(dependency['alternative'])
 				txtBuffer.set_text(dependencies)
 
+		# Old data
 		self.oldObjective = self.txtObjective.get_text()
 		self.oldQuantity = self.txtQuantity.get_text()
 		self.oldExpiration = self.calExpiration.get_date()
@@ -102,6 +107,12 @@ class AddObjective:
 		return closeDialog
 
 
+	def __Delete(self):
+		print "Delete"
+		if self.__objective:
+			self.__controller.DeleteObjective(self.__objective)
+
+
 	def __Cancel(self):
 		print "Cancel"
 
@@ -127,6 +138,8 @@ class AddObjective:
 
 		if response == 1:
 			closeDialog = self.__StoreData()
+		elif response == 2:
+			closeDialog = self.__Delete()
 		else:
 			closeDialog = self.__Cancel()
 
@@ -135,4 +148,4 @@ class AddObjective:
 
 
 	def __on_chkExpiration_toggled(self, widget):
-		self.calExpiration.set_sensitive(widget.get_active())
+		self.vbCalendarHour.set_sensitive(widget.get_active())
