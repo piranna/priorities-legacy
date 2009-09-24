@@ -269,12 +269,14 @@ class Model:
 		# Re-adjust priorities
 		checked = []
 		for dependent in dependents:
-			if dependent['objective'] not in checked:
-				checked.append(dependent['objective'])
 
-				# If dependency has alternatives
-				# update its priority
-				if dependent['priority']:
+			# If dependency has alternatives
+			# update its priority
+			if dependent['priority']:
+				if dependent['objective'] not in checked:
+					checked.append(dependent['objective'])
+
+####
 					count = self.connection.execute('''
 						SELECT COUNT(*) AS count FROM requeriments
 						WHERE objective==?
@@ -285,23 +287,26 @@ class Model:
 						dependent['requeriment'],
 						dependent['priority'])).fetchone()['count']
 
-					self.connection.execute('''
-						UPDATE requeriments
-						SET priority=
-							CASE
-								WHEN(?>1) THEN
-									priority-1
-								ELSE
-									0
-							END
-						WHERE objective==?
-						AND requeriment==?
-						AND priority==?
-						''',
-						(count,
-						dependent['objective'],
-						dependent['requeriment'],
-						dependent['priority']))
+					print "Delete:",count,dependent
+####
+
+				self.connection.execute('''
+					UPDATE requeriments
+					SET priority=
+						CASE
+							WHEN(?>1) THEN
+								priority-1
+							ELSE
+								0
+						END
+					WHERE objective==?
+					AND requeriment==?
+					AND priority==?
+					''',
+					(count,
+					dependent['objective'],
+					dependent['requeriment'],
+					dependent['priority']))
 
 #			# If dependendy has alternatives
 #			# update its priority
