@@ -256,15 +256,8 @@ class Model:
 		# Delete requeriment
 		self.DelRequeriments_ById(objective_id)
 
-		# Re-adjust priorities
-		for dependent in self.DirectDependents(objective_id):
-			self.connection.execute('''
-				UPDATE requeriments
-				SET priority=priority-1
-				WHERE objective==?
-				AND requeriment==?
-				''',
-				(dependent['objective'],dependent['requeriment']))
+		# Get dependents
+		dependents = self.DirectDependents(objective_id)
 
 		# Delete alternatives
 		self.connection.execute('''
@@ -272,6 +265,68 @@ class Model:
 			WHERE alternative==?
 			''',
 			(objective_id,))
+
+		# Re-adjust priorities
+		checked = []
+		for dependent in dependents:
+			if dependent['objective'] not in checked:
+				checked.append(dependent['objective'])
+
+				# If dependency has alternatives
+				# update its priority
+				if dependent['priority']:
+					count = self.connection.execute('''
+						SELECT COUNT(*) AS count FROM requeriments
+						WHERE objective==?
+						AND requeriment==?
+						AND priority==?
+						''',
+						(dependent['objective'],
+						dependent['requeriment'],
+						dependent['priority'])).fetchone()['count']
+
+					self.connection.execute('''
+						UPDATE requeriments
+						SET priority=
+							CASE
+								WHEN(?>1) THEN
+									priority-1
+								ELSE
+									0
+							END
+						WHERE objective==?
+						AND requeriment==?
+						AND priority==?
+						''',
+						(count,
+						dependent['objective'],
+						dependent['requeriment'],
+						dependent['priority']))
+
+#			# If dependendy has alternatives
+#			# update its priority
+#			if dependent['requeriment']:
+#				self.connection.execute('''
+#					UPDATE requeriments
+#					SET priority=
+#						CASE
+#							WHEN
+#							(
+#								SELECT COUNT(*) FROM requeriments
+#								WHERE objective==?
+#								AND requeriment==?
+#								AND priority==?
+#							)>1 THEN
+#								priority-1
+#							ELSE
+#								0
+#						END
+#					WHERE objective==?
+#					AND requeriment==?
+#					AND priority>?
+#					''',
+#					(dependent['objective'],dependent['requeriment'],dependent['priority'],
+#					dependent['objective'],dependent['requeriment'],dependent['priority']))
 
 #		# Delete dependents
 #		self.connection.execute('''
