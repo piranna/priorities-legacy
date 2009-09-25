@@ -31,6 +31,7 @@ class View:
 
 		self.layout = builder.get_object("layout")
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
+		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
 
 		mnuObjective_Add = builder.get_object("mnuObjective_Add")
 		mnuObjective_Add.connect('activate',self.__AddObjective)
@@ -41,10 +42,15 @@ class View:
 		mnuAbout = builder.get_object("mnuAbout")
 		mnuAbout.connect('activate',self.__About)
 
-		# Contextual menu
-		self.mnuContextual = builder.get_object("mnuContextual")
+		# Layout contextual menu
+		self.mnuCtxLayout = builder.get_object("mnuCtxLayout")
+		mnuLayout_AddObjective = builder.get_object("mnuLayout_AddObjective")
+		mnuLayout_AddObjective.connect('activate',self.__AddObjective)
 
-		self.mnuDeleteObjective = builder.get_object("mnuDeleteObjective")
+		# Objective contextual menu
+		self.mnuCtxObjective = builder.get_object("mnuCtxObjective")
+		self.mnuObjective_Edit = builder.get_object("mnuObjective_Edit")
+		self.mnuObjective_Delete = builder.get_object("mnuObjective_Delete")
 
 		self.__CreateTree()
 
@@ -317,7 +323,6 @@ class View:
 
 						SetExpirationColor()
 
-#						button.connect('clicked',self.__on_objective_clicked)
 						button.connect('button-press-event',self.__on_objective_clicked)
 
 						# Put objective button
@@ -391,10 +396,17 @@ class View:
 
 	def __on_objective_clicked(self, widget,event):
 		if(event.button == 3):	# Secondary button
-			self.mnuDeleteObjective.connect('activate',self.__DelObjective,self.__controller.GetId(widget.get_label()))
-			self.mnuContextual.popup(None,None,None, event.button,event.time)
+			objective_id = self.__controller.GetId(widget.get_label())
+			self.mnuObjective_Edit.connect('activate',self.__AddObjective, objective_id)
+			self.mnuObjective_Delete.connect('activate',self.__DelObjective, objective_id)
+			self.mnuCtxObjective.popup(None,None,None, event.button,event.time)
 		else:
 			self.__AddObjective(widget, self.__controller.GetId(widget.get_label()))
+
+
+	def __ShowLayoutMenu(self, widget,event):
+		if(event.button == 3):	# Secondary button
+			self.mnuCtxLayout.popup(None,None,None, event.button,event.time)
 
 
 	def __Preferences(self, widget):

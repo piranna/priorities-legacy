@@ -158,6 +158,7 @@
                       <object class="GtkImageMenuItem" id="mnuObjective_Add">
                         <property name="label">gtk-add</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
                     </child>
@@ -917,11 +918,30 @@
     <property name="upper">59</property>
     <property name="step_increment">1</property>
   </object>
-  <object class="GtkMenu" id="mnuContextual">
+  <object class="GtkMenu" id="mnuCtxObjective">
     <property name="visible">True</property>
     <child>
-      <object class="GtkImageMenuItem" id="mnuDeleteObjective">
-        <property name="label">gtk-clear</property>
+      <object class="GtkImageMenuItem" id="mnuObjective_Edit">
+        <property name="label">gtk-edit</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_Delete">
+        <property name="label">gtk-remove</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="mnuCtxLayout">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_AddObjective">
+        <property name="label">gtk-add</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
