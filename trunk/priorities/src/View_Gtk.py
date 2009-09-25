@@ -32,14 +32,14 @@ class View:
 		self.layout = builder.get_object("layout")
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 
-		btnAddObjective = builder.get_object("btnAddObjective")
-		btnAddObjective.connect('clicked',self.__AddObjective)
+		mnuObjective_Add = builder.get_object("mnuObjective_Add")
+		mnuObjective_Add.connect('activate',self.__AddObjective)
 
-		btnPreferences = builder.get_object("btnPreferences")
-		btnPreferences.connect('clicked',self.__Preferences)
+		mnuPreferences = builder.get_object("mnuPreferences")
+		mnuPreferences.connect('activate',self.__Preferences)
 
-		btnAbout = builder.get_object("btnAbout")
-		btnAbout.connect('clicked',self.__About)
+		mnuAbout = builder.get_object("mnuAbout")
+		mnuAbout.connect('activate',self.__About)
 
 		# Contextual menu
 		self.mnuContextual = builder.get_object("mnuContextual")
@@ -193,7 +193,7 @@ class View:
 						else:
 							# Create requeriment button
 							requeriment_button = CreateButton(self.__controller.GetName(objective['alternative']))
-							requeriment_button.connect('clicked',self.__AddObjective)
+							requeriment_button.connect('clicked',self.__AddObjective, objective['objective_id'])
 
 							# Put requeriment button
 							coords = (x,y)
@@ -367,8 +367,8 @@ class View:
 		about.window.destroy()
 
 
-	def __AddObjective(self, widget):
-		addObjective = AddObjective(self.__controller, self.__controller.GetId(widget.get_label()))
+	def __AddObjective(self, widget, objective_id=None):
+		addObjective = AddObjective(self.__controller, objective_id)
 
 		addObjective.window.set_transient_for(self.window)
 		response = addObjective.window.run()
@@ -394,7 +394,7 @@ class View:
 			self.mnuDeleteObjective.connect('activate',self.__DelObjective,self.__controller.GetId(widget.get_label()))
 			self.mnuContextual.popup(None,None,None, event.button,event.time)
 		else:
-			self.__AddObjective(widget)
+			self.__AddObjective(widget, self.__controller.GetId(widget.get_label()))
 
 
 	def __Preferences(self, widget):

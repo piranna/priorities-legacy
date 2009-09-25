@@ -1,8 +1,10 @@
 0.7:
 ====
 Eliminar objetivo
+	Reorganizar alternativas sin dejar huecos en blanco
 	? Opcion para eliminar en cascada
 	Mensaje de aviso mostrando cuales se van a eliminar
+	[BUG] Al eliminar con boton derecho tambien se elimina su dependiente
 
 [BUG] Cancelar modificacion de objetivos
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
@@ -13,6 +15,8 @@ Eliminar objetivo
 
 0.8:
 ====
+Añadir objetivo con boton derecho
+
 ? Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
 	Distribuir los demas proporcionalmente
@@ -23,8 +27,6 @@ Eliminar objetivo
 
 0.9:
 ====
-Editar alternativas directamente (¿AddObjective o nueva ventana?)
-
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
@@ -58,6 +60,7 @@ Localizacion de tareas/cambio de prioridades por proximidad fisica
 2.0:
 ====
 Limpieza de codigo, reorganizacion y optimizacion
+	Cambiar Insert_array_tree_2d a un diccionario ordenado
 
 
 Wont-fix:
@@ -67,4 +70,4 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
-Cambiar Insert_array_tree_2d a un mapa ordenado
+
