@@ -1,7 +1,6 @@
 0.7:
 ====
 Eliminar objetivo
-	Eliminar objetivo con boton derecho
 	? Opcion para eliminar en cascada
 	Mensaje de aviso mostrando cuales se van a eliminar
 

@@ -41,6 +41,11 @@ class View:
 		btnAbout = builder.get_object("btnAbout")
 		btnAbout.connect('clicked',self.__About)
 
+		# Contextual menu
+		self.mnuContextual = builder.get_object("mnuContextual")
+
+		self.mnuDeleteObjective = builder.get_object("mnuDeleteObjective")
+
 		self.__CreateTree()
 
 		self.window.show()
@@ -312,7 +317,8 @@ class View:
 
 						SetExpirationColor()
 
-						button.connect('clicked',self.__AddObjective)
+#						button.connect('clicked',self.__on_objective_clicked)
+						button.connect('button-press-event',self.__on_objective_clicked)
 
 						# Put objective button
 						self.layout.put(button, int(x),int(y))
@@ -373,6 +379,22 @@ class View:
 		# Redraw the requeriments tree
 		if response > 0:
 			self.__CreateTree()
+
+
+	def __DelObjective(self, menuitem,objective):
+		self.__controller.DeleteObjective(objective)
+
+#		# Redraw the requeriments tree
+#		if response > 0:
+		self.__CreateTree()
+
+
+	def __on_objective_clicked(self, widget,event):
+		if(event.button == 3):	# Secondary button
+			self.mnuDeleteObjective.connect('activate',self.__DelObjective,self.__controller.GetId(widget.get_label()))
+			self.mnuContextual.popup(None,None,None, event.button,event.time)
+		else:
+			self.__AddObjective(widget)
 
 
 	def __Preferences(self, widget):
