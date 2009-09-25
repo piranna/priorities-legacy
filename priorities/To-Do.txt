@@ -2,16 +2,14 @@
 ====
 Eliminar objetivo
 	Eliminar objetivo con boton derecho
-*	Eliminar objetivo desde ventana AddObjective
-	Actualizar prioridad de requerimientos
-	Opcion para eliminar en cascada
+	? Opcion para eliminar en cascada
 	Mensaje de aviso mostrando cuales se van a eliminar
-
-? Implementar hora en expiracion
-	Guardar y cargar datos correctamente
 
 [BUG] Cancelar modificacion de objetivos
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
+	Cambiar en lugar de eliminar y rehacer requerimientos modificar in-situ
+	Cuando se elimine un requerimiento, si es el unico eliminarlo del todo
+		Comprobar diferencias entre el antes y el despues
 
 
 0.8:
@@ -71,4 +69,3 @@ Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Cambiar Insert_array_tree_2d a un mapa ordenado
-
