@@ -458,7 +458,6 @@
             <child>
               <object class="GtkButton" id="btnDelete">
                 <property name="label" translatable="yes">Eliminar</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
               </object>

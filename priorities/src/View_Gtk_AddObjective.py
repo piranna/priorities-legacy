@@ -36,6 +36,9 @@ class AddObjective:
 		if objective:
 			objective = self.__controller.GetObjective_byId(objective)
 
+			btnDelete = builder.get_object("btnDelete")
+			btnDelete.show()
+
 			if objective:
 				self.txtObjective.set_text(objective["name"])
 
