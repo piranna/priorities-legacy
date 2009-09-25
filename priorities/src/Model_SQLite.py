@@ -173,16 +173,16 @@ class Model:
 				''',
 				(objective,))
 
-			print
+#			print
 
 			requeriment = 1
 			for row in query:
-				print "dentro",row['requeriment'],requeriment
+#				print "dentro",row['requeriment'],requeriment
 				if row['requeriment'] != requeriment:
 					break
 				requeriment += 1
 
-			print "fuera",requeriment
+#			print "fuera",requeriment
 
 			# Return requeriment id
 			return requeriment
@@ -281,13 +281,11 @@ class Model:
 						SELECT COUNT(*) AS count FROM requeriments
 						WHERE objective==?
 						AND requeriment==?
-						AND priority==?
 						''',
 						(dependent['objective'],
-						dependent['requeriment'],
-						dependent['priority'])).fetchone()['count']
+						dependent['requeriment'])).fetchone()['count']
 
-					print "Delete:",count,dependent
+					print "DeleteObjective:",count,dependent
 ####
 
 				self.connection.execute('''
@@ -295,25 +293,17 @@ class Model:
 					SET priority=
 						CASE
 							WHEN(?>1) THEN
-								priority-1
+								priority
 							ELSE
 								0
 						END
 					WHERE objective==?
 					AND requeriment==?
-					AND priority==?
 					''',
 					(count,
 					dependent['objective'],
-					dependent['requeriment'],
-					dependent['priority']))
+					dependent['requeriment']))
 
-#			# If dependendy has alternatives
-#			# update its priority
-#			if dependent['requeriment']:
-#				self.connection.execute('''
-#					UPDATE requeriments
-#					SET priority=
 #						CASE
 #							WHEN
 #							(
@@ -326,27 +316,6 @@ class Model:
 #							ELSE
 #								0
 #						END
-#					WHERE objective==?
-#					AND requeriment==?
-#					AND priority>?
-#					''',
-#					(dependent['objective'],dependent['requeriment'],dependent['priority'],
-#					dependent['objective'],dependent['requeriment'],dependent['priority']))
-
-#		# Delete dependents
-#		self.connection.execute('''
-#			DELETE FROM requeriments
-#			WHERE alternative==?
-#			''',
-#			(objective_id,))
-#
-#		# Downgrade dependents
-#		self.connection.execute('''
-#			UPDATE requeriments
-#			SET priority=priority-1
-#			WHERE alternative==?
-#			''',
-#			(objective_id,))
 
 		# Delete objective
 		self.connection.execute('''

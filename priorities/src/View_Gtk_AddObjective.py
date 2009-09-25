@@ -14,16 +14,23 @@ class AddObjective:
 		self.window.connect('destroy',self.__on_AddObjective_destroy)
 		self.window.connect('response',self.__on_AddObjective_response)
 
+		# Objective & quantity
 		self.txtObjective = builder.get_object("txtObjective")
 		self.txtQuantity = builder.get_object("txtQuantity")
-		self.calExpiration = builder.get_object("calExpiration")
-		self.txtRequeriments = builder.get_object("txtRequirements")
-		txtBuffer = self.txtRequeriments.get_buffer()
 
-		self.vbCalendarHour = builder.get_object("vbCalendarHour")
-
+		# Expiration
 		self.chkExpiration = builder.get_object("chkExpiration")
 		self.chkExpiration.connect('toggled', self.__on_chkExpiration_toggled)
+
+		self.vbCalendarHour = builder.get_object("vbCalendarHour")
+		self.calExpiration = builder.get_object("calExpiration")
+		self.sbHour = builder.get_object("sbHour")
+		self.sbMinute = builder.get_object("sbMinute")
+		self.sbSecond = builder.get_object("sbSecond")
+
+		# Requeriments
+		self.txtRequeriments = builder.get_object("txtRequirements")
+		txtBuffer = self.txtRequeriments.get_buffer()
 
 		# Set data
 		if objective:
@@ -34,14 +41,18 @@ class AddObjective:
 
 				self.txtQuantity.set_text(str(objective["quantity"]))
 
+				self.expiration=None
 				if objective["expiration"]:
 					self.chkExpiration.set_active(True)
 					self.chkExpiration.toggled()
 
-					expiration = datetime.datetime.strptime(objective["expiration"], "%Y-%m-%d %H:%M:%S")
+					self.expiration = datetime.datetime.strptime(objective["expiration"], "%Y-%m-%d %H:%M:%S")
 
-					self.calExpiration.select_month(expiration.month-1, expiration.year)
-					self.calExpiration.select_day(expiration.day)
+					self.calExpiration.select_month(self.expiration.month-1, self.expiration.year)
+					self.calExpiration.select_day(self.expiration.day)
+					self.sbHour.set_value(self.expiration.hour)
+					self.sbMinute.set_value(self.expiration.minute)
+					self.sbSecond.set_value(self.expiration.second)
 
 				dependencies = ""
 				last_requeriment = None
@@ -59,7 +70,7 @@ class AddObjective:
 		# Old data
 		self.oldObjective = self.txtObjective.get_text()
 		self.oldQuantity = self.txtQuantity.get_text()
-		self.oldExpiration = self.calExpiration.get_date()
+
 		start,end = txtBuffer.get_bounds()
 		self.oldRequeriments = txtBuffer.get_text(start,end)
 
@@ -68,6 +79,7 @@ class AddObjective:
 	def __StoreData(self):
 		print "StoreData"
 
+		# [To-Do] Check expiration modification
 		closeDialog = (self.txtObjective.get_text() and self.txtQuantity.get_text())
 
 		if closeDialog:
@@ -75,10 +87,15 @@ class AddObjective:
 
 			# Expiration
 			if(self.chkExpiration.get_active()):
-				expiration = self.calExpiration.get_date()
-				expiration = datetime.datetime(expiration[0], expiration[1]+1, expiration[2])
+				self.expiration = self.calExpiration.get_date()
+				self.expiration = datetime.datetime(self.expiration[0],
+													self.expiration[1]+1,
+													self.expiration[2],
+													self.sbHour.get_value_as_int(),
+													self.sbMinute.get_value_as_int(),
+													self.sbSecond.get_value_as_int())
 			else:
-				expiration = None
+				self.expiration = None
 
 			# Requeriments
 			txtBuffer = self.txtRequeriments.get_buffer()
@@ -98,7 +115,7 @@ class AddObjective:
 			# Add objective
 			self.__controller.AddObjective(self.txtObjective.get_text(),
 											self.txtQuantity.get_text(),
-											expiration,
+											self.expiration,
 											txtBuffer)
 
 		else:
