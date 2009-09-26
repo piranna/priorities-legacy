@@ -130,7 +130,9 @@ class AddObjective:
 	def __Delete(self):
 		print "Delete"
 		if self.__objective:
-			self.__controller.DeleteObjective(self.__objective)
+			import preferences
+			preferences = preferences.Load()
+			self.__controller.DeleteObjective(self.__objective,preferences['deleteCascade'])
 
 		return True
 

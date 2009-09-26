@@ -635,6 +635,13 @@
                             <child>
                               <object class="GtkComboBox" id="cbShowExceededDependencies">
                                 <property name="visible">True</property>
+                                <property name="model">liststore1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
                                 <property name="position">1</property>
@@ -946,5 +953,22 @@
         <property name="use_stock">True</property>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Nunca</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Solo no expiradas</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Siempre</col>
+      </row>
+    </data>
   </object>
 </interface>

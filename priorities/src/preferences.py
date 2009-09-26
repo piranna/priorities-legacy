@@ -11,17 +11,17 @@ def Load():
 	preferences['useDefaultDB']				= True
 	preferences['database']					= config_dir+"/personal.sqlite"
 
+	preferences['showSharp']				= False
+	preferences['showArrowHeads']			= True
+
+	preferences['showExceededDependencies']	= 1
+	preferences['expirationWarning']		= 1
+	preferences['deleteCascade']			= True
+
 	preferences['color_unabordable']		= "#FF7777"
 	preferences['color_inprocess']			= "#FFFF77"
 	preferences['color_available']			= "#77FF77"
 	preferences['color_satisfacted']		= "#7777FF"
-
-	preferences['showSharp']				= False
-	preferences['showArrowHeads']				= True
-
-	preferences['showExceededDependencies']	= 1
-
-	preferences['expirationWarning']		= 1
 
 	# Load preferences from file
 	# Create configuration dir
@@ -46,6 +46,7 @@ def Load():
 		preferences['useDefaultDB']		= (preferences['useDefaultDB']=="True")
 		preferences['showSharp']		= (preferences['showSharp']=="True")
 		preferences['showArrowHeads']	= (preferences['showArrowHeads']=="True")
+		preferences['deleteCascade']	= (preferences['deleteCascade']=="True")
 
 		# Re-define integer preferences
 		preferences['showExceededDependencies']	= int(preferences['showExceededDependencies'])
