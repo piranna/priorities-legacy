@@ -18,15 +18,22 @@ class Preferences:
 		self.window = builder.get_object("Preferences")
 		self.window.connect('response',self.__on_Preferences_response)
 
+		#
 		# DataBase
+
+		# Use default database
 		chkDefaultDB = builder.get_object("chkDefaultDB")
 		chkDefaultDB.connect('toggled', self.__on_chkDefaultDB_toggled)
 		chkDefaultDB.set_active(self.preferences['useDefaultDB'])
 
+		# Default database
 		self.fcDefaultDB = builder.get_object("fcDefaultDB")
 		self.fcDefaultDB.set_filename(self.preferences['database'])
 
 		chkDefaultDB.toggled()
+
+		#
+		# Graphic
 
 		# Show sharp
 		chkShowSharp = builder.get_object("chkShowSharp")
@@ -38,17 +45,17 @@ class Preferences:
 		chkShowArrowHeads.connect('toggled', self.__on_chkShowArrowHeads_toggled)
 		chkShowArrowHeads.set_active(self.preferences['showArrowHeads'])
 
+		#
+		# Objectives
+
 		# Show satisfacted dependencies
-		model_scrit = gtk.ListStore(str)
-		model_scrit.append(("Nunca",))
-		model_scrit.append(("Solo no expiradas",))
-		model_scrit.append(("Siempre",))
-		cell = gtk.CellRendererText()
+#		model_scrit = gtk.ListStore(str)
+#		model_scrit.append(("Nunca",))
+#		model_scrit.append(("Solo no expiradas",))
+#		model_scrit.append(("Siempre",))
 
 		cbShowExceededDependencies = builder.get_object("cbShowExceededDependencies")
-		cbShowExceededDependencies.set_model(model_scrit)
-		cbShowExceededDependencies.pack_start(cell)
-		cbShowExceededDependencies.add_attribute(cell,'text',0)
+#		cbShowExceededDependencies.set_model(model_scrit)
 		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
 		cbShowExceededDependencies.set_active(self.preferences['showExceededDependencies'])
 
@@ -57,7 +64,14 @@ class Preferences:
 		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
 		sbExpirationWarning.set_value(self.preferences['expirationWarning'])
 
-		# Colors
+		# Delete on cascade
+		chkDeleteCascade = builder.get_object("chkDeleteCascade")
+		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
+		chkDeleteCascade.set_active(self.preferences['deleteCascade'])
+
+		#
+		# Button colors
+
 		cbInabordable = builder.get_object("cbInabordable")
 		cbInabordable.connect('color-set', self.__on_colorbutton_colorset)
 		cbInabordable.set_color(gtk.gdk.color_parse(self.preferences['color_unabordable']))
@@ -94,6 +108,10 @@ class Preferences:
 
 	def __on_chkShowArrowHeads_toggled(self, widget):
 		self.preferences["showArrowHeads"] = widget.get_active()
+
+
+	def __on_chkDeleteCascade_toggled(self, widget):
+		self.preferences["deleteCascade"] = widget.get_active()
 
 
 	def __on_cbShowExceededDependencies_changed(self, widget):
