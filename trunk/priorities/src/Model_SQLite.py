@@ -67,15 +67,22 @@ class Model:
 
 
 	def DirectDependencies(self, objective_id=None, requeriment=None, export=False):
-#		sql = '''
-#			SELECT objectives.quantity AS objective_quantity,expiration,
 		sql = '''
-			SELECT objectives.id AS objective_id,name,objectives.quantity AS objective_quantity,expiration,
+			SELECT objectives.id AS objective_id,objectives.name AS name,objectives.quantity AS objective_quantity,objectives.expiration AS expiration,
 					requeriment,priority,alternative,requeriments.quantity AS requeriment_quantity
+			'''
+		if export:
+			sql += ",objectives2.name AS alternative_name"
+		sql += '''
 			FROM objectives
 				LEFT OUTER JOIN requeriments
 					ON objectives.id=requeriments.objective
 			'''
+		if export:
+			sql += '''
+					LEFT OUTER JOIN objectives AS objectives2
+						ON requeriments.alternative=objectives2.id
+				'''
 
 		if objective_id:
 			sql += "WHERE objectives.id=="+str(objective_id)
@@ -87,7 +94,7 @@ class Model:
 			sql += " expiration DESC,"
 		sql += " objective_id,requeriment,priority ASC"
 
-		print "sql=",sql
+#		print "sql=",sql
 
 		return self.connection.execute(sql)
 

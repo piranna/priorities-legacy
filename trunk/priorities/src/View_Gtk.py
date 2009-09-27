@@ -477,5 +477,30 @@ class View:
 
 
 	def __Export(self, widget):
-		print self.__controller.Export()
+		dialog = gtk.FileChooserDialog("Export priorities database",
+										None,
+										gtk.FILE_CHOOSER_ACTION_SAVE,
+										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		dialog.set_current_name("export.priorities")
+
+		"""Create and add the pywine filter"""
+		filter = gtk.FileFilter()
+		filter.set_name("Priorities exported file")
+		filter.add_pattern("*.priorities")
+		dialog.add_filter(filter)
+		"""Create and add the 'all files' filter"""
+		filter = gtk.FileFilter()
+		filter.set_name("All files")
+		filter.add_pattern("*")
+		dialog.add_filter(filter)
+
+		if dialog.run()==gtk.RESPONSE_OK:
+			try:
+				file = open(dialog.get_filename(), "w")
+				file.write(self.__controller.Export())
+				file.close()
+			except:
+				print "Exception exporting database"
+		dialog.destroy()
 

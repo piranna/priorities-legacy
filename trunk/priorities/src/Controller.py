@@ -76,10 +76,10 @@ class Controller:
 			PrivateRecursiveDependencies(row['objective_id'])
 
 ####
-		for level in dependencies:
-			for dependency in level:
-				print dependency
-			print
+#		for level in dependencies:
+#			for dependency in level:
+#				print dependency
+#			print
 ####
 
 		return dependencies
@@ -199,18 +199,42 @@ class Controller:
 
 	def Export(self):
 		txt = ""
+		obj = None
+		req = None
 		for level in self.RecursiveDependencies(export=True):
 			for objective in level:
-				txt += "AddObjective '''"+objective['name']+"'''"
+				if((obj and obj!=objective['objective_id'])
+				or(req and req!=objective['requeriment'])):
+					txt += ")]\n"
+					obj=None
+					req=None
 
-				# Quantity
-				if objective['objective_quantity']:
-					txt += " -c"+str(objective['objective_quantity'])
+				if not req:
+					txt += "AddObjective '''"+objective['name']+"'''"
 
-				# Expiration
-				if objective['expiration']:
-					txt += " -e'''"+objective['expiration']+"'''"
+					# Quantity
+					if objective['objective_quantity']:
+						txt += " -c"+str(objective['objective_quantity'])
 
-				txt += "\n"
+					# Expiration
+					if objective['expiration']:
+						txt += " -e'''"+objective['expiration']+"'''"
+
+				# Alternative
+				if objective['alternative_name']:
+					if req:
+						txt += ",'''"+objective['alternative_name']+"'''"
+					else:
+						txt += " [('''"+objective['alternative_name']+"'''"
+						if objective['priority']:
+							obj = objective['objective_id']
+							req = objective['requeriment']
+						else:
+							txt += ",)]\n"
+				else:
+					txt += "\n"
+		if req:
+			txt += ")]\n"
+
 		return txt
 

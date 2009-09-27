@@ -73,5 +73,5 @@ def Store(preferences):
 		file.close()
 
 	except:
-		print "no file to store"
+		print "Exception storing preferences"
 
