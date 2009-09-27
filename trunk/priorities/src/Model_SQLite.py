@@ -66,7 +66,7 @@ class Model:
 		return None
 
 
-	def DirectDependencies(self, objective_id=None, requeriment=None):
+	def DirectDependencies(self, objective_id=None, requeriment=None, export=False):
 #		sql = '''
 #			SELECT objectives.quantity AS objective_quantity,expiration,
 		sql = '''
@@ -82,10 +82,12 @@ class Model:
 		if requeriment:
 			sql += "AND requeriment=="+str(requeriment)
 
-#		sql += " ORDER BY objective_id,requeriment,priority"
-#		sql += " ORDER BY objective,requeriment,priority"
-		sql += " ORDER BY expiration DESC, objective_id,requeriment,priority ASC"
+		sql += " ORDER BY"
+		if not export:
+			sql += " expiration DESC,"
+		sql += " objective_id,requeriment,priority ASC"
 
+		print "sql=",sql
 
 		return self.connection.execute(sql)
 

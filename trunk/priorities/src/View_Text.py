@@ -67,7 +67,11 @@ class View(cmd.Cmd):
 
 
 		# Objective
-		if line[0]=="'":
+		if line[0:2]=="'''":
+			line = line[3:].split("'''",1)
+		elif line[0:2]=='"""':
+			line = line[3:].split('"""',1)
+		elif line[0]=="'":
 			line = line[1:].split("'",1)
 		elif line[0]=='"':
 			line = line[1:].split('"',1)
@@ -130,3 +134,4 @@ class View(cmd.Cmd):
 	def do_EOF(self, line):
 		print
 		return True
+
