@@ -8,7 +8,7 @@ class Controller:
 
 	# Get all the requeriments tree of an objective.
 	# If objective_id is not defined return the all-objectives tree
-	def RecursiveDependencies(self, objective_id=None):
+	def RecursiveDependencies(self, objective_id=None, export=False):
 
 		dependencies = []
 
@@ -46,7 +46,7 @@ class Controller:
 			if objective_id not in checked:
 				checked.append(objective_id)
 
-				for row in self.__model.DirectDependencies(objective_id):
+				for row in self.__model.DirectDependencies(objective_id, export=export):
 
 					# If objective has an alternative,
 					# get the new depth
@@ -72,7 +72,7 @@ class Controller:
 			return depth+1
 
 
-		for row in self.__model.DirectDependencies(objective_id):
+		for row in self.__model.DirectDependencies(objective_id, export=export):
 			PrivateRecursiveDependencies(row['objective_id'])
 
 ####
@@ -165,7 +165,7 @@ class Controller:
 
 	def IsAvailable(self, objective_id):
 		req_alt = {}
-		for requeriment in self.DirectDependencies(objective_id):
+		for requeriment in self.__model.DirectDependencies(objective_id):
 			if requeriment['alternative']:
 				if requeriment['priority']:
 					if not req_alt.get(requeriment['requeriment'], False):
@@ -178,7 +178,7 @@ class Controller:
 		return True
 
 	def IsInprocess(self, objective_id):
-		for requeriment in self.DirectDependencies(objective_id):
+		for requeriment in self.__model.DirectDependencies(objective_id):
 			if self.IsSatisfacted(requeriment['alternative']):
 				return True
 		return False
@@ -189,10 +189,28 @@ class Controller:
 
 	def DeleteObjective(self, objective_id,cascade=False):
 		if cascade:
-			for requeriment in self.DirectDependencies(objective_id):
+			for requeriment in self.__model.DirectDependencies(objective_id):
 				if(requeriment['alternative']
 				and len(self.DirectDependents(requeriment['alternative']))<2):
 					self.DeleteObjective(requeriment['alternative'],cascade)
 
 		return self.__model.DeleteObjective(objective_id)
+
+
+	def Export(self):
+		txt = ""
+		for level in self.RecursiveDependencies(export=True):
+			for objective in level:
+				txt += "AddObjective '''"+objective['name']+"'''"
+
+				# Quantity
+				if objective['objective_quantity']:
+					txt += " -c"+str(objective['objective_quantity'])
+
+				# Expiration
+				if objective['expiration']:
+					txt += " -e'''"+objective['expiration']+"'''"
+
+				txt += "\n"
+		return txt
 

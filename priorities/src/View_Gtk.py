@@ -57,8 +57,8 @@ class View:
 #		mnuImport.connect('activate',self.__on_Main_destroy)
 
 		# Export
-#		mnuExport = builder.get_object("mnuExport")
-#		mnuExport.connect('activate',self.__on_Main_destroy)
+		mnuExport = builder.get_object("mnuExport")
+		mnuExport.connect('activate',self.__Export)
 
 		# Exit
 		mnuExit = builder.get_object("mnuExit")
@@ -471,6 +471,11 @@ class View:
 			self.preferences = preferences.Load()
 			self.__CreateTree()
 
+
 	def __on_Main_destroy(self, widget, data=None):
 		gtk.main_quit()
+
+
+	def __Export(self, widget):
+		print self.__controller.Export()
 
