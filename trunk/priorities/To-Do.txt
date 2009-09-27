@@ -36,7 +36,7 @@ Usar opciones afirmativas y negativas
 1.0:
 ====
 Exportar/importar a texto plano
-	Abrir, guardar y guardar como afectan a la base de datos
+	Nuevo, abrir, guardar y guardar como afectan a la base de datos
 	Importar y exportar afectan al texto plano y se ejecutan sobre la base de datos actual
 		Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
