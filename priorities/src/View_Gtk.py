@@ -33,21 +33,71 @@ class View:
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
 
-		mnuObjective_Add = builder.get_object("mnuObjective_Add")
-		mnuObjective_Add.connect('activate',self.__AddObjective)
+		#
+		# File
 
+		# New
+#		mnuNew = builder.get_object("mnuNew")
+#		mnuNew.connect('activate',self.__on_Main_destroy)
+
+		# Open
+#		mnuOpen = builder.get_object("mnuOpen")
+#		mnuOpen.connect('activate',self.__on_Main_destroy)
+
+		# Save
+#		mnuSave = builder.get_object("mnuSave")
+#		mnuSave.connect('activate',self.__on_Main_destroy)
+
+		# Save as
+#		mnuSaveAs = builder.get_object("mnuSaveAs")
+#		mnuSaveAs.connect('activate',self.__on_Main_destroy)
+
+		# Import
+#		mnuImport = builder.get_object("mnuImport")
+#		mnuImport.connect('activate',self.__on_Main_destroy)
+
+		# Export
+#		mnuExport = builder.get_object("mnuExport")
+#		mnuExport.connect('activate',self.__on_Main_destroy)
+
+		# Exit
+		mnuExit = builder.get_object("mnuExit")
+		mnuExit.connect('activate',self.__on_Main_destroy)
+
+		#
+		# Edit
+
+		# Preferences
 		mnuPreferences = builder.get_object("mnuPreferences")
 		mnuPreferences.connect('activate',self.__Preferences)
 
+		#
+		# Objective
+
+		# Add
+		mnuObjective_Add = builder.get_object("mnuObjective_Add")
+		mnuObjective_Add.connect('activate',self.__AddObjective)
+
+		# Delete
+#		mnuObjective_Del = builder.get_object("mnuObjective_Del")
+#		mnuObjective_Del.connect('activate',self.__AddObjective)
+
+		#
+		# Help
+
+		# About
 		mnuAbout = builder.get_object("mnuAbout")
 		mnuAbout.connect('activate',self.__About)
 
-		# Layout contextual menu
+		#
+		# Contextual menues
+
+		# Layout
 		self.mnuCtxLayout = builder.get_object("mnuCtxLayout")
 		mnuLayout_AddObjective = builder.get_object("mnuLayout_AddObjective")
 		mnuLayout_AddObjective.connect('activate',self.__AddObjective)
 
-		# Objective contextual menu
+		# Objective
 		self.mnuCtxObjective = builder.get_object("mnuCtxObjective")
 		self.mnuObjective_Edit = builder.get_object("mnuObjective_Edit")
 		self.mnuObjective_Delete = builder.get_object("mnuObjective_Delete")
