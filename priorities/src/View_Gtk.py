@@ -6,6 +6,7 @@ import datetime
 
 from View_Gtk_About import *
 from View_Gtk_AddObjective import *
+from View_Gtk_DeleteCascade import *
 from View_Gtk_Preferences import *
 
 import preferences
@@ -437,10 +438,17 @@ class View:
 
 
 	def __DelObjective(self, menuitem,objective):
-		self.__controller.DeleteObjective(objective)
+		if self.preferences['deleteCascade']:
+			dialog = Preferences(self.__controller)
 
-#		# Redraw the requeriments tree
-#		if response > 0:
+			dialog.window.set_transient_for(self.window)
+			response = dialog.window.run()
+			dialog.window.destroy()
+
+			if response <= 0:
+				return
+
+		self.__controller.DeleteObjective(objective, self.preferences['deleteCascade'])
 		self.__CreateTree()
 
 
