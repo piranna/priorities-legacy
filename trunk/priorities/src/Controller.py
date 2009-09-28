@@ -203,13 +203,14 @@ class Controller:
 		req = None
 		for level in self.RecursiveDependencies(export=True):
 			for objective in level:
-				if((obj and obj!=objective['objective_id'])
-				or(req and req!=objective['requeriment'])):
-					txt += ")]\n"
-					obj=None
+				if(req and req!=objective['requeriment']):
+					txt += ")"
 					req=None
+				if(obj and obj!=objective['objective_id']):
+					txt += "]\n"
+					obj=None
 
-				if not req:
+				if not obj:
 					txt += "AddObjective '''"+objective['name']+"'''"
 
 					# Quantity
@@ -222,10 +223,17 @@ class Controller:
 
 				# Alternative
 				if objective['alternative_name']:
-					if req:
-						txt += ",'''"+objective['alternative_name']+"'''"
+					if obj:
+						txt += ","
 					else:
-						txt += " [('''"+objective['alternative_name']+"'''"
+						txt += " [("
+
+					txt += "'''"+objective['alternative_name']
+					if objective['requeriment_quantity']:
+						txt += ":"+objective['requeriment_quantity']
+					txt += "'''"
+
+					if not req:
 						if objective['priority']:
 							obj = objective['objective_id']
 							req = objective['requeriment']
@@ -237,4 +245,3 @@ class Controller:
 			txt += ")]\n"
 
 		return txt
-
