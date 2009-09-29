@@ -1,6 +1,6 @@
 0.7:
 ====
-* [BUG] Cancelar modificacion de objetivos
+* [BUG] Cancelar modificacion de objetivos al cerrar ventana
 
 Eliminar objetivo
 	Reorganizar alternativas sin dejar huecos en blanco en las prioridades en la base de datos
@@ -36,6 +36,9 @@ Usar opciones afirmativas y negativas
 
 1.0:
 ====
+Internacionalizacion con gettext
+	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
+
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
 	* Importar y exportar afectan al texto plano y se ejecutan sobre la base de datos actual
