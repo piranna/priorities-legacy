@@ -3,6 +3,8 @@ import gtk
 
 
 class AddObjective:
+	__destroy = True
+
 	def __init__(self, controller, objective=None):
 		self.__controller = controller
 		self.__objective = objective
@@ -144,6 +146,16 @@ class AddObjective:
 
 		if not closeDialog:
 			print "\tCancel no cierra"
+			dialog = gtk.MessageDialog(self.window,
+										0,
+										gtk.MESSAGE_QUESTION,
+										gtk.BUTTONS_YES_NO,
+										"El objetivo se ha modificado")
+			dialog.format_secondary_text("El objetivo se ha modificado y los cambios se perderan. Esta seguro que desea continuar?")
+			response = dialog.run()
+			dialog.destroy()
+			if response == gtk.RESPONSE_YES:
+				return True
 
 		return closeDialog
 
@@ -151,8 +163,9 @@ class AddObjective:
 	def __on_AddObjective_destroy(self, widget):
 		print "destroy"
 
-		if not self.__Cancel():
-			self.window.emit_stop_by_name('destroy')
+#		if not self.__destroy:
+		self.window.emit_stop_by_name('destroy')
+#			self.__destroy = True
 
 
 	def __on_AddObjective_response(self, widget, response):
@@ -165,8 +178,13 @@ class AddObjective:
 		elif response == 2:
 			closeDialog = self.__Delete()
 		else:
+			print "__on_AddObjective_response",response
 			closeDialog = self.__Cancel()
 
+			if response == -4 and not closeDialog:
+				self.__destroy = False
+
+		print "closeDialog",closeDialog
 		if not closeDialog:
 			self.window.emit_stop_by_name('response')
 

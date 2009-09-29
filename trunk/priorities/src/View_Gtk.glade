@@ -532,8 +532,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="use_preview_label">False</property>
                         <property name="show_hidden">True</property>
+                        <property name="use_preview_label">False</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
@@ -1045,8 +1045,8 @@ los siguientes objetivos en casacada</property>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">btnCancel</action-widget>
-      <action-widget response="0">btnAccept</action-widget>
+      <action-widget response="0">btnCancel2</action-widget>
+      <action-widget response="0">btnAccept2</action-widget>
     </action-widgets>
   </object>
 </interface>
