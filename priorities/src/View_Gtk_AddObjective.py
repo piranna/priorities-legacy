@@ -13,6 +13,7 @@ class AddObjective:
 		builder.add_from_file("View_Gtk.glade")
 
 		self.window = builder.get_object("AddObjective")
+		self.window.connect('delete-event',self.__on_AddObjective_deleteevent)
 		self.window.connect('destroy',self.__on_AddObjective_destroy)
 		self.window.connect('response',self.__on_AddObjective_response)
 
@@ -160,11 +161,19 @@ class AddObjective:
 		return closeDialog
 
 
+	def __on_AddObjective_deleteevent(self, widget,data=None):
+		print "delete-event"
+
+		if not self.__destroy:
+			self.window.emit_stop_by_name('delete-event')
+			self.__destroy = True
+
+	
 	def __on_AddObjective_destroy(self, widget):
 		print "destroy"
 
 #		if not self.__destroy:
-		self.window.emit_stop_by_name('destroy')
+#		self.window.emit_stop_by_name('destroy')
 #			self.__destroy = True
 
 
