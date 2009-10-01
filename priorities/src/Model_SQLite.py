@@ -285,7 +285,6 @@ class Model:
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
 
-####
 					count = self.connection.execute('''
 						SELECT COUNT(*) AS count FROM requeriments
 						WHERE objective==?
@@ -294,13 +293,12 @@ class Model:
 						(dependent['objective'],
 						dependent['requeriment'])).fetchone()['count']
 
-					print "DeleteObjective:",count,dependent
-####
-
 				self.connection.execute('''
 					UPDATE requeriments
 					SET priority=
 						CASE
+							WHEN(?>1 AND priority>?) THEN
+								priority-1
 							WHEN(?>1) THEN
 								priority
 							ELSE
@@ -310,21 +308,10 @@ class Model:
 					AND requeriment==?
 					''',
 					(count,
+					dependent['priority'],
+					count,
 					dependent['objective'],
 					dependent['requeriment']))
-
-#						CASE
-#							WHEN
-#							(
-#								SELECT COUNT(*) FROM requeriments
-#								WHERE objective==?
-#								AND requeriment==?
-#								AND priority==?
-#							)>1 THEN
-#								priority-1
-#							ELSE
-#								0
-#						END
 
 		# Delete objective
 		self.connection.execute('''
@@ -332,4 +319,3 @@ class Model:
 			WHERE id==?
 			''',
 			(objective_id,))
-

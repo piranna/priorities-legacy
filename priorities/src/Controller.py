@@ -75,12 +75,12 @@ class Controller:
 		for row in self.__model.DirectDependencies(objective_id, export=export):
 			PrivateRecursiveDependencies(row['objective_id'])
 
-####
-#		for level in dependencies:
-#			for dependency in level:
-#				print dependency
-#			print
-####
+###
+		for level in dependencies:
+			for dependency in level:
+				print dependency
+			print
+###
 
 		return dependencies
 
