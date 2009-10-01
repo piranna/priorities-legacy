@@ -48,14 +48,8 @@ class Preferences:
 		#
 		# Objectives
 
-		# Show satisfacted dependencies
-#		model_scrit = gtk.ListStore(str)
-#		model_scrit.append(("Nunca",))
-#		model_scrit.append(("Solo no expiradas",))
-#		model_scrit.append(("Siempre",))
-
+		# Show exceeded dependencies
 		cbShowExceededDependencies = builder.get_object("cbShowExceededDependencies")
-#		cbShowExceededDependencies.set_model(model_scrit)
 		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
 		cbShowExceededDependencies.set_active(self.preferences['showExceededDependencies'])
 
