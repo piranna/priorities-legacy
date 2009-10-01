@@ -268,12 +268,16 @@ class Model:
 		# Get dependents
 		dependents = self.DirectDependents(objective_id)
 
+#		print "\ndependents 1:",dependents
+
 		# Delete alternatives
 		self.connection.execute('''
 			DELETE FROM requeriments
 			WHERE alternative==?
 			''',
 			(objective_id,))
+
+#		print "\ndependents 2:",self.DirectDependents(objective_id)
 
 		# Re-adjust priorities
 		checked = []
@@ -313,9 +317,14 @@ class Model:
 					dependent['objective'],
 					dependent['requeriment']))
 
+
+#		print "\ndependents 3:",self.DirectDependents(objective_id)
+
 		# Delete objective
 		self.connection.execute('''
 			DELETE FROM objectives
 			WHERE id==?
 			''',
 			(objective_id,))
+
+#		print "\ndependents 4:",self.DirectDependents(objective_id)

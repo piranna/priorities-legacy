@@ -111,11 +111,26 @@ class AddObjective:
 
 			else:
 				self.__controller.DelRequeriments(self.txtObjective.get_text())
+
+				# Requeriments
 				txtBuffer = txtBuffer.splitlines()
 				for i in range(0,len(txtBuffer)):
+
+					# Alternatives
+					duplicates = []
+
 					txtBuffer[i] = txtBuffer[i].split(',')
 					for j in range(0,len(txtBuffer[i])):
 						txtBuffer[i][j] = txtBuffer[i][j].strip()
+
+						# If alternative is previously defined in this requeriment
+						# ignore it
+						if j>0 and txtBuffer[i][j] in txtBuffer[i][0:(j-1)]:
+							#del txtBuffer[i][j]
+							duplicates.append(j)
+
+					for j in reversed(duplicates):
+						del txtBuffer[i][j]
 
 			# Add objective
 			self.__controller.AddObjective(self.txtObjective.get_text(),
@@ -191,4 +206,3 @@ class AddObjective:
 
 	def __on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
-
