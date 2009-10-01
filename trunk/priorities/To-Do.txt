@@ -1,7 +1,7 @@
 0.7:
 ====
 Eliminar objetivo
-	Reorganizar alternativas sin dejar huecos en blanco en las prioridades en la base de datos
+	Reorganizar alternativas sin eliminar objetivos no relaccionados
 	? Mensaje de aviso mostrando cuales se van a eliminar en cascada
 		Mensaje en forma de arbol
 	[BUG] Al eliminar con boton derecho tambien se elimina su dependiente
@@ -10,6 +10,8 @@ Eliminar objetivo
 	Cambiar en lugar de eliminar y rehacer requerimientos modificar in-situ
 	Cuando se elimine un requerimiento, si es el unico eliminarlo del todo
 		Comprobar diferencias entre el antes y el despues
+
+[BUG] Al introducir dos requisitos iguales almacena los dos
 
 
 0.8:
