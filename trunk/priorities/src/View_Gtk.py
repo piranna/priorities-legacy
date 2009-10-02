@@ -442,13 +442,16 @@ class View:
 			dialog = Preferences(self.__controller)
 
 			dialog.window.set_transient_for(self.window)
+###
+			print self.__controller.Get_DeleteObjective_Tree(objective)
+###
 			response = dialog.window.run()
 			dialog.window.destroy()
 
 			if response <= 0:
 				return
 
-		self.__controller.DeleteObjective(objective, self.preferences['deleteCascade'])
+#		self.__controller.DeleteObjective(objective)
 		self.__CreateTree()
 
 
