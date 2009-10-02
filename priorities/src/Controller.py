@@ -187,13 +187,21 @@ class Controller:
 		return self.__model.DelRequeriments_ByName(objective_name)
 
 
-	def DeleteObjective(self, objective_id,cascade=False):
-		if cascade:
-			for requeriment in self.__model.DirectDependencies(objective_id):
-				if(requeriment['alternative']
-				and len(self.DirectDependents(requeriment['alternative']))<2):
-					self.DeleteObjective(requeriment['alternative'],cascade)
+	def Get_DeleteObjective_Tree(self, objective_id, checked=[]):
+		tree = {}
 
+		for requeriment in self.__model.DirectDependencies(objective_id):
+			if(requeriment['alternative']
+			and requeriment['alternative'] not in checked
+			and len(self.DirectDependents(requeriment['alternative']))<2):
+				checked.append(requeriment['alternative'])
+				tree[requeriment['alternative']] = self.Get_DeleteObjective_Tree(requeriment['alternative'],
+																				checked)
+
+		return tree
+
+
+	def DeleteObjective(self, objective_id):
 		return self.__model.DeleteObjective(objective_id)
 
 

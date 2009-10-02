@@ -1,10 +1,9 @@
 0.7:
 ====
-Eliminar objetivo
-	([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
-	? Mensaje de aviso mostrando cuales se van a eliminar en cascada
-		Mensaje en forma de arbol
-	([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
+? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
+
+([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
+([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
 
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
 	Cambiar en lugar de eliminar y rehacer requerimientos modificar in-situ
@@ -52,6 +51,7 @@ Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 Post 1.0:
 =========
 Hacer version de todas las funciones de GTK en modo texto
+	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
 
 Version en PyGUI
@@ -75,3 +75,4 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
+Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
