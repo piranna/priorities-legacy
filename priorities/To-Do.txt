@@ -1,9 +1,9 @@
 0.7:
 ====
 ? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
-	Modificar hijos recursivamente
 	Modificar inconsistencia ancentros recursivamente
 	Obtener objetivos a eliminar
+	[BUG] Si se decide no eliminar uno de los objetivos con requisitos ya checkeados los previos pueden haberse borrado
 
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
@@ -36,6 +36,8 @@ Usar opciones afirmativas y negativas
 
 1.0:
 ====
+Aumentar grosor de las lineas de los requesitos al hacer mouseover
+
 Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
