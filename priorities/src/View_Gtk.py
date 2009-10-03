@@ -437,21 +437,18 @@ class View:
 			self.__CreateTree()
 
 
-	def __DelObjective(self, menuitem,objective):
+	def __DelObjective(self, menuitem,objective_id):
 		if self.preferences['deleteCascade']:
-			dialog = Preferences(self.__controller)
+			dialog = DeleteCascade(self.__controller, objective_id)
 
 			dialog.window.set_transient_for(self.window)
-###
-			print self.__controller.Get_DeleteObjective_Tree(objective)
-###
 			response = dialog.window.run()
 			dialog.window.destroy()
 
 			if response <= 0:
 				return
 
-#		self.__controller.DeleteObjective(objective)
+#		self.__controller.DeleteObjective(objective_id)
 		self.__CreateTree()
 
 

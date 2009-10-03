@@ -451,9 +451,10 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnDelete">
-                <property name="label" translatable="yes">Eliminar</property>
+                <property name="label" translatable="yes">gtk-remove</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -463,10 +464,11 @@
             </child>
             <child>
               <object class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">Cancelar</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -476,12 +478,13 @@
             </child>
             <child>
               <object class="GtkButton" id="btnAccept">
-                <property name="label" translatable="yes">Aceptar</property>
+                <property name="label" translatable="yes">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -532,8 +535,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="show_hidden">True</property>
                         <property name="use_preview_label">False</property>
+                        <property name="show_hidden">True</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
@@ -643,7 +646,6 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -675,7 +677,6 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -850,10 +851,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnCancel1">
-                <property name="label" translatable="yes">Cancelar</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -863,10 +865,11 @@
             </child>
             <child>
               <object class="GtkButton" id="btnAcept">
-                <property name="label" translatable="yes">Aceptar</property>
+                <property name="label" translatable="yes">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -965,7 +968,14 @@
       </row>
     </data>
   </object>
-  <object class="GtkTreeStore" id="treestore1"/>
+  <object class="GtkTreeStore" id="treestore1">
+    <columns>
+      <!-- column-name objective_id -->
+      <column type="gint"/>
+      <!-- column-name delete -->
+      <column type="gboolean"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="DeleteCascade">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Delete in cascade</property>
@@ -987,8 +997,8 @@
             <child>
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Se van a proceder a eliminar
-los siguientes objetivos en casacada</property>
+                <property name="label" translatable="yes">Se va a proceder a eliminar
+los siguientes objetivos en cascada</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -997,14 +1007,44 @@ los siguientes objetivos en casacada</property>
               </packing>
             </child>
             <child>
-              <object class="GtkTreeView" id="treeview">
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="model">treestore1</property>
+                <property name="hadjustment">adjDeleteCascadeH</property>
+                <property name="vadjustment">adjDeleteCascadeV</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                  <object class="GtkTreeView" id="treeview">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="model">treestore1</property>
+                    <property name="hadjustment">adjDeleteCascadeH</property>
+                    <property name="vadjustment">adjDeleteCascadeV</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
                     <child>
-                      <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <property name="title">Objective</property>
+                        <property name="expand">True</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="title">Delete</property>
+                        <child>
+                          <object class="GtkCellRendererToggle" id="deleteCell"/>
+                          <attributes>
+                            <attribute name="active">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
@@ -1024,10 +1064,11 @@ los siguientes objetivos en casacada</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnCancel2">
-                <property name="label" translatable="yes">Cancelar</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1037,10 +1078,11 @@ los siguientes objetivos en casacada</property>
             </child>
             <child>
               <object class="GtkButton" id="btnAccept2">
-                <property name="label" translatable="yes">Aceptar</property>
+                <property name="label" translatable="yes">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1061,5 +1103,13 @@ los siguientes objetivos en casacada</property>
       <action-widget response="0">btnCancel2</action-widget>
       <action-widget response="0">btnAccept2</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjDeleteCascadeH">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjDeleteCascadeV">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
   </object>
 </interface>
