@@ -1,6 +1,9 @@
 0.7:
 ====
 ? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
+	Modificar hijos recursivamente
+	Modificar inconsistencia ancentros recursivamente
+	Obtener objetivos a eliminar
 
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
@@ -76,3 +79,4 @@ Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
+
