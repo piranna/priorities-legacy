@@ -187,18 +187,23 @@ class Controller:
 		return self.__model.DelRequeriments_ByName(objective_name)
 
 
-	def Get_DeleteObjective_Tree(self, objective_id, checked=[]):
-		tree = {}
+	def Get_DeleteObjective_Tree(self, objective_id):
+		checked = []
 
-		for requeriment in self.__model.DirectDependencies(objective_id):
-			if(requeriment['alternative']
-			and requeriment['alternative'] not in checked
-			and len(self.DirectDependents(requeriment['alternative']))<2):
-				checked.append(requeriment['alternative'])
-				tree[requeriment['alternative']] = self.Get_DeleteObjective_Tree(requeriment['alternative'],
-																				checked)
+		def Private_Get_DeleteObjective_Tree(objective_id):
+#			print "\tGet_DeleteObjective_Tree",objective_id,checked
+			tree = {}
 
-		return tree
+			for requeriment in self.__model.DirectDependencies(objective_id):
+				if(requeriment['alternative']
+				and requeriment['alternative'] not in checked
+				and len(self.DirectDependents(requeriment['alternative']))<2):
+					checked.append(requeriment['alternative'])
+					tree[requeriment['alternative']] = self.Get_DeleteObjective_Tree(requeriment['alternative'])
+
+			return tree
+
+		return Private_Get_DeleteObjective_Tree(objective_id)
 
 
 	def DeleteObjective(self, objective_id):
@@ -253,3 +258,4 @@ class Controller:
 			txt += ")]\n"
 
 		return txt
+

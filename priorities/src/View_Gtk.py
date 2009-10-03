@@ -16,6 +16,8 @@ class View:
 	x_step = 100
 	y_step = 50
 
+	__objectiveHI_edit = None
+	__objectiveHI_delete = None
 
 	def __init__(self, controller, database,useDefaultDB):
 		self.__controller = controller
@@ -438,25 +440,42 @@ class View:
 
 
 	def __DelObjective(self, menuitem,objective_id):
-		if self.preferences['deleteCascade']:
+		if(self.preferences['deleteCascade']
+		and len(self.__controller.DirectDependencies(objective_id))>1):
 			dialog = DeleteCascade(self.__controller, objective_id)
 
 			dialog.window.set_transient_for(self.window)
 			response = dialog.window.run()
 			dialog.window.destroy()
 
-			if response <= 0:
-				return
+			if response > 0:
+				self.__CreateTree()
 
-#		self.__controller.DeleteObjective(objective_id)
-		self.__CreateTree()
+		else:
+			dialog = gtk.MessageDialog(self.window,
+										0,
+										gtk.MESSAGE_QUESTION,
+										gtk.BUTTONS_YES_NO,
+										"Desea eliminar el objetivo "+self.__controller.GetName(objective_id)+"?")
+			response = dialog.run()
+			dialog.destroy()
+			if response == gtk.RESPONSE_YES:
+				self.__controller.DeleteObjective(objective_id)
+				self.__CreateTree()
 
 
 	def __on_objective_clicked(self, widget,event):
 		if(event.button == 3):	# Secondary button
 			objective_id = self.__controller.GetId(widget.get_label())
-			self.mnuObjective_Edit.connect('activate',self.__AddObjective, objective_id)
-			self.mnuObjective_Delete.connect('activate',self.__DelObjective, objective_id)
+
+			if self.__objectiveHI_edit:
+				self.mnuObjective_Edit.disconnect(self.__objectiveHI_edit)
+			self.__objectiveHI_edit = self.mnuObjective_Edit.connect('activate',self.__AddObjective, objective_id)
+
+			if self.__objectiveHI_delete:
+				self.mnuObjective_Delete.disconnect(self.__objectiveHI_delete)
+			self.__objectiveHI_delete = self.mnuObjective_Delete.connect('activate',self.__DelObjective, objective_id)
+
 			self.mnuCtxObjective.popup(None,None,None, event.button,event.time)
 		else:
 			self.__AddObjective(widget, self.__controller.GetId(widget.get_label()))

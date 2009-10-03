@@ -82,13 +82,11 @@ class AddObjective:
 
 
 	def __StoreData(self):
-		print "StoreData"
 
 		# [To-Do] Check expiration modification
 		closeDialog = (self.txtObjective.get_text() and self.txtQuantity.get_text())
 
 		if closeDialog:
-			print "\tGuardar datos"
 
 			# Expiration
 			if(self.chkExpiration.get_active()):
@@ -138,14 +136,10 @@ class AddObjective:
 											self.expiration,
 											txtBuffer)
 
-		else:
-			print "\tStoreData no cierra"
-
 		return closeDialog
 
 
 	def __Delete(self):
-		print "Delete"
 		if self.__objective:
 			import preferences
 			preferences = preferences.Load()
@@ -155,12 +149,9 @@ class AddObjective:
 
 
 	def __Cancel(self):
-		print "Cancel"
-
 		closeDialog = (self.oldObjective == self.txtObjective.get_text())
 
 		if not closeDialog:
-			print "\tCancel no cierra"
 			dialog = gtk.MessageDialog(self.window,
 										0,
 										gtk.MESSAGE_QUESTION,
@@ -176,16 +167,12 @@ class AddObjective:
 
 
 	def __on_AddObjective_delete_event(self, widget,data=None):
-		print "delete_event"
-
 		if not self.__destroy:
 			self.__destroy = True
 			return True
 
-	
-	def __on_AddObjective_response(self, widget, response):
-		print "response"
 
+	def __on_AddObjective_response(self, widget, response):
 		closeDialog = True
 
 		if response == 1:
@@ -193,16 +180,15 @@ class AddObjective:
 		elif response == 2:
 			closeDialog = self.__Delete()
 		else:
-			print "__on_AddObjective_response",response
 			closeDialog = self.__Cancel()
 
 			if response == -4 and not closeDialog:
 				self.__destroy = False
 
-		print "closeDialog",closeDialog
 		if not closeDialog:
 			self.window.emit_stop_by_name('response')
 
 
 	def __on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
+
