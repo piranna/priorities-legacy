@@ -972,7 +972,11 @@
     <columns>
       <!-- column-name objective_id -->
       <column type="gint"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
       <!-- column-name delete -->
+      <column type="gboolean"/>
+      <!-- column-name inconsistent -->
       <column type="gboolean"/>
     </columns>
   </object>
@@ -1030,7 +1034,7 @@ los siguientes objetivos en cascada</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
-                            <attribute name="text">0</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -1041,7 +1045,8 @@ los siguientes objetivos en cascada</property>
                         <child>
                           <object class="GtkCellRendererToggle" id="deleteCell"/>
                           <attributes>
-                            <attribute name="active">1</attribute>
+                            <attribute name="active">2</attribute>
+                            <attribute name="inconsistent">3</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -1107,9 +1112,12 @@ los siguientes objetivos en cascada</property>
   <object class="GtkAdjustment" id="adjDeleteCascadeH">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
   </object>
   <object class="GtkAdjustment" id="adjDeleteCascadeV">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
