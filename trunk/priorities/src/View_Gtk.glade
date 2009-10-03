@@ -1106,7 +1106,7 @@ los siguientes objetivos en cascada</property>
     </child>
     <action-widgets>
       <action-widget response="0">btnCancel2</action-widget>
-      <action-widget response="0">btnAccept2</action-widget>
+      <action-widget response="2">btnAccept2</action-widget>
     </action-widgets>
   </object>
   <object class="GtkAdjustment" id="adjDeleteCascadeH">

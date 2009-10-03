@@ -96,7 +96,7 @@ class Model:
 
 #		print "sql=",sql
 
-		return self.connection.execute(sql)
+		return self.connection.execute(sql).fetchall()
 
 
 	def DirectDependents(self, objective_id):
@@ -122,6 +122,7 @@ class Model:
 		query = self.connection.execute('''
 			SELECT id FROM objectives
 				WHERE name==?
+				LIMIT 1
 			''',
 			(name,))
 		query = query.fetchone()
@@ -328,3 +329,4 @@ class Model:
 			(objective_id,))
 
 #		print "\ndependents 4:",self.DirectDependents(objective_id)
+

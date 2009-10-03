@@ -1,8 +1,6 @@
 0.7:
 ====
 ? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
-	Modificar inconsistencia ancentros recursivamente
-	Obtener objetivos a eliminar
 	[BUG] Si se decide no eliminar uno de los objetivos con requisitos ya checkeados los previos pueden haberse borrado
 
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
@@ -38,6 +36,8 @@ Usar opciones afirmativas y negativas
 ====
 Aumentar grosor de las lineas de los requesitos al hacer mouseover
 
+Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+
 Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
@@ -50,6 +50,7 @@ Exportar/importar a texto plano
 Cargar/importar archivo de exportacion desde terminal
 i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
+Cambiar indices en base de datos a UNSIGNED
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 
@@ -81,4 +82,5 @@ Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
+Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 
