@@ -141,9 +141,28 @@ class AddObjective:
 
 	def __Delete(self):
 		if self.__objective:
-			import preferences
-			preferences = preferences.Load()
-			self.__controller.DeleteObjective(self.__objective,preferences['deleteCascade'])
+			if(self.preferences['deleteCascade']
+			and len(self.__controller.DirectDependencies(self.__objective))>1):
+				dialog = DeleteCascade(self.__controller, self.__objective)
+
+				dialog.window.set_transient_for(self.window)
+				response = dialog.window.run()
+				dialog.window.destroy()
+
+				if response > 0:
+					self.__CreateTree()
+
+			else:
+				dialog = gtk.MessageDialog(self.window,
+											0,
+											gtk.MESSAGE_QUESTION,
+											gtk.BUTTONS_YES_NO,
+											"Desea eliminar el objetivo "+self.__controller.GetName(self.__objective)+"?")
+				response = dialog.run()
+				dialog.destroy()
+				if response == gtk.RESPONSE_YES:
+					self.__controller.DeleteObjective(self.__objective)
+					self.__CreateTree()
 
 		return True
 
