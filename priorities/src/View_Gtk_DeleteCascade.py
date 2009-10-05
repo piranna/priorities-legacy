@@ -50,17 +50,19 @@ class DeleteCascade:
 	def __on_deleteCell_toggled(self, cell, path,model):
 		def SetChildrens(iterator,column, value):
 			iterator = model.iter_children(iterator)
-			while iterator:
-				model.set_value(iterator,2, value)
-				SetChildrens(iterator,column, value)
-				iterator = model.iter_next(iterator)
+			if(iterator
+			and value != model.get_value(iterator,2)):
+				while iterator:
+					model.set_value(iterator,2, value)
+					SetChildrens(iterator,column, value)
+					iterator = model.iter_next(iterator)
 
-		def SetAncestorsInconsistency(iterator,column, value):
-			iterator = model.iter_parent(iterator)
-			while iterator:
-#				model.set_value(iterator,2, value)
-				SetAncestors(iterator,column, value)
-				iterator = model.iter_next(iterator)
+#		def SetAncestorsInconsistency(iterator,column, value):
+#			iterator = model.iter_parent(iterator)
+#			while iterator:
+##				model.set_value(iterator,2, value)
+#				SetAncestors(iterator,column, value)
+#				iterator = model.iter_next(iterator)
 
 		iterator = model.get_iter(path)
 		if model.get_value(iterator,2):
