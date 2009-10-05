@@ -2,6 +2,8 @@
 ====
 ? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
 	[BUG] Si se decide no eliminar uno de los objetivos con requisitos ya checkeados los previos pueden haberse borrado
+		Comprobar requisitos cuando se conserve un objetivo
+		? Conservar requisitos que se iban a eliminar
 
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
