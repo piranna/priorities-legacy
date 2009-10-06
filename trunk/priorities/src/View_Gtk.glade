@@ -1011,7 +1011,7 @@ los siguientes objetivos en cascada</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
+              <object class="GtkScrolledWindow" id="scrolledwindow2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hadjustment">adjDeleteCascadeH</property>
@@ -1032,7 +1032,7 @@ los siguientes objetivos en cascada</property>
                         <property name="title">Objective</property>
                         <property name="expand">True</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>
                             <attribute name="text">1</attribute>
                           </attributes>
