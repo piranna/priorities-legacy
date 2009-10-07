@@ -191,15 +191,32 @@ class Controller:
 		checked = []
 
 		def Private_Get_DeleteObjective_Tree(objective_id):
-#			print "\tGet_DeleteObjective_Tree",objective_id,checked
+
+			def MergeDependents(dependents):
+				for dependent in dependents:
+					if(dependent['objective'] in ):
+						
+					elif(IsDescendent(dependent['objective'],objective_id)):
+						pass
+
 			tree = {}
+			stack = []
 
 			for requeriment in self.__model.DirectDependencies(objective_id):
 				if(requeriment['alternative']
-				and requeriment['alternative'] not in checked
-				and len(self.DirectDependents(requeriment['alternative']))<2):
-					checked.append(requeriment['alternative'])
-					tree[requeriment['alternative']] = self.Get_DeleteObjective_Tree(requeriment['alternative'])
+				and requeriment['alternative'] not in checked):
+					dependents = self.DirectDependents(requeriment['alternative'])
+
+					# If objective has several dependents
+					# merge the ones that are requeriments of the objetive to delete
+					if len(dependents) >= 2:
+						MergeDependents(dependents)
+
+					# If objective doesn't have several dependents
+					# include it as deletable
+					if len(dependents) < 2:
+						checked.append(requeriment['alternative'])
+						tree[requeriment['alternative']] = Private_Get_DeleteObjective_Tree(requeriment['alternative'])
 
 			return tree
 
