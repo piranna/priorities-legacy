@@ -20,7 +20,7 @@ class DeleteCascade:
 
 		# Fill model
 		def Append(parent, tree):
-#			print "Append",tree
+			print "Append",tree
 			for objective_id in tree.keys():
 				Append(model.append(parent,
 									(objective_id, controller.GetName(objective_id), True,False)),
