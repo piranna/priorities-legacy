@@ -10,8 +10,6 @@
 
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
 	Cambiar en lugar de eliminar y rehacer requerimientos modificar in-situ
-	Cuando se elimine un requerimiento, si es el unico eliminarlo del todo
-		Comprobar diferencias entre el antes y el despues
 
 
 0.8:

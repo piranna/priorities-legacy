@@ -189,20 +189,41 @@ class Controller:
 
 	def Get_DeleteObjective_Tree(self, objective_id):
 		checked = []
+		checked.append(objective_id)
 
-		def Private_Get_DeleteObjective_Tree(objective_id):
-
+		def Private_Get_DeleteObjective_Tree(parent):
 			def MergeDependents(dependents):
-				for dependent in dependents:
-					if(dependent['objective'] in ):
-						
-					elif(IsDescendent(dependent['objective'],objective_id)):
-						pass
+			''' Merge the dependencies that has objective_id as an ancestor
+				removing duplicates
+			'''
+				def IsDescendent(objective):
+				''' Check if objective is a descendent of objective_id
+					in the requeriments tree
+				'''
+					for dependent in self.__model.DirectDependents(objective):
+						if(dependent['objective'] == objective_id
+						or IsDescendent(dependent['objective'])):
+							return True
+					return False
+
+
+				ancestors = []
+
+###
+				for index in range(0, len(dependents)):
+					if(dependents[index]['objective'] in ancestors):
+						dependents[index] = None
+					elif(IsDescendent(dependents[index]['objective'])):
+						ancestors.append(dependents[index]['objective'])
+
+				# Remove merged dependents
+###
+
 
 			tree = {}
 			stack = []
 
-			for requeriment in self.__model.DirectDependencies(objective_id):
+			for requeriment in self.__model.DirectDependencies(parent):
 				if(requeriment['alternative']
 				and requeriment['alternative'] not in checked):
 					dependents = self.DirectDependents(requeriment['alternative'])
@@ -219,6 +240,7 @@ class Controller:
 						tree[requeriment['alternative']] = Private_Get_DeleteObjective_Tree(requeriment['alternative'])
 
 			return tree
+
 
 		return Private_Get_DeleteObjective_Tree(objective_id)
 
