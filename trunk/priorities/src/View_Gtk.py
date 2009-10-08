@@ -226,10 +226,13 @@ class View:
 				self.layout.set_size(int(layout_size_x),
 											int(layout_size_y))
 
-			def CreateButton(label):
+			def CreateButton(label,objective_id):
 				button = gtk.Button(label)
 				button.set_focus_on_click(False)
 				button.show()
+				button.connect('clicked',self.__AddObjective, objective_id)
+				button.connect('enter_notify_event',self.__on_enter_notify)
+				button.connect('leave_notify_event',self.__on_leave_notify)
 				return button
 
 			x = random.randint(self.x_step/2.0,self.x_step)
@@ -251,8 +254,8 @@ class View:
 						# else create a new one
 						else:
 							# Create requeriment button
-							requeriment_button = CreateButton(self.__controller.GetName(objective['alternative']))
-							requeriment_button.connect('clicked',self.__AddObjective, objective['objective_id'])
+							requeriment_button = CreateButton(self.__controller.GetName(objective['alternative']),
+																objective['objective_id'])
 
 							# Put requeriment button
 							coords = (x,y)
@@ -327,7 +330,8 @@ class View:
 					color = GetColor()
 					if(color):
 						# Create objective button
-						button = CreateButton(objective['name'])
+						button = CreateButton(objective['name'], objective['objective_id'])
+						button.connect('button-press-event',self.__on_objective_clicked)
 
 						# Tooltip
 						button.set_tooltip_text("Cantidad: "+str(objective['objective_quantity']))
@@ -375,8 +379,6 @@ class View:
 							button.modify_bg(gtk.STATE_NORMAL, color)
 
 						SetExpirationColor()
-
-						button.connect('button-press-event',self.__on_objective_clicked)
 
 						# Put objective button
 						self.layout.put(button, int(x),int(y))
@@ -477,8 +479,6 @@ class View:
 			self.__objectiveHI_delete = self.mnuObjective_Delete.connect('activate',self.__DelObjective, objective_id)
 
 			self.mnuCtxObjective.popup(None,None,None, event.button,event.time)
-		else:
-			self.__AddObjective(widget, self.__controller.GetId(widget.get_label()))
 
 
 	def __ShowLayoutMenu(self, widget,event):
@@ -530,4 +530,16 @@ class View:
 			except:
 				print "Exception exporting database"
 		dialog.destroy()
+
+
+	def __on_enter_notify(self, widget,event):
+		print "__on_enter_notify"
+		self.layout.queue_draw()
+		self.__DrawRequerimentsArrows(widget,event)
+
+
+	def __on_leave_notify(self, widget,event):
+		print "__on_leave_notify"
+		self.layout.queue_draw()
+		self.__DrawRequerimentsArrows(widget,event)
 
