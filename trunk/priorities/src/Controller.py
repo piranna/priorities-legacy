@@ -188,40 +188,47 @@ class Controller:
 
 
 	def Get_DeleteObjective_Tree(self, objective_id):
+		''' Get the tree of the objectives that are going to be deleted
+		'''
+		# Checked objectives stack
 		checked = []
-		checked.append(objective_id)
 
 		def Private_Get_DeleteObjective_Tree(parent):
 			def MergeDependents(dependents):
-			''' Merge the dependencies that has objective_id as an ancestor
-				removing duplicates
-			'''
-				def IsDescendent(objective):
-				''' Check if objective is a descendent of objective_id
-					in the requeriments tree
+				''' Merge the dependencies that has objective_id as an ancestor
+					removing duplicates
 				'''
+				def IsDescendent(objective):
+					''' Check if objective is a descendent of objective_id
+						in the requeriments tree
+					'''
+					if objective==objective_id:
+						return True
 					for dependent in self.__model.DirectDependents(objective):
 						if(dependent['objective'] == objective_id
 						or IsDescendent(dependent['objective'])):
 							return True
 					return False
 
+				# [To-Do] It seems it's called twice when has several dependent
+				# that are from the same requeriment
 
 				ancestors = []
 
-###
 				for index in range(0, len(dependents)):
-					if(dependents[index]['objective'] in ancestors):
-						dependents[index] = None
-					elif(IsDescendent(dependents[index]['objective'])):
-						ancestors.append(dependents[index]['objective'])
+					if(IsDescendent(dependents[index]['objective'])):
+						ancestors.append(index)
 
 				# Remove merged dependents
-###
+				ancestors.reverse()
+				for index in ancestors:
+					dependents.pop(index)
 
 
+			# Increment checked objectives stack
+			# and init subtree
+			checked.append(parent)
 			tree = {}
-			stack = []
 
 			for requeriment in self.__model.DirectDependencies(parent):
 				if(requeriment['alternative']
@@ -236,9 +243,11 @@ class Controller:
 					# If objective doesn't have several dependents
 					# include it as deletable
 					if len(dependents) < 2:
-						checked.append(requeriment['alternative'])
 						tree[requeriment['alternative']] = Private_Get_DeleteObjective_Tree(requeriment['alternative'])
 
+			# Decrement checked objectives stack
+			# and return subtree
+			checked.pop()
 			return tree
 
 
