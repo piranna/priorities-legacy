@@ -36,8 +36,6 @@ Definir archivo de preferencias como parametro
 
 1.0:
 ====
-? Aumentar grosor de las lineas de los requesitos con enter_notify y disminuirlo con leave_notify
-
 Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
 Internacionalizacion con gettext

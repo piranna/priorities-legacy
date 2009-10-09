@@ -19,6 +19,8 @@ class View:
 	__objectiveHI_edit = None
 	__objectiveHI_delete = None
 
+	__cursorObjective = None
+
 	def __init__(self, controller, database,useDefaultDB):
 		self.__controller = controller
 		self.preferences = preferences.Load()
@@ -138,8 +140,7 @@ class View:
 		dialog.destroy()
 
 
-	def __DrawRequerimentsArrows(self,widget,event):
-
+	def __DrawRequerimentsArrows(self, widget,event):
 		# Graphic Context
 		gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
 
@@ -149,16 +150,16 @@ class View:
 				angle = math.radians(angle)
 
 #				print arrow,angle,lenght
-				cotan = math.atan((arrow[0][0]-arrow[1][0])/(arrow[0][1]-arrow[1][1]))+angle
+				cotan = math.atan((arrow[1][0]-arrow[2][0])/(arrow[1][1]-arrow[2][1]))+angle
 
-				return (arrow[1][0]+math.sin(cotan)*lenght, arrow[1][1]+math.cos(cotan)*lenght)
+				return (arrow[2][0]+math.sin(cotan)*lenght, arrow[2][1]+math.cos(cotan)*lenght)
 
 			arrowPoint = ArrowPoint(arrow, 15, 15)
-			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
+			self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
 												int(arrowPoint[0]),int(arrowPoint[1]))
 
 			arrowPoint = ArrowPoint(arrow, -15, 15)
-			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
+			self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
 												int(arrowPoint[0]),int(arrowPoint[1]))
 
 
@@ -188,21 +189,23 @@ class View:
 												layout_size[0],layout_size[1])
 
 		# Arrows
-		print self.__req_arrows
+#		print self.__req_arrows
 		for arrow in self.__req_arrows:
-			print "\t",arrow
+#			print "\t",arrow
 
-#			if :
-#				gc.set_line_attributes(2, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
-#			else:
-#				gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+			if arrow[0]==self.__cursorObjective:
+				gc.set_line_attributes(2, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+			else:
+				gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 
 			# Arrow line
-			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
-												int(arrow[1][0]),int(arrow[1][1]))
+			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
+												int(arrow[2][0]),int(arrow[2][1]))
 			# Arrow head
 			if self.preferences["showArrowHeads"]:
 				DrawHead(arrow)
+
+		gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 #		print
 
 
@@ -244,8 +247,8 @@ class View:
 				button.set_focus_on_click(False)
 				button.show()
 				button.connect('clicked',self.__AddObjective, objective_id)
-				button.connect('enter_notify_event',self.__on_enter_notify)
-				button.connect('leave_notify_event',self.__on_leave_notify)
+				button.connect('enter_notify_event',self.__IncreaseLineWidth, objective_id)
+				button.connect('leave_notify_event',self.__IncreaseLineWidth)
 				return button
 
 			x = random.randint(self.x_step/2.0,self.x_step)
@@ -286,7 +289,7 @@ class View:
 							x += self.x_step + random.randint(0, self.x_step/2)
 
 						# Store the requeriment arrow coordinates
-						self.__req_arrows.append((coords, GetCoordinates(objective['alternative'])))
+						self.__req_arrows.append((objective['objective_id'],coords, GetCoordinates(objective['alternative'])))
 
 			# If level has had requeriments,
 			# reset objectives coordinates
@@ -409,7 +412,7 @@ class View:
 				if(coords	# [To-Do] Optimizar para requisitos sin alternativas
 				and level_requeriments.has_key(objective['objective_id'])
 				and objective['requeriment'] not in level_requeriments[objective['objective_id']]):
-					self.__req_arrows.append((GetCoordinates(objective['objective_id']), coords))
+					self.__req_arrows.append((objective['objective_id'],GetCoordinates(objective['objective_id']), coords))
 					level_requeriments[objective['objective_id']].append(objective['requeriment'])
 #					print self.__req_arrows
 
@@ -545,12 +548,6 @@ class View:
 		dialog.destroy()
 
 
-	def __on_enter_notify(self, widget,event):
-		print "__on_enter_notify"
-		self.__DrawRequerimentsArrows(widget,event)
-
-
-	def __on_leave_notify(self, widget,event):
-		print "__on_leave_notify"
-		self.__DrawRequerimentsArrows(widget,event)
-
+	def __IncreaseLineWidth(self, widget,event, objective_id=None):
+		self.__cursorObjective = objective_id
+		self.layout.queue_draw()
