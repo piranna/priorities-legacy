@@ -64,13 +64,41 @@ class DeleteCascade:
 #				SetAncestors(iterator,column, value)
 #				iterator = model.iter_next(iterator)
 
+		def Preserve(iterator, objective_id):
+			while iterator:
+				if(model.get_value(iterator,0)==objective_id
+				and model.get_value(iterator,2)):
+					model.set_value(iterator,2, False)
+					Preserve(model.get_iter_root(), model.get_value(iterator,0))
+
+				else:
+					Preserve(model.iter_children(iterator), objective_id)
+
+				iterator = model.iter_next(iterator)
+
+		def Delete(iterator, objective_id):
+			while iterator:
+				if model.get_value(iterator,0)==objective_id:
+					pass
+#					model.set_value(iterator,2, False)
+#					SetChildrens(iterator,2, False)
+				else:
+					Delete(model.iter_children(iterator), objective_id)
+				iterator = model.iter_next(iterator)
+
+
 		iterator = model.get_iter(path)
+
+		# Active - Set preserve
 		if model.get_value(iterator,2):
-			model.set_value(iterator,2, False)
-			SetChildrens(iterator,2, False)
+			Preserve(model.get_iter_root(), model.get_value(iterator,0))
+#			SetChildrens(iterator,2, False)
 #			SetAncestorsInconsistency(iterator,2, False)
+
+		# Inactive - Set delete
 		else:
-			model.set_value(iterator,2, True)
-			SetChildrens(iterator,2, True)
+			Delete(model.get_iter_root(), model.get_value(iterator,0))
+#			model.set_value(iterator,2, True)
+#			SetChildrens(iterator,2, True)
 #			SetAncestorsInconsistency(iterator,2, True)
 
