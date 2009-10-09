@@ -19,27 +19,17 @@
 	Distribuir los demas proporcionalmente
 	Con las alternativas, registrarlas y distribuirlas a posteriori
 	Distribucion de requerimientos en un mismo nivel debajo de sus alternativas
-	Gravity de los botones
+
+Gravity de los botones
+
+Cambiar indices en base de datos a UNSIGNED
 
 
 0.9:
 ====
-Dibujar alternativas en modo texto
-Dibujar lineas en modo texto
-
 Pasar de getopts a optparse
 Usar (exclusivamente) opciones largas
 Usar opciones afirmativas y negativas
-
-Definir archivo de preferencias como parametro
-
-
-1.0:
-====
-Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
-
-Internacionalizacion con gettext
-	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
@@ -48,9 +38,22 @@ Exportar/importar a texto plano
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
 Cargar/importar archivo de exportacion desde terminal
+
+Definir archivo de preferencias como parametro
+
+
+1.0:
+====
+Dibujar alternativas en modo texto
+Dibujar lineas en modo texto
+
+Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+
+Internacionalizacion con gettext
+	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
+
 i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
-Cambiar indices en base de datos a UNSIGNED
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 
@@ -83,4 +86,3 @@ Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
-
