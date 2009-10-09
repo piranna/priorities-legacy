@@ -162,6 +162,8 @@ class View:
 												int(arrowPoint[0]),int(arrowPoint[1]))
 
 
+#		self.layout.queue_draw()
+
 		# Background sharp
 		if(self.preferences['showSharp']):
 			layout_size = self.layout.get_size()
@@ -172,18 +174,29 @@ class View:
 				self.layout.bin_window.draw_line(gc, 0,y*self.y_step,
 													layout_size[0],y*self.y_step)
 
+			# Left
 #			self.layout.bin_window.draw_line(gc, 0,0,
 #												x*self.x_step,layout_size[1])
+			# Top
 #			self.layout.bin_window.draw_line(gc, 0,0,
 #												layout_size[0],y*self.y_step)
+			# Right
 			self.layout.bin_window.draw_line(gc, layout_size[0],0,
 												layout_size[0],layout_size[1])
+			# Down
 			self.layout.bin_window.draw_line(gc, 0,layout_size[1],
 												layout_size[0],layout_size[1])
 
 		# Arrows
+		print self.__req_arrows
 		for arrow in self.__req_arrows:
-#			print "\t",arrow
+			print "\t",arrow
+
+#			if :
+#				gc.set_line_attributes(2, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+#			else:
+#				gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+
 			# Arrow line
 			self.layout.bin_window.draw_line(gc, int(arrow[0][0]),int(arrow[0][1]),
 												int(arrow[1][0]),int(arrow[1][1]))
@@ -534,12 +547,10 @@ class View:
 
 	def __on_enter_notify(self, widget,event):
 		print "__on_enter_notify"
-		self.layout.queue_draw()
 		self.__DrawRequerimentsArrows(widget,event)
 
 
 	def __on_leave_notify(self, widget,event):
 		print "__on_leave_notify"
-		self.layout.queue_draw()
 		self.__DrawRequerimentsArrows(widget,event)
 
