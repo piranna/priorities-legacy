@@ -104,9 +104,13 @@ class AddObjective(View_Gtk.View):
 			start,end = txtBuffer.get_bounds()
 			txtBuffer = txtBuffer.get_text(start,end)
 			if(txtBuffer==self.oldRequeriments):
+				print "\tigual"
 				txtBuffer = None
 
 			else:
+				print "\tdistintos"
+				print "\t",self.oldRequeriments
+				print "\t",txtBuffer
 				self.controller.DelRequeriments(self.txtObjective.get_text())
 
 				# Requeriments
