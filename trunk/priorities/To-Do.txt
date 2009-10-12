@@ -1,9 +1,3 @@
-0.7:
-====
-([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
-([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
-
-
 0.8:
 ====
 Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuandosean requeridos por varios
@@ -23,6 +17,11 @@ Cambiar indices en base de datos a UNSIGNED
 
 Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
 	opcion
+
+Crear una clase para la interfaz al archivo de preferencias
+
+Arreglar base de datos en Preferences
+	Cambiar sensitivity al panel
 
 
 0.9:

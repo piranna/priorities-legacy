@@ -108,11 +108,9 @@ class Preferences(View_Gtk.View):
 
 
 	def __on_cbShowExceededDependencies_changed(self, widget):
-		print "__on_showExceededDependencies_toggled",widget.get_active()
 		self.preferences["showExceededDependencies"] = widget.get_active()
 
 
 	def __on_sbExpirationWarning_valuechanged(self, widget):
-		print "__on_sbExpirationWarning_valuechanged",widget.get_value_as_int()
 		self.preferences["expirationWarning"] = widget.get_value_as_int()
 

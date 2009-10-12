@@ -243,9 +243,10 @@
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <property name="program_name">Priorities</property>
-    <property name="version">0.6</property>
+    <property name="version">0.7</property>
     <property name="copyright" translatable="yes">Copyright 2009
-&#xA9; Jes&#xFA;s Legan&#xE9;s Combarro</property>
+&#xA9; Jes&#xFA;s Legan&#xE9;s Combarro "El Pira&#xF1;a"
+&lt;piranna@gmail.com&gt;</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
