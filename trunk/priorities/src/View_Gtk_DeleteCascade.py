@@ -1,21 +1,18 @@
-import gtk
+import View_Gtk
 
 
-class DeleteCascade:
-	def __init__(self, controller,objective_id):
-		self.__controller = controller
+class DeleteCascade(View_Gtk.View):
+	def __init__(self, objective_id):
+		View_Gtk.View.__init__(self)
 
-		builder = gtk.Builder()
-		builder.add_from_file("View_Gtk.glade")
+		self.window = self.builder.get_object("DeleteCascade")
 
-		self.window = builder.get_object("DeleteCascade")
-
-		treeview = builder.get_object("treeview")
+		treeview = self.builder.get_object("treeview")
 		model = treeview.get_model()
 
 		self.window.connect('response',self.__on_DeleteCascade_response, model)
 
-		deleteCell = builder.get_object("deleteCell")
+		deleteCell = self.builder.get_object("deleteCell")
 		deleteCell.connect('toggled', self.__on_deleteCell_toggled, model)
 
 		# Fill model
@@ -23,12 +20,12 @@ class DeleteCascade:
 			print "Append",tree
 			for objective_id in tree.keys():
 				Append(model.append(parent,
-									(objective_id, controller.GetName(objective_id), True,False)),
+									(objective_id, self.controller.GetName(objective_id), True,False)),
 						tree[objective_id])
 
 		Append(model.append(None,
-							(objective_id, controller.GetName(objective_id), True,False)),
-				controller.Get_DeleteObjective_Tree(objective_id))
+							(objective_id, self.controller.GetName(objective_id), True,False)),
+				self.controller.Get_DeleteObjective_Tree(objective_id))
 
 		treeview.expand_all()
 
@@ -37,7 +34,7 @@ class DeleteCascade:
 		if response>0:
 			def DeleteObjective_recursive(iterator):
 				if model.get_value(iterator,2):
-					self.__controller.DeleteObjective(model.get_value(iterator,0))
+					self.controller.DeleteObjective(model.get_value(iterator,0))
 
 				iterator = model.iter_children(iterator)
 				while iterator:

@@ -1,9 +1,9 @@
-import gtk
+import View_Gtk
 
 
-class About:
+class About(View_Gtk.View):
 	def __init__(self):
-		builder = gtk.Builder()
-		builder.add_from_file("View_Gtk.glade")
+		View_Gtk.View.__init__(self)
 
-		self.window = builder.get_object("About")
+		self.window = self.builder.get_object("About")
+

@@ -81,7 +81,9 @@ if __name__ == "__main__":
 	if not textmode:
 #		try:
 			import View_Gtk
-			interface = View_Gtk.View(controller, db,useDefaultDB)
+			View_Gtk.View.controller = controller
+			import View_Gtk_Main
+			interface = View_Gtk_Main.Main(db,useDefaultDB)
 #		except: #gtk.GtkWarning, e:
 			print
 			print "An error has ocurred loading GTK interface"

@@ -1,33 +1,32 @@
 import gtk
 
+import View_Gtk
+
 import preferences
 
 
-class Preferences:
-	def __init__(self, controller):
-		self.__controller = controller
+class Preferences(View_Gtk.View):
+	def __init__(self):
+		View_Gtk.View.__init__(self)
 
 		self.preferences = preferences.Load()
 
 		# [To-Do] Check diferences between stored and loaded preferences
 
-		builder = gtk.Builder()
-		builder.add_from_file("View_Gtk.glade")
-
 		# Preferences window
-		self.window = builder.get_object("Preferences")
+		self.window = self.builder.get_object("Preferences")
 		self.window.connect('response',self.__on_Preferences_response)
 
 		#
 		# DataBase
 
 		# Use default database
-		chkDefaultDB = builder.get_object("chkDefaultDB")
+		chkDefaultDB = self.builder.get_object("chkDefaultDB")
 		chkDefaultDB.connect('toggled', self.__on_chkDefaultDB_toggled)
 		chkDefaultDB.set_active(self.preferences['useDefaultDB'])
 
 		# Default database
-		self.fcDefaultDB = builder.get_object("fcDefaultDB")
+		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
 		self.fcDefaultDB.set_filename(self.preferences['database'])
 
 		chkDefaultDB.toggled()
@@ -36,12 +35,12 @@ class Preferences:
 		# Graphic
 
 		# Show sharp
-		chkShowSharp = builder.get_object("chkShowSharp")
+		chkShowSharp = self.builder.get_object("chkShowSharp")
 		chkShowSharp.connect('toggled', self.__on_chkShowSharp_toggled)
 		chkShowSharp.set_active(self.preferences['showSharp'])
 
 		# Show arrow heads
-		chkShowArrowHeads = builder.get_object("chkShowArrowHeads")
+		chkShowArrowHeads = self.builder.get_object("chkShowArrowHeads")
 		chkShowArrowHeads.connect('toggled', self.__on_chkShowArrowHeads_toggled)
 		chkShowArrowHeads.set_active(self.preferences['showArrowHeads'])
 
@@ -49,36 +48,36 @@ class Preferences:
 		# Objectives
 
 		# Show exceeded dependencies
-		cbShowExceededDependencies = builder.get_object("cbShowExceededDependencies")
+		cbShowExceededDependencies = self.builder.get_object("cbShowExceededDependencies")
 		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
 		cbShowExceededDependencies.set_active(self.preferences['showExceededDependencies'])
 
 		# Expiration warning
-		sbExpirationWarning = builder.get_object("sbExpirationWarning")
+		sbExpirationWarning = self.builder.get_object("sbExpirationWarning")
 		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
 		sbExpirationWarning.set_value(self.preferences['expirationWarning'])
 
 		# Delete on cascade
-		chkDeleteCascade = builder.get_object("chkDeleteCascade")
+		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
 		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
 		chkDeleteCascade.set_active(self.preferences['deleteCascade'])
 
 		#
 		# Button colors
 
-		cbInabordable = builder.get_object("cbInabordable")
+		cbInabordable = self.builder.get_object("cbInabordable")
 		cbInabordable.connect('color-set', self.__on_colorbutton_colorset)
 		cbInabordable.set_color(gtk.gdk.color_parse(self.preferences['color_unabordable']))
 
-		cbInProcess = builder.get_object("cbInProcess")
+		cbInProcess = self.builder.get_object("cbInProcess")
 		cbInProcess.connect('color-set', self.__on_colorbutton_colorset)
 		cbInProcess.set_color(gtk.gdk.color_parse(self.preferences['color_inprocess']))
 
-		cbAvailable = builder.get_object("cbAvailable")
+		cbAvailable = self.builder.get_object("cbAvailable")
 		cbAvailable.connect('color-set', self.__on_colorbutton_colorset)
 		cbAvailable.set_color(gtk.gdk.color_parse(self.preferences['color_available']))
 
-		cbSatisfacted = builder.get_object("cbSatisfacted")
+		cbSatisfacted = self.builder.get_object("cbSatisfacted")
 		cbSatisfacted.connect('color-set', self.__on_colorbutton_colorset)
 		cbSatisfacted.set_color(gtk.gdk.color_parse(self.preferences['color_satisfacted']))
 
