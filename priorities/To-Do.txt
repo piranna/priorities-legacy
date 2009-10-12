@@ -4,7 +4,7 @@
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
 
 [BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
-	Cambiar en lugar de eliminar y rehacer requerimientos modificar in-situ
+	Cambiar en lugar de eliminar y rehacer requerimientos, modificar in-situ
 
 
 0.8:

@@ -1,44 +1,43 @@
 import datetime
-import gtk
+
+import View_Gtk
 
 
-class AddObjective:
+class AddObjective(View_Gtk.View):
 	__destroy = True
 
-	def __init__(self, controller, objective=None):
-		self.__controller = controller
+	def __init__(self, objective=None):
+		View_Gtk.View.__init__(self)
+
 		self.__objective = objective
 
-		builder = gtk.Builder()
-		builder.add_from_file("View_Gtk.glade")
-
-		self.window = builder.get_object("AddObjective")
+		self.window = self.builder.get_object("AddObjective")
 		self.window.connect('delete_event',self.__on_AddObjective_delete_event)
 		self.window.connect('response',self.__on_AddObjective_response)
 
 		# Objective & quantity
-		self.txtObjective = builder.get_object("txtObjective")
-		self.txtQuantity = builder.get_object("txtQuantity")
+		self.txtObjective = self.builder.get_object("txtObjective")
+		self.txtQuantity = self.builder.get_object("txtQuantity")
 
 		# Expiration
-		self.chkExpiration = builder.get_object("chkExpiration")
+		self.chkExpiration = self.builder.get_object("chkExpiration")
 		self.chkExpiration.connect('toggled', self.__on_chkExpiration_toggled)
 
-		self.vbCalendarHour = builder.get_object("vbCalendarHour")
-		self.calExpiration = builder.get_object("calExpiration")
-		self.sbHour = builder.get_object("sbHour")
-		self.sbMinute = builder.get_object("sbMinute")
-		self.sbSecond = builder.get_object("sbSecond")
+		self.vbCalendarHour = self.builder.get_object("vbCalendarHour")
+		self.calExpiration = self.builder.get_object("calExpiration")
+		self.sbHour = self.builder.get_object("sbHour")
+		self.sbMinute = self.builder.get_object("sbMinute")
+		self.sbSecond = self.builder.get_object("sbSecond")
 
 		# Requeriments
-		self.txtRequeriments = builder.get_object("txtRequirements")
+		self.txtRequeriments = self.builder.get_object("txtRequirements")
 		txtBuffer = self.txtRequeriments.get_buffer()
 
 		# Set data
 		if objective:
-			objective = self.__controller.GetObjective_byId(objective)
+			objective = self.controller.GetObjective_byId(objective)
 
-			btnDelete = builder.get_object("btnDelete")
+			btnDelete = self.builder.get_object("btnDelete")
 			btnDelete.show()
 
 			if objective:
@@ -61,7 +60,7 @@ class AddObjective:
 
 				dependencies = ""
 				last_requeriment = None
-				for dependency in self.__controller.DirectDependencies(objective['id']):
+				for dependency in self.controller.DirectDependencies(objective['id']):
 					if(last_requeriment and last_requeriment==dependency['requeriment']):
 						dependencies += ','
 					else:
@@ -69,7 +68,7 @@ class AddObjective:
 							dependencies += '\n'
 						last_requeriment = dependency['requeriment']
 					if(dependency['alternative']):
-						dependencies += self.__controller.GetName(dependency['alternative'])
+						dependencies += self.controller.GetName(dependency['alternative'])
 				txtBuffer.set_text(dependencies)
 
 		# Old data
@@ -108,7 +107,7 @@ class AddObjective:
 				txtBuffer = None
 
 			else:
-				self.__controller.DelRequeriments(self.txtObjective.get_text())
+				self.controller.DelRequeriments(self.txtObjective.get_text())
 
 				# Requeriments
 				txtBuffer = txtBuffer.splitlines()
@@ -131,7 +130,7 @@ class AddObjective:
 						del txtBuffer[i][j]
 
 			# Add objective
-			self.__controller.AddObjective(self.txtObjective.get_text(),
+			self.controller.AddObjective(self.txtObjective.get_text(),
 											self.txtQuantity.get_text(),
 											self.expiration,
 											txtBuffer)
@@ -142,8 +141,8 @@ class AddObjective:
 	def __Delete(self):
 		if self.__objective:
 			if(self.preferences['deleteCascade']
-			and len(self.__controller.DirectDependencies(self.__objective))>1):
-				dialog = DeleteCascade(self.__controller, self.__objective)
+			and len(self.controller.DirectDependencies(self.__objective))>1):
+				dialog = DeleteCascade(self.controller, self.__objective)
 
 				dialog.window.set_transient_for(self.window)
 				response = dialog.window.run()
@@ -157,11 +156,11 @@ class AddObjective:
 											0,
 											gtk.MESSAGE_QUESTION,
 											gtk.BUTTONS_YES_NO,
-											"Desea eliminar el objetivo "+self.__controller.GetName(self.__objective)+"?")
+											"Desea eliminar el objetivo "+self.controller.GetName(self.__objective)+"?")
 				response = dialog.run()
 				dialog.destroy()
 				if response == gtk.RESPONSE_YES:
-					self.__controller.DeleteObjective(self.__objective)
+					self.controller.DeleteObjective(self.__objective)
 					self.__CreateTree()
 
 		return True

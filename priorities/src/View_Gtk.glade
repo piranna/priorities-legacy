@@ -201,6 +201,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkHButtonBox" id="bbZoom">
+            <property name="visible">True</property>
+            <property name="layout_style">start</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -218,7 +232,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -451,7 +465,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnDelete">
-                <property name="label" translatable="yes">gtk-remove</property>
+                <property name="label">gtk-remove</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
@@ -464,7 +478,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnCancel">
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -478,7 +492,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnAccept">
-                <property name="label" translatable="yes">gtk-apply</property>
+                <property name="label">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -535,8 +549,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="use_preview_label">False</property>
                         <property name="show_hidden">True</property>
+                        <property name="use_preview_label">False</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
@@ -851,7 +865,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnCancel1">
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -865,7 +879,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnAcept">
-                <property name="label" translatable="yes">gtk-apply</property>
+                <property name="label">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -939,12 +953,46 @@
         <property name="use_stock">True</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_ZoomIn">
+        <property name="label">gtk-zoom-in</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_ZoomOut">
+        <property name="label">gtk-zoom-out</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="mnuCtxLayout">
     <property name="visible">True</property>
     <child>
       <object class="GtkImageMenuItem" id="mnuLayout_AddObjective">
         <property name="label">gtk-add</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_ZoomOut">
+        <property name="label">gtk-zoom-out</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
@@ -1069,7 +1117,7 @@ los siguientes objetivos en cascada</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="btnCancel2">
-                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -1083,7 +1131,7 @@ los siguientes objetivos en cascada</property>
             </child>
             <child>
               <object class="GtkButton" id="btnAccept2">
-                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
