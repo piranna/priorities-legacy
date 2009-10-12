@@ -131,12 +131,11 @@ class Model:
 		return None
 
 
-	def AddObjective(self, name, quantity=None, expiration=None):
-		# Update old objective
+	def AddObjective(self, name, quantity=None, expiration="no valid expiration"):
+		# If it's an old objective,
+		# update it
 		objective_id = self.GetId(name)
-
 		if objective_id:
-
 			# Increase quantity
 			if quantity!=None:
 				self.connection.execute('''
@@ -148,15 +147,19 @@ class Model:
 				print "\t\tQuantity:",quantity
 
 			# Update expiration
-			self.connection.execute('''
-				UPDATE objectives
-				SET expiration=?
-				WHERE id=?
-				''',
-				(expiration, objective_id))
+			if expiration!="no valid expiration":
+				self.connection.execute('''
+					UPDATE objectives
+					SET expiration=?
+					WHERE id=?
+					''',
+					(expiration, objective_id))
 
 			# Return objective id
 			return objective_id
+
+		# If it's not an old objective,
+		# create a new one
 
 		# Insert new objective
 		if(quantity==None):

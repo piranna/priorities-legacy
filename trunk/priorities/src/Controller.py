@@ -184,7 +184,7 @@ class Controller:
 		return False
 
 	def DelRequeriments(self, objective_name):
-		return self.__model.DelRequeriments_ByName(objective_name)
+		return self.__model.DelRequeriments_ById(self.__model.GetId(objective_name))
 
 
 	def Get_DeleteObjective_Tree(self, objective_id):

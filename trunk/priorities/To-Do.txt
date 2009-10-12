@@ -3,9 +3,6 @@
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
 
-[BUG] Al cambiar un objetivo con un requerimiento con una expiracion esta desaparece (¿expiration=None?)
-	Cambiar en lugar de eliminar y rehacer requerimientos, modificar in-situ
-
 
 0.8:
 ====
@@ -21,6 +18,11 @@ Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 Gravity de los botones
 
 Cambiar indices en base de datos a UNSIGNED
+
+? Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade)
+
+Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
+	opcion
 
 
 0.9:
@@ -59,6 +61,8 @@ Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 Post 1.0:
 =========
+Opciones de hacer/deshacer
+
 Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
@@ -66,7 +70,8 @@ Dibujar comandos en modo texto o NCurses
 Version en PyGUI
 
 Resaltar lineas de requisitos recursivamente
-Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
+
+? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
 	Animacion de zoom in y zoom out
 
 
