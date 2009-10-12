@@ -47,6 +47,7 @@ class DeleteCascade:
 			DeleteObjective_recursive(model.get_iter_root())
 
 
+
 	def __on_deleteCell_toggled(self, cell, path,model):
 		def SetChildrens(iterator,column, value):
 			iterator = model.iter_children(iterator)
@@ -57,6 +58,7 @@ class DeleteCascade:
 					SetChildrens(iterator,column, value)
 					iterator = model.iter_next(iterator)
 
+
 #		def SetAncestorsInconsistency(iterator,column, value):
 #			iterator = model.iter_parent(iterator)
 #			while iterator:
@@ -64,27 +66,78 @@ class DeleteCascade:
 #				SetAncestors(iterator,column, value)
 #				iterator = model.iter_next(iterator)
 
+
 		def Preserve(iterator, objective_id):
 			while iterator:
-				if(model.get_value(iterator,0)==objective_id
-				and model.get_value(iterator,2)):
-					model.set_value(iterator,2, False)
-					Preserve(model.get_iter_root(), model.get_value(iterator,0))
+				if model.get_value(iterator,0)==objective_id:
+
+					if model.get_value(iterator,2):
+						model.set_value(iterator,2, False)
+
+						iter_childs = model.iter_children(iterator)
+						while iter_childs:
+							Preserve(model.get_iter_root(), model.get_value(iter_childs,0))
+							iter_childs = model.iter_next(iter_childs)
 
 				else:
 					Preserve(model.iter_children(iterator), objective_id)
 
 				iterator = model.iter_next(iterator)
 
+
 		def Delete(iterator, objective_id):
+			canBeDeleted = []
+
+			def CanBeDeleted():
+				def Private_CanBeDeleted(iterator):
+					while iterator:
+						if model.get_value(iterator,0)==objective_id:
+
+							def HasAlternatives():
+								it = model.iter_children(model.iter_parent(iterator))
+								preserved = 0
+								while it:
+									if not model.get_value(it,2):
+										preserved += 1
+										if preserved > 1:
+											return True
+									it = model.iter_next(it)
+								return False
+
+
+							if(not model.get_value(model.iter_parent(iterator),2)
+							and not HasAlternatives()):
+								return False
+
+						elif not Private_CanBeDeleted(model.iter_children(iterator)):
+							return False
+
+						iterator = model.iter_next(iterator)
+
+					return True
+
+				return (objective_id in canBeDeleted
+						or Private_CanBeDeleted(model.get_iter_root()))
+
+
 			while iterator:
 				if model.get_value(iterator,0)==objective_id:
-					pass
-#					model.set_value(iterator,2, False)
-#					SetChildrens(iterator,2, False)
+
+					if(not model.get_value(iterator,2)
+						and CanBeDeleted()):
+						canBeDeleted.append(objective_id)
+						model.set_value(iterator,2, True)
+
+						iter_childs = model.iter_children(iterator)
+						while iter_childs:
+							Delete(model.get_iter_root(), model.get_value(iter_childs,0))
+							iter_childs = model.iter_next(iter_childs)
+
 				else:
 					Delete(model.iter_children(iterator), objective_id)
+
 				iterator = model.iter_next(iterator)
+
 
 
 		iterator = model.get_iter(path)

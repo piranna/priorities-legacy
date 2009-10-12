@@ -1,10 +1,5 @@
 0.7:
 ====
-? Mensaje de aviso en forma de arbol mostrando cuales se van a eliminar en cascada
-	[BUG] Si se decide no eliminar uno de los objetivos con requisitos ya checkeados los previos pueden haberse borrado
-		Comprobar requisitos cuando se conserve un objetivo
-		? Conservar requisitos que se iban a eliminar
-
 ([BUG] Reorganizar alternativas sin eliminar objetivos no relaccionados)
 ([BUG] Al eliminar con boton derecho tambien se elimina su dependiente)
 
@@ -14,6 +9,9 @@
 
 0.8:
 ====
+Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuandosean requeridos por varios
+Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
+
 ? Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
 	Distribuir los demas proporcionalmente
@@ -44,6 +42,8 @@ Definir archivo de preferencias como parametro
 
 1.0:
 ====
+Icono de la aplicacion
+
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
@@ -64,6 +64,10 @@ Hacer version de todas las funciones de GTK en modo texto
 Dibujar comandos en modo texto o NCurses
 
 Version en PyGUI
+
+Resaltar lineas de requisitos recursivamente
+Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
+	Animacion de zoom in y zoom out
 
 
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
@@ -86,3 +90,4 @@ Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
+
