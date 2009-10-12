@@ -1,6 +1,6 @@
 0.8:
 ====
-Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuandosean requeridos por varios
+Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 ? Estudiar distribucion de botones
@@ -11,17 +11,16 @@ Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 Gravity de los botones
 
-Cambiar indices en base de datos a UNSIGNED
+* Cambiar indices en base de datos a UNSIGNED
 
 ? Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade)
 
 Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
-	opcion
+	? opcion
 
 Crear una clase para la interfaz al archivo de preferencias
 
 Arreglar base de datos en Preferences
-	Cambiar sensitivity al panel
 
 
 0.9:
@@ -29,6 +28,9 @@ Arreglar base de datos en Preferences
 Pasar de getopts a optparse
 Usar (exclusivamente) opciones largas
 Usar opciones afirmativas y negativas
+
+? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
+	Animacion de zoom in y zoom out
 
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
@@ -44,6 +46,8 @@ Definir archivo de preferencias como parametro
 1.0:
 ====
 Icono de la aplicacion
+
+Barra de herramientas
 
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
@@ -62,6 +66,8 @@ Post 1.0:
 =========
 Opciones de hacer/deshacer
 
+Buscar con autocompletado
+
 Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
@@ -69,9 +75,6 @@ Dibujar comandos en modo texto o NCurses
 Version en PyGUI
 
 Resaltar lineas de requisitos recursivamente
-
-? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
-	Animacion de zoom in y zoom out
 
 
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
@@ -92,6 +95,6 @@ i Excepcion al cargar GTK
 Quitar foco a todos los botones en GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
-Arbol en DeleteCascade muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
+Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 

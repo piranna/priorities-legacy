@@ -18,13 +18,15 @@ class Main(View_Gtk.View):
 	x_step = 100
 	y_step = 50
 
-	__objectiveHI_edit = None
-	__objectiveHI_delete = None
-
-	__cursorObjective = None
-
 	def __init__(self, database,useDefaultDB):
 		View_Gtk.View.__init__(self)
+
+		self.__objectiveHI_edit = None
+		self.__objectiveHI_delete = None
+		self.__objectiveHI_zoomin = None
+
+		self.__cursorObjective = None
+		self.__rootObjective = None
 
 		self.preferences = preferences.Load()
 
@@ -37,6 +39,11 @@ class Main(View_Gtk.View):
 		self.layout = self.builder.get_object("layout")
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
+
+		self.bbZoom = self.builder.get_object("bbZoom")
+
+		btnStart = self.builder.get_object("btnStart")
+		btnStart.connect('clicked',self.__on_btnStart_clicked)
 
 		#
 		# File
@@ -102,10 +109,21 @@ class Main(View_Gtk.View):
 		mnuLayout_AddObjective = self.builder.get_object("mnuLayout_AddObjective")
 		mnuLayout_AddObjective.connect('activate',self.__AddObjective)
 
+		mnuLayout_ZoomIn = self.builder.get_object("mnuLayout_ZoomIn")
+		mnuLayout_ZoomIn.connect('activate',self.__ZoomIn)
+
+		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
+		mnuLayout_ZoomOut.connect('activate',self.__ZoomOut)
+
 		# Objective
 		self.mnuCtxObjective = self.builder.get_object("mnuCtxObjective")
 		self.mnuObjective_Edit = self.builder.get_object("mnuObjective_Edit")
 		self.mnuObjective_Delete = self.builder.get_object("mnuObjective_Delete")
+
+		self.mnuObjective_ZoomIn = self.builder.get_object("mnuObjective_ZoomIn")
+
+		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
+		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
 
 		self.__CreateTree()
 
@@ -231,7 +249,7 @@ class Main(View_Gtk.View):
 		y = self.y_step/2.0
 
 		# Niveles
-		for level in self.controller.ShowTree():
+		for level in self.controller.ShowTree(self.__rootObjective):
 			def UpdateLayoutSize(width,height):
 				layout_size_x = self.layout.get_size()[0]
 				layout_size_y = self.layout.get_size()[1]
@@ -494,6 +512,11 @@ class Main(View_Gtk.View):
 				self.mnuObjective_Delete.disconnect(self.__objectiveHI_delete)
 			self.__objectiveHI_delete = self.mnuObjective_Delete.connect('activate',self.__DelObjective, objective_id)
 
+			if self.__objectiveHI_zoomin:
+				self.mnuObjective_ZoomIn.disconnect(self.__objectiveHI_zoomin)
+			self.__objectiveHI_zoomin = self.mnuObjective_ZoomIn.connect('activate',self.__ZoomIn, widget.get_label())
+
+
 			self.mnuCtxObjective.popup(None,None,None, event.button,event.time)
 
 
@@ -553,4 +576,51 @@ class Main(View_Gtk.View):
 	def __IncreaseLineWidth(self, widget,event, objective_id=None):
 		self.__cursorObjective = objective_id
 		self.layout.queue_draw()
+
+
+	def __SetRootObjective(self, objective_name=None, flag=None):
+		def SetZoom(toggle_button):
+			if not flag:
+				check = (objective_name
+						and (toggle_button.get_label() == objective_name))
+#			elif flag == "zoom in":
+#				check =
+
+			try:
+				toggle_button.set_active(check)
+			except:
+				pass
+
+
+		self.__rootObjective = objective_name
+		self.bbZoom.foreach(SetZoom)
+
+		self.__CreateTree()
+
+
+	def __on_btnStart_clicked(self, widget):
+		print "__on_btnStart_clicked"
+		self.__SetRootObjective()
+
+
+	def __ZoomIn(self, widget, objective_name=None):
+		print "__ZoomIn"
+
+		flag = None
+
+		if objective_name:
+			toggle_button = gtk.ToggleButton(objective_name)
+			toggle_button.show()
+#			toggle_button.connect("toggled", self.__SetRootObjective, objective_name)
+			self.bbZoom.add(toggle_button)
+
+#		else:
+#			flag = "zoom in"
+
+		self.__SetRootObjective(objective_name, flag)
+
+
+	def __ZoomOut(self, widget):
+		print "__ZoomOut"
+		self.__CreateTree()
 
