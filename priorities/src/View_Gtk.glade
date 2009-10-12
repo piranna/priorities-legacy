@@ -205,7 +205,18 @@
             <property name="visible">True</property>
             <property name="layout_style">start</property>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="btnStart">
+                <property name="label">gtk-home</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -562,7 +573,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
                     </child>
@@ -600,7 +610,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -831,6 +840,18 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="chkRemoveOrphanRequeriments">
+                    <property name="label" translatable="yes">Eliminar requerimientos huerfanos</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkFrame" id="frame5">
                     <property name="visible">True</property>
                     <property name="label_xalign">0</property>
@@ -855,7 +876,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -1001,6 +1022,14 @@
     <child>
       <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
         <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_ZoomIn">
+        <property name="label">gtk-zoom-in</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
       </object>
     </child>
     <child>
