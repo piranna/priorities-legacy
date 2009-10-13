@@ -16,7 +16,7 @@ Gravity de los botones
 Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
 	? opcion
 
-Crear una clase para la interfaz al archivo de preferencias
+* Crear una clase para la interfaz al archivo de preferencias
 
 
 0.9:
@@ -30,8 +30,7 @@ Usar opciones afirmativas y negativas
 
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
-	* Importar y exportar afectan al texto plano y se ejecutan sobre la base de datos actual
-		Exportar toda la base de datos o solo una parte del arbol
+	Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
 Cargar/importar archivo de exportacion desde terminal
@@ -94,3 +93,4 @@ Reordenar manualmente los objetivos (Drag & Drop)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 Cambiar indices en base de datos a UNSIGNED
+

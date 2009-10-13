@@ -85,10 +85,10 @@ if __name__ == "__main__":
 			import View_Gtk_Main
 			interface = View_Gtk_Main.Main(db,useDefaultDB)
 #		except: #gtk.GtkWarning, e:
-			print
-			print "An error has ocurred loading GTK interface"
-			print "Loading text mode interface"
-			textmode = True
+#			print
+#			print "An error has ocurred loading GTK interface"
+#			print "Loading text mode interface"
+#			textmode = True
 
 #		import View_Curses
 #		interface = View_Curses.View(controller, db,useDefaultDB)

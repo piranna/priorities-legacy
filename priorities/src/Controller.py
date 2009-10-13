@@ -307,3 +307,7 @@ class Controller:
 
 		return txt
 
+
+	def Import(self, lines):
+		for line in lines:
+
