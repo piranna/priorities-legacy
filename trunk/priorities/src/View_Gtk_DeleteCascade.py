@@ -151,7 +151,6 @@ class DeleteCascade(View_Gtk.View):
 				iterator = model.iter_next(iterator)
 
 
-
 		iterator = model.get_iter(path)
 
 		# Active - Set preserve
@@ -166,3 +165,4 @@ class DeleteCascade(View_Gtk.View):
 #			model.set_value(iterator,2, True)
 #			SetChildrens(iterator,2, True)
 #			SetAncestorsInconsistency(iterator,2, True)
+

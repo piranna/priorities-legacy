@@ -555,15 +555,8 @@ class Main(View_Gtk.View):
 		gtk.main_quit()
 
 
-	def __Export(self, widget):
-		dialog = gtk.FileChooserDialog("Export priorities database",
-										None,
-										gtk.FILE_CHOOSER_ACTION_SAVE,
-										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-		dialog.set_current_name("export.priorities")
-
-		"""Create and add the pywine filter"""
+	def __SetFileFilters(self, dialog):
+		"""Create and add the priorities exported file filter"""
 		filter = gtk.FileFilter()
 		filter.set_name("Priorities exported file")
 		filter.add_pattern("*.priorities")
@@ -574,6 +567,17 @@ class Main(View_Gtk.View):
 		filter.add_pattern("*")
 		dialog.add_filter(filter)
 
+
+	def __Export(self, widget):
+		dialog = gtk.FileChooserDialog("Export priorities database",
+										None,
+										gtk.FILE_CHOOSER_ACTION_SAVE,
+										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		dialog.set_current_name("export.priorities")
+
+		self.__SetFileFilters(dialog)
+
 		if dialog.run()==gtk.RESPONSE_OK:
 			try:
 				file = open(dialog.get_filename(), "w")
@@ -581,6 +585,26 @@ class Main(View_Gtk.View):
 				file.close()
 			except:
 				print "Exception exporting database"
+		dialog.destroy()
+
+
+	def __Import(self, widget):
+		dialog = gtk.FileChooserDialog("Export priorities database",
+										None,
+										gtk.FILE_CHOOSER_ACTION_OPEN,
+										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+#		dialog.set_current_name("export.priorities")
+
+		self.__SetFileFilters(dialog)
+
+		if dialog.run()==gtk.RESPONSE_OK:
+			try:
+				import Parser
+				parser = Parser.Parser(self.controller, dialog.get_filename())
+				parser.cmdloop()
+			except:
+				print "Exception importing database"
 		dialog.destroy()
 
 
@@ -608,3 +632,4 @@ class Main(View_Gtk.View):
 		print "__ZoomOut"
 		self.__zoomlevel -= 1
 		self.__CreateTree(objective_name)
+
