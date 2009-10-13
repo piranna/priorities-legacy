@@ -76,8 +76,8 @@ class Main(View_Gtk.View):
 #		mnuSaveAs.connect('activate',self.__on_Main_destroy)
 
 		# Import
-#		mnuImport = self.builder.get_object("mnuImport")
-#		mnuImport.connect('activate',self.__on_Main_destroy)
+		mnuImport = self.builder.get_object("mnuImport")
+		mnuImport.connect('activate',self.__Import)
 
 		# Export
 		mnuExport = self.builder.get_object("mnuExport")
