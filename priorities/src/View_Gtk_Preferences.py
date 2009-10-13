@@ -45,24 +45,6 @@ class Preferences(View_Gtk.View):
 		chkShowArrowHeads.set_active(self.preferences['showArrowHeads'])
 
 		#
-		# Objectives
-
-		# Show exceeded dependencies
-		cbShowExceededDependencies = self.builder.get_object("cbShowExceededDependencies")
-		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
-		cbShowExceededDependencies.set_active(self.preferences['showExceededDependencies'])
-
-		# Expiration warning
-		sbExpirationWarning = self.builder.get_object("sbExpirationWarning")
-		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
-		sbExpirationWarning.set_value(self.preferences['expirationWarning'])
-
-		# Delete on cascade
-		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
-		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
-		chkDeleteCascade.set_active(self.preferences['deleteCascade'])
-
-		#
 		# Button colors
 
 		cbInabordable = self.builder.get_object("cbInabordable")
@@ -80,6 +62,29 @@ class Preferences(View_Gtk.View):
 		cbSatisfacted = self.builder.get_object("cbSatisfacted")
 		cbSatisfacted.connect('color-set', self.__on_colorbutton_colorset)
 		cbSatisfacted.set_color(gtk.gdk.color_parse(self.preferences['color_satisfacted']))
+
+		#
+		# Objectives
+
+		# Show exceeded dependencies
+		cbShowExceededDependencies = self.builder.get_object("cbShowExceededDependencies")
+		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
+		cbShowExceededDependencies.set_active(self.preferences['showExceededDependencies'])
+
+		# Expiration warning
+		sbExpirationWarning = self.builder.get_object("sbExpirationWarning")
+		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
+		sbExpirationWarning.set_value(self.preferences['expirationWarning'])
+
+		# Delete on cascade
+		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
+		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
+		chkDeleteCascade.set_active(self.preferences['deleteCascade'])
+
+		# Confirm delete on cascade
+		self.chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
+		self.chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
+		self.chkConfirmDeleteCascade.set_active(self.preferences['confirmDeleteCascade'])
 
 
 	def __on_chkDefaultDB_toggled(self, widget):
@@ -105,6 +110,11 @@ class Preferences(View_Gtk.View):
 
 	def __on_chkDeleteCascade_toggled(self, widget):
 		self.preferences["deleteCascade"] = widget.get_active()
+		self.chkConfirmDeleteCascade.set_sensitive(widget.get_active())
+
+
+	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+		self.preferences["confirmDeleteCascade"] = widget.get_active()
 
 
 	def __on_cbShowExceededDependencies_changed(self, widget):

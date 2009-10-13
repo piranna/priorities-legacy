@@ -5,15 +5,9 @@ class DeleteCascade(View_Gtk.View):
 	def __init__(self, objective_id):
 		View_Gtk.View.__init__(self)
 
-		self.window = self.builder.get_object("DeleteCascade")
-
+		# Model
 		treeview = self.builder.get_object("treeview")
 		model = treeview.get_model()
-
-		self.window.connect('response',self.__on_DeleteCascade_response, model)
-
-		deleteCell = self.builder.get_object("deleteCell")
-		deleteCell.connect('toggled', self.__on_deleteCell_toggled, model)
 
 		# Fill model
 		def Append(parent, tree):
@@ -27,22 +21,44 @@ class DeleteCascade(View_Gtk.View):
 							(objective_id, self.controller.GetName(objective_id), True,False)),
 				self.controller.Get_DeleteObjective_Tree(objective_id))
 
-		treeview.expand_all()
+		# If confirmDeleteCascade,
+		# show window
+		if preferences['confirmDeleteCascade']:
+			self.window = self.builder.get_object("DeleteCascade")
+			self.window.connect('response',self.__on_DeleteCascade_response, model)
+
+			deleteCell = self.builder.get_object("deleteCell")
+			deleteCell.connect('toggled', self.__on_deleteCell_toggled, model)
+
+			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
+#			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
+#			chkConfirmDeleteCascade.set_active(self.preferences['confirmDeleteCascade'])
+
+			treeview.expand_all()
+
+		# If not,
+		# delete requeriments directly
+		else:
+			self.__DeleteObjective_recursive(model, model.get_iter_root())
+
+
+	def __DeleteObjective_recursive(model, iterator):
+		if model.get_value(iterator,2):
+			self.controller.DeleteObjective(model.get_value(iterator,0))
+
+		iterator = model.iter_children(iterator)
+		while iterator:
+			DeleteObjective_recursive(model, iterator)
+			iterator = model.iter_next(iterator)
 
 
 	def __on_DeleteCascade_response(self, widget, response,model):
 		if response>0:
-			def DeleteObjective_recursive(iterator):
-				if model.get_value(iterator,2):
-					self.controller.DeleteObjective(model.get_value(iterator,0))
+			DeleteObjective_recursive(model, model.get_iter_root())
 
-				iterator = model.iter_children(iterator)
-				while iterator:
-					DeleteObjective_recursive(iterator)
-					iterator = model.iter_next(iterator)
 
-			DeleteObjective_recursive(model.get_iter_root())
-
+#	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+#		self.preferences["confirmDeleteCascade"] = widget.get_active()
 
 
 	def __on_deleteCell_toggled(self, cell, path,model):
@@ -54,7 +70,6 @@ class DeleteCascade(View_Gtk.View):
 					model.set_value(iterator,2, value)
 					SetChildrens(iterator,column, value)
 					iterator = model.iter_next(iterator)
-
 
 #		def SetAncestorsInconsistency(iterator,column, value):
 #			iterator = model.iter_parent(iterator)
@@ -151,4 +166,3 @@ class DeleteCascade(View_Gtk.View):
 #			model.set_value(iterator,2, True)
 #			SetChildrens(iterator,2, True)
 #			SetAncestorsInconsistency(iterator,2, True)
-
