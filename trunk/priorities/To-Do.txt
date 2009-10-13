@@ -18,8 +18,6 @@ Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento
 
 Crear una clase para la interfaz al archivo de preferencias
 
-Arreglar base de datos en Preferences
-
 
 0.9:
 ====

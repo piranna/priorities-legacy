@@ -27,6 +27,7 @@ class Preferences(View_Gtk.View):
 
 		# Default database
 		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
+		self.fcDefaultDB.connect('file-set', self.__on_fcDefaultDB_fileset)
 		self.fcDefaultDB.set_filename(self.preferences['database'])
 
 		chkDefaultDB.toggled()
@@ -94,6 +95,12 @@ class Preferences(View_Gtk.View):
 
 	def __on_chkDefaultDB_toggled(self, widget):
 		self.fcDefaultDB.set_sensitive(widget.get_active())
+
+
+	def __on_fcDefaultDB_fileset(self, widget):
+		filename = widget.get_filename()
+		if filename:
+			self.preferences["database"] = filename
 
 
 	def __on_colorbutton_colorset(self, widget):
