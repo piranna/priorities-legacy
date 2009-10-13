@@ -1,5 +1,7 @@
 0.8:
 ====
+* Cambiar todas las referencias a preferences.py por config.py
+
 Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
@@ -13,8 +15,8 @@ Gravity de los botones
 
 ? Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade)
 
-Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
-	? opcion
+Eliminar requisitos huerfanos
+	? Opcion en Preferences
 
 * Crear una clase para la interfaz al archivo de preferencias
 
@@ -33,8 +35,6 @@ Exportar/importar a texto plano
 	Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
-Cargar/importar archivo de exportacion desde terminal
-
 Definir archivo de preferencias como parametro
 
 
@@ -43,9 +43,6 @@ Definir archivo de preferencias como parametro
 Icono de la aplicacion
 
 Barra de herramientas
-
-Dibujar alternativas en modo texto
-Dibujar lineas en modo texto
 
 Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
@@ -56,6 +53,8 @@ i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
+Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
+
 
 Post 1.0:
 =========
@@ -63,9 +62,12 @@ Opciones de hacer/deshacer
 
 Buscar con autocompletado
 
+Cargar/importar archivo de exportacion desde terminal
 Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
+Dibujar alternativas en modo texto
+Dibujar lineas en modo texto
 
 Version en PyGUI
 
