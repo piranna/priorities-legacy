@@ -76,6 +76,11 @@ class Preferences(View_Gtk.View):
 		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
 		sbExpirationWarning.set_value(self.preferences['expirationWarning'])
 
+		# Remove orphan requeriments
+		chkRemoveOrphanRequeriments = self.builder.get_object("chkRemoveOrphanRequeriments")
+		chkRemoveOrphanRequeriments.connect('toggled', self.__on_chkRemoveOrphanRequeriments_toggled)
+		chkRemoveOrphanRequeriments.set_active(self.preferences['removeOrphanRequeriments'])
+
 		# Delete on cascade
 		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
 		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
@@ -106,6 +111,10 @@ class Preferences(View_Gtk.View):
 
 	def __on_chkShowArrowHeads_toggled(self, widget):
 		self.preferences["showArrowHeads"] = widget.get_active()
+
+
+	def __on_chkRemoveOrphanRequeriments_toggled(self, widget):
+		self.preferences["removeOrphanRequeriments"] = widget.get_active()
 
 
 	def __on_chkDeleteCascade_toggled(self, widget):

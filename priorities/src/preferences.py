@@ -16,6 +16,7 @@ def Load():
 
 	preferences['showExceededDependencies']	= 1
 	preferences['expirationWarning']		= 1
+	preferences['removeOrphanRequeriments']	= True
 	preferences['deleteCascade']			= True
 	preferences['confirmDeleteCascade']		= True
 
@@ -44,11 +45,12 @@ def Load():
 		file.close()
 
 		# Re-define boolean preferences
-		preferences['useDefaultDB']			= (preferences['useDefaultDB']=="True")
-		preferences['showSharp']			= (preferences['showSharp']=="True")
-		preferences['showArrowHeads']		= (preferences['showArrowHeads']=="True")
-		preferences['deleteCascade']		= (preferences['deleteCascade']=="True")
-		preferences['confirmDeleteCascade']	= (preferences['confirmDeleteCascade']=="True")
+		preferences['useDefaultDB']				= (preferences['useDefaultDB']=="True")
+		preferences['showSharp']				= (preferences['showSharp']=="True")
+		preferences['showArrowHeads']			= (preferences['showArrowHeads']=="True")
+		preferences['removeOrphanRequeriments']	= (preferences['removeOrphanRequeriments']=="True")
+		preferences['deleteCascade']			= (preferences['deleteCascade']=="True")
+		preferences['confirmDeleteCascade']		= (preferences['confirmDeleteCascade']=="True")
 
 		# Re-define integer preferences
 		preferences['showExceededDependencies']	= int(preferences['showExceededDependencies'])
