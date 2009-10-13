@@ -11,8 +11,6 @@ Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 Gravity de los botones
 
-* Cambiar indices en base de datos a UNSIGNED
-
 ? Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade)
 
 Cuando un requisito solo sea requerido por otro y se elimine dicho requerimiento, eliminarlo completamente
@@ -97,4 +95,4 @@ Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
-
+Cambiar indices en base de datos a UNSIGNED
