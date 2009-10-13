@@ -4,6 +4,10 @@ import random
 import math
 import datetime
 
+
+import navigationbar
+
+
 import View_Gtk
 
 from View_Gtk_About import *
@@ -26,7 +30,8 @@ class Main(View_Gtk.View):
 		self.__objectiveHI_zoomin = None
 
 		self.__cursorObjective = None
-		self.__rootObjective = None
+
+		self.__zoomlevel = 0
 
 		self.preferences = preferences.Load()
 
@@ -40,10 +45,16 @@ class Main(View_Gtk.View):
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
 
-		self.bbZoom = self.builder.get_object("bbZoom")
+		# Navigation Bar
+		self.navBar = navigationbar.NavigationBar()
+		self.navBar.show()
+		vbox1 = self.builder.get_object("vbox1")
+		vbox1.pack_start(self.navBar, False)
+		vbox1.reorder_child(self.navBar, 1)
 
-		btnStart = self.builder.get_object("btnStart")
-		btnStart.connect('clicked',self.__on_btnStart_clicked)
+		# Start button
+		self.navBar.add_with_id("gtk-home", self.__Zoom, 0)
+		self.navBar.get_button_from_id(0).set_use_stock(True)
 
 		#
 		# File
@@ -227,7 +238,7 @@ class Main(View_Gtk.View):
 #		print
 
 
-	def __CreateTree(self):
+	def __CreateTree(self, objective_name=None):
 		self.__CleanTree()
 
 		objectives = []
@@ -249,7 +260,7 @@ class Main(View_Gtk.View):
 		y = self.y_step/2.0
 
 		# Niveles
-		for level in self.controller.ShowTree(self.__rootObjective):
+		for level in self.controller.ShowTree(objective_name):
 			def UpdateLayoutSize(width,height):
 				layout_size_x = self.layout.get_size()[0]
 				layout_size_y = self.layout.get_size()[1]
@@ -578,49 +589,22 @@ class Main(View_Gtk.View):
 		self.layout.queue_draw()
 
 
-	def __SetRootObjective(self, objective_name=None, flag=None):
-		def SetZoom(toggle_button):
-			if not flag:
-				check = (objective_name
-						and (toggle_button.get_label() == objective_name))
-#			elif flag == "zoom in":
-#				check =
-
-			try:
-				toggle_button.set_active(check)
-			except:
-				pass
-
-
-		self.__rootObjective = objective_name
-		self.bbZoom.foreach(SetZoom)
-
-		self.__CreateTree()
-
-
-	def __on_btnStart_clicked(self, widget):
-		print "__on_btnStart_clicked"
-		self.__SetRootObjective()
+	def __Zoom(self):
+		self.__CreateTree(objective_name)
 
 
 	def __ZoomIn(self, widget, objective_name=None):
 		print "__ZoomIn"
-
-		flag = None
-
 		if objective_name:
-			toggle_button = gtk.ToggleButton(objective_name)
-			toggle_button.show()
-#			toggle_button.connect("toggled", self.__SetRootObjective, objective_name)
-			self.bbZoom.add(toggle_button)
+			self.__zoomlevel += 1
+			self.navBar.add_with_id(objective_name, self.__CreateTree, self.__zoomlevel)
+			self.__CreateTree(objective_name)
 
-#		else:
-#			flag = "zoom in"
-
-		self.__SetRootObjective(objective_name, flag)
+		else:
+			pass
 
 
 	def __ZoomOut(self, widget):
 		print "__ZoomOut"
-		self.__CreateTree()
-
+		self.__zoomlevel -= 1
+		self.__CreateTree(objective_name)

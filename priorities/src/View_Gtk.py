@@ -9,4 +9,3 @@ class View:
 		if not self.builder:
 			self.builder = gtk.Builder()
 			self.builder.add_from_file("View_Gtk.glade")
-
