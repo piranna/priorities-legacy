@@ -16,8 +16,6 @@ Gravity de los botones
 Eliminar requisitos huerfanos
 	? Opcion en Preferences
 
-? Crear una clase para la interfaz al archivo de preferencias
-
 
 0.9:
 ====
