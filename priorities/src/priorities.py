@@ -31,13 +31,13 @@ def CheckArgs(args):
 
 if __name__ == "__main__":
 
-	# Load preferences
-	import preferences
-	preferences = preferences.Load()
+	# Load config
+	import config
+	config = config.Load()
 
 	# Set default vars
-	useDefaultDB = preferences['useDefaultDB']
-	db = preferences['database']
+	useDefaultDB = config['useDefaultDB']
+	db = config['database']
 	textmode = False
 	input = None
 
@@ -96,4 +96,3 @@ if __name__ == "__main__":
 	if textmode:
 		import View_Text
 		interface = View_Text.View(controller, db,useDefaultDB,input)
-

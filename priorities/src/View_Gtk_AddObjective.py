@@ -144,7 +144,7 @@ class AddObjective(View_Gtk.View):
 
 	def __Delete(self):
 		if self.__objective:
-			if(self.preferences['deleteCascade']
+			if(self.config['deleteCascade']
 			and len(self.controller.DirectDependencies(self.__objective))>1):
 				dialog = DeleteCascade(self.controller, self.__objective)
 

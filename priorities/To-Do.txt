@@ -1,7 +1,5 @@
 0.8:
 ====
-* Cambiar todas las referencias a preferences.py por config.py
-
 Poder seleccionar a eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
