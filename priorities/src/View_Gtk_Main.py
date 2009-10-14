@@ -4,9 +4,7 @@ import random
 import math
 import datetime
 
-
 import navigationbar
-
 
 import View_Gtk
 
@@ -15,7 +13,7 @@ from View_Gtk_AddObjective import *
 from View_Gtk_DeleteCascade import *
 from View_Gtk_Preferences import *
 
-import config
+import Config
 
 
 class Main(View_Gtk.View):
@@ -32,8 +30,6 @@ class Main(View_Gtk.View):
 		self.__cursorObjective = None
 
 		self.__zoomlevel = 0
-
-		self.config = config.Load()
 
 		if not (database and useDefaultDB):
 			self.__AskDB(database)
