@@ -15,7 +15,7 @@ from View_Gtk_AddObjective import *
 from View_Gtk_DeleteCascade import *
 from View_Gtk_Preferences import *
 
-import preferences
+import config
 
 
 class Main(View_Gtk.View):
@@ -33,7 +33,7 @@ class Main(View_Gtk.View):
 
 		self.__zoomlevel = 0
 
-		self.preferences = preferences.Load()
+		self.config = config.Load()
 
 		if not (database and useDefaultDB):
 			self.__AskDB(database)
@@ -195,7 +195,7 @@ class Main(View_Gtk.View):
 #		self.layout.queue_draw()
 
 		# Background sharp
-		if(self.preferences['showSharp']):
+		if(self.config['showSharp']):
 			layout_size = self.layout.get_size()
 			for x in range(1,layout_size[0]/self.x_step):
 				self.layout.bin_window.draw_line(gc, x*self.x_step,0,
@@ -231,7 +231,7 @@ class Main(View_Gtk.View):
 			self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
 												int(arrow[2][0]),int(arrow[2][1]))
 			# Arrow head
-			if self.preferences["showArrowHeads"]:
+			if self.config["showArrowHeads"]:
 				DrawHead(arrow)
 
 		gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
@@ -352,24 +352,24 @@ class Main(View_Gtk.View):
 					def GetColor():
 						# Blue - Satisfacted
 						if self.controller.IsSatisfacted(objective['objective_id']):
-							show = self.preferences['showExceededDependencies']
+							show = self.config['showExceededDependencies']
 							if(show):
 								if(show==1 and objective['expiration'] and objective['expiration']<datetime.datetime):
 #									print show,objective['expiration'],datetime.datetime
 									return None
-								return gtk.gdk.color_parse(self.preferences['color_satisfacted'])
+								return gtk.gdk.color_parse(self.config['color_satisfacted'])
 							return None
 
 						# Green - Available
 						elif self.controller.IsAvailable(objective['objective_id']):
-							return gtk.gdk.color_parse(self.preferences['color_available'])
+							return gtk.gdk.color_parse(self.config['color_available'])
 
 						# Yellow - InProgress
 						elif self.controller.IsInprocess(objective['objective_id']):
-							return gtk.gdk.color_parse(self.preferences['color_inprocess'])
+							return gtk.gdk.color_parse(self.config['color_inprocess'])
 
 						# Red - Unabordable
-						return gtk.gdk.color_parse(self.preferences['color_unabordable'])
+						return gtk.gdk.color_parse(self.config['color_unabordable'])
 
 
 					color = GetColor()
@@ -401,7 +401,7 @@ class Main(View_Gtk.View):
 
 								# Next to expire - Set color animation
 								elif(datetime.datetime.strptime(objective["expiration"],"%Y-%m-%d %H:%M:%S")
-								< datetime.datetime.now()+datetime.timedelta(self.preferences['expirationWarning'])):
+								< datetime.datetime.now()+datetime.timedelta(self.config['expirationWarning'])):
 
 									def button_expires_inverted(button, color):
 										button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
@@ -487,7 +487,7 @@ class Main(View_Gtk.View):
 
 
 	def __DelObjective(self, menuitem,objective_id):
-		if(self.preferences['deleteCascade']
+		if(self.config['deleteCascade']
 		and len(self.controller.DirectDependencies(objective_id))>1):
 			dialog = DeleteCascade(objective_id)
 
@@ -545,9 +545,9 @@ class Main(View_Gtk.View):
 		response = dialog.window.run()
 		dialog.window.destroy()
 
-		# Reload preferences if neccesary
+		# Reload config if neccesary
 		if response > 0:
-			self.preferences = preferences.Load()
+			self.config = config.Load()
 			self.__CreateTree()
 
 

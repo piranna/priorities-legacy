@@ -23,7 +23,7 @@ class DeleteCascade(View_Gtk.View):
 
 		# If confirmDeleteCascade,
 		# show window
-		if preferences['confirmDeleteCascade']:
+		if config['confirmDeleteCascade']:
 			self.window = self.builder.get_object("DeleteCascade")
 			self.window.connect('response',self.__on_DeleteCascade_response, model)
 
@@ -32,7 +32,7 @@ class DeleteCascade(View_Gtk.View):
 
 			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
 #			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
-#			chkConfirmDeleteCascade.set_active(self.preferences['confirmDeleteCascade'])
+#			chkConfirmDeleteCascade.set_active(self.config['confirmDeleteCascade'])
 
 			treeview.expand_all()
 
@@ -58,7 +58,7 @@ class DeleteCascade(View_Gtk.View):
 
 
 #	def __on_chkConfirmDeleteCascade_toggled(self, widget):
-#		self.preferences["confirmDeleteCascade"] = widget.get_active()
+#		self.config["confirmDeleteCascade"] = widget.get_active()
 
 
 	def __on_deleteCell_toggled(self, cell, path,model):

@@ -2,7 +2,7 @@ class Controller:
 
 	# Constructor
 	def __init__(self, model):
-#	def __init__(self, model, preferences):
+#	def __init__(self, model, config):
 		self.__model = model
 
 
