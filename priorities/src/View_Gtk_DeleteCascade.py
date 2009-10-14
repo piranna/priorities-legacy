@@ -44,22 +44,26 @@ class DeleteCascade(View_Gtk.View):
 
 
 	def __DeleteObjective_recursive(model, iterator):
+		# If objective is marked,
+		# delete it
 		if model.get_value(iterator,2):
 			self.controller.DeleteObjective(model.get_value(iterator,0))
 
+		# Delete objective marqued requeriments, if any
 		iterator = model.iter_children(iterator)
 		while iterator:
-			DeleteObjective_recursive(model, iterator)
+			self.__DeleteObjective_recursive(model, iterator)
 			iterator = model.iter_next(iterator)
 
 
 	def __on_DeleteCascade_response(self, widget, response,model):
 		if response>0:
-			DeleteObjective_recursive(model, model.get_iter_root())
+			self.__DeleteObjective_recursive(model, model.get_iter_root())
 
 
 	def __on_chkConfirmDeleteCascade_toggled(self, widget):
 		self.config.Set("confirmDeleteCascade", widget.get_active())
+		self.config.Store()
 
 
 	def __on_deleteCell_toggled(self, cell, path,model):
@@ -166,3 +170,4 @@ class DeleteCascade(View_Gtk.View):
 #			model.set_value(iterator,2, True)
 #			SetChildrens(iterator,2, True)
 #			SetAncestorsInconsistency(iterator,2, True)
+

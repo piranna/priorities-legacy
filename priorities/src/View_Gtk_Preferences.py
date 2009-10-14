@@ -11,22 +11,22 @@ class Preferences(View_Gtk.View):
 
 		# Preferences window
 		self.window = self.builder.get_object("Preferences")
-#		self.window.connect('response',self.__on_Preferences_response)
+		self.window.connect('response',self.__on_Preferences_response)
 
 		#
 		# DataBase
 
 		# Use default database
 		chkDefaultDB = self.builder.get_object("chkDefaultDB")
-		chkDefaultDB.connect('toggled', self.__on_chkDefaultDB_toggled)
 		chkDefaultDB.set_active(self.config.Get('useDefaultDB'))
 
 		# Default database
 		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
 		self.fcDefaultDB.connect('file-set', self.__on_fcDefaultDB_fileset)
 		self.fcDefaultDB.set_filename(self.config.Get('database'))
+		self.fcDefaultDB.set_sensitive(self.config.Get('useDefaultDB'))
 
-		chkDefaultDB.toggled()
+		chkDefaultDB.connect('toggled', self.__on_chkDefaultDB_toggled)
 
 		#
 		# Graphic
@@ -80,16 +80,19 @@ class Preferences(View_Gtk.View):
 
 		# Delete on cascade
 		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
-		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
 		chkDeleteCascade.set_active(self.config.Get('deleteCascade'))
 
 		# Confirm delete on cascade
 		self.chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
 		self.chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
 		self.chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
+		self.chkConfirmDeleteCascade.set_sensitive(self.config.Get('deleteCascade'))
+
+		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
 
 
 	def __on_chkDefaultDB_toggled(self, widget):
+		self.config.Set("useDefaultDB", widget.get_active())
 		self.fcDefaultDB.set_sensitive(widget.get_active())
 
 
@@ -103,9 +106,9 @@ class Preferences(View_Gtk.View):
 		self.config.Set(widget.get_title(), widget.get_color())
 
 
-#	def __on_Preferences_response(self, widget, response):
-#		if response == 1:
-#			config.Store(self.config)
+	def __on_Preferences_response(self, widget, response):
+		if response == 1:
+			self.config.Store()
 
 
 	def __on_chkShowSharp_toggled(self, widget):
@@ -135,3 +138,4 @@ class Preferences(View_Gtk.View):
 
 	def __on_sbExpirationWarning_valuechanged(self, widget):
 		self.config.Set("expirationWarning", widget.get_value_as_int())
+
