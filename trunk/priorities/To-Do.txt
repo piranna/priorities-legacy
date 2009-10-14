@@ -11,10 +11,9 @@ Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 Gravity de los botones
 
-? Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade)
+(Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade))
 
-Eliminar requisitos huerfanos
-	? Opcion en Preferences
+? Eliminar requisitos huerfanos
 
 
 0.9:

@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
+
 import sys
 
-#from optparse import OptionParser
+import Config
+
+
+config_path = "~/.priorities"
 
 
 def usage():
@@ -32,8 +36,7 @@ def CheckArgs(args):
 if __name__ == "__main__":
 
 	# Load config
-	import config
-	config = config.Config()
+	config = Config.Config(config_path)
 
 	# Set default vars
 	useDefaultDB = config.Get('useDefaultDB')
@@ -82,6 +85,7 @@ if __name__ == "__main__":
 #		try:
 			import View_Gtk
 			View_Gtk.View.controller = controller
+			View_Gtk.View.config = config
 			import View_Gtk_Main
 			interface = View_Gtk_Main.Main(db,useDefaultDB)
 #		except: #gtk.GtkWarning, e:
@@ -96,3 +100,4 @@ if __name__ == "__main__":
 	if textmode:
 		import View_Text
 		interface = View_Text.View(controller, db,useDefaultDB,input)
+
