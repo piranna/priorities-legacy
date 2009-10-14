@@ -33,11 +33,11 @@ if __name__ == "__main__":
 
 	# Load config
 	import config
-	config = config.Load()
+	config = config.Config()
 
 	# Set default vars
-	useDefaultDB = config['useDefaultDB']
-	db = config['database']
+	useDefaultDB = config.Get('useDefaultDB')
+	db = config.Get('database')
 	textmode = False
 	input = None
 
