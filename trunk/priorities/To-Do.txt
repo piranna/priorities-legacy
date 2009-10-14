@@ -16,7 +16,7 @@ Gravity de los botones
 Eliminar requisitos huerfanos
 	? Opcion en Preferences
 
-* Crear una clase para la interfaz al archivo de preferencias
+? Crear una clase para la interfaz al archivo de preferencias
 
 
 0.9:
@@ -41,6 +41,8 @@ Definir archivo de preferencias como parametro
 Icono de la aplicacion
 
 Barra de herramientas
+
+Exportar a imagen
 
 Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 

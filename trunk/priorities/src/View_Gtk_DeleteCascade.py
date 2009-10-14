@@ -23,7 +23,7 @@ class DeleteCascade(View_Gtk.View):
 
 		# If confirmDeleteCascade,
 		# show window
-		if config['confirmDeleteCascade']:
+		if self.config['confirmDeleteCascade']:
 			self.window = self.builder.get_object("DeleteCascade")
 			self.window.connect('response',self.__on_DeleteCascade_response, model)
 
@@ -31,8 +31,8 @@ class DeleteCascade(View_Gtk.View):
 			deleteCell.connect('toggled', self.__on_deleteCell_toggled, model)
 
 			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
-#			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
-#			chkConfirmDeleteCascade.set_active(self.config['confirmDeleteCascade'])
+			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
+			chkConfirmDeleteCascade.set_active(self.config['confirmDeleteCascade'])
 
 			treeview.expand_all()
 
@@ -57,8 +57,8 @@ class DeleteCascade(View_Gtk.View):
 			DeleteObjective_recursive(model, model.get_iter_root())
 
 
-#	def __on_chkConfirmDeleteCascade_toggled(self, widget):
-#		self.config["confirmDeleteCascade"] = widget.get_active()
+	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+		self.config["confirmDeleteCascade"] = widget.get_active()
 
 
 	def __on_deleteCell_toggled(self, cell, path,model):
@@ -165,4 +165,3 @@ class DeleteCascade(View_Gtk.View):
 #			model.set_value(iterator,2, True)
 #			SetChildrens(iterator,2, True)
 #			SetAncestorsInconsistency(iterator,2, True)
-
