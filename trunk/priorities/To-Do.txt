@@ -58,6 +58,10 @@ Mantener nombre de la base de datos por defecto en Preferences al pulsar cancela
 
 Post 1.0:
 =========
+Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
+Modificar clave de objetivos de autonumerado a campo name
+Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
+
 Opciones de hacer/deshacer
 
 Buscar con autocompletado
