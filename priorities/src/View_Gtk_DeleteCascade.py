@@ -52,7 +52,8 @@ class DeleteCascade(View_Gtk.View):
 		# If objective is marked,
 		# delete it
 		if self.__model.get_value(iterator,2):
-			self.controller.DeleteObjective(self.__model.get_value(iterator,0))
+			self.controller.DeleteObjective(self.__model.get_value(iterator,0),
+											self.config.Get('removeOrphanRequeriments'))
 			response |= 1
 
 		# Delete objective marqued requeriments, if any

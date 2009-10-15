@@ -34,10 +34,10 @@ class Model:
 				);
 				CREATE TABLE IF NOT EXISTS requeriments
 				(
-					objective INTEGER NOT NULL,
+					objective INTEGER NOT NULL, --FOREIGN KEY objectives ON UPDATE CASCADE ON DESTROY CASCADE
 					requeriment INTEGER NOT NULL,
 					priority INTEGER NOT NULL DEFAULT 0,
-					alternative INTEGER NOT NULL,
+					alternative INTEGER NOT NULL, --FOREIGN KEY objectives ON UPDATE CASCADE ON DESTROY CASCADE
 					quantity FLOAT NOT NULL DEFAULT 1,
 					PRIMARY KEY(objective,requeriment,priority)
 				);
@@ -242,16 +242,12 @@ class Model:
 		return None
 
 
-	def DelRequeriments_ById(self, objective_id):
+	def DelRequeriments_ById(self, objective_id):			# Overseed by Foreign Key
 		return self.__connection.execute('''
 			DELETE FROM requeriments
 			WHERE objective==?
 			''',
 			(objective_id,))
-
-
-	def DelRequeriments_ByName(self, objective_name):
-		return self.DelRequeriments_ById(self.GetId(objective_name))
 
 
 #	def GetRequeriment(self, objective,alternative):
@@ -268,8 +264,16 @@ class Model:
 #		return None
 
 
-	def DeleteObjective(self, objective_id):
-		# Delete requeriment
+	def DeleteObjective(self, objective_id, delete_orphans = False):
+		def DeleteAlternatives():			# Overseed by Foreign Key
+			return self.__connection.execute('''
+				DELETE FROM requeriments
+				WHERE alternative==?
+				''',
+				(objective_id,))
+
+
+		# Delete requeriments
 		self.DelRequeriments_ById(objective_id)
 
 		# Get dependents
@@ -278,11 +282,7 @@ class Model:
 #		print "\ndependents 1:",dependents
 
 		# Delete alternatives
-		self.__connection.execute('''
-			DELETE FROM requeriments
-			WHERE alternative==?
-			''',
-			(objective_id,))
+		DeleteAlternatives()
 
 #		print "\ndependents 2:",self.DirectDependents(objective_id)
 
@@ -293,6 +293,8 @@ class Model:
 			# If dependency has alternatives
 			# update its priority
 			if dependent['priority']:
+				# If dependency has not been checked
+				# get it's number of alternatives
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
 
@@ -304,6 +306,7 @@ class Model:
 						(dependent['objective'],
 						dependent['requeriment'])).fetchone()['count']
 
+				# Update dependency priority
 				self.__connection.execute('''
 					UPDATE requeriments
 					SET priority=

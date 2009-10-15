@@ -501,7 +501,8 @@ class Main(View_Gtk.View):
 										gtk.BUTTONS_YES_NO,
 										"Desea eliminar el objetivo "+self.controller.GetName(objective_id)+"?")
 			if dialog.run() == gtk.RESPONSE_YES:
-				self.controller.DeleteObjective(objective_id)
+				self.controller.DeleteObjective(objective_id,
+												self.config.Get('removeOrphanRequeriments'))
 				self.__CreateTree()
 			dialog.destroy()
 

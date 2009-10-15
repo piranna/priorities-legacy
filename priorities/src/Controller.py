@@ -183,7 +183,7 @@ class Controller:
 		return False
 
 	def DelRequeriments(self, objective_name):
-		return self.__model.DelRequeriments_ById(self.__model.GetId(objective_name))
+		return self.__model.DelRequeriments_ById(self.GetId(objective_name))
 
 
 	def Get_DeleteObjective_Tree(self, objective_id):
@@ -253,8 +253,8 @@ class Controller:
 		return Private_Get_DeleteObjective_Tree(objective_id)
 
 
-	def DeleteObjective(self, objective_id):
-		return self.__model.DeleteObjective(objective_id)
+	def DeleteObjective(self, objective_id, delete_orphans = False):
+		self.__model.DeleteObjective(objective_id, delete_orphans)
 
 
 	def Export(self):
