@@ -13,13 +13,13 @@ class DeleteCascade(View_Gtk.View):
 
 		# Fill model
 		def Append(tree, parent=None):
-			print "Append antes",tree, parent
+			print "Append antes", parent,tree
 #			self.__tree.get(objective_id, []).append(path)
 			for objective_id in tree.keys():
 				Append(tree[objective_id],
 						self.__model.append(parent,
 									(objective_id, self.controller.GetName(objective_id), True,False)))
-			print "Append despues",tree, parent
+			print "Append despu", parent,tree
 			print
 
 		Append(self.controller.Get_DeleteObjective_Tree(objective_id),
@@ -36,7 +36,7 @@ class DeleteCascade(View_Gtk.View):
 			deleteCell = self.builder.get_object("deleteCell")
 			deleteCell.connect('toggled', self.__on_deleteCell_toggled)
 
-			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
+			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade1")
 			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
 			chkConfirmDeleteCascade.set_active(confirmDeleteCascade)
 
@@ -70,7 +70,6 @@ class DeleteCascade(View_Gtk.View):
 
 
 	def __on_chkConfirmDeleteCascade_toggled(self, widget):
-		print widget.get_active()
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 		self.config.Store()
 
@@ -163,3 +162,4 @@ class DeleteCascade(View_Gtk.View):
 		else:
 			Delete(self.__model.get_iter_root(),
 					self.__model.get_value(iterator,0))
+
