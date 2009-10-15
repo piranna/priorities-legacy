@@ -1,7 +1,5 @@
 0.8:
 ====
-[BUG] Opcion si se desea preguntar al eliminar en cascada en DeleteCascade
-
 ? Eliminar requisitos huerfanos
 
 ? Estudiar distribucion de botones
