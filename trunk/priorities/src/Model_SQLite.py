@@ -2,10 +2,10 @@ import sqlite3
 
 
 class Model:
-	connection = None
-
 	# Contructor & destructor
 	def __init__(self, db_name):
+		self.__connection = None
+
 		if db_name:
 			self.Connect(db_name)
 
@@ -17,13 +17,13 @@ class Model:
 	def Connect(self, db_name):
 		self.unconnect()
 
-		self.connection = sqlite3.connect(db_name)
+		self.__connection = sqlite3.connect(db_name)
 
-		self.connection.row_factory = sqlite3.Row
-		self.connection.isolation_level = None
+		self.__connection.row_factory = sqlite3.Row
+		self.__connection.isolation_level = None
 
 		try:
-			self.connection.executescript('''
+			self.__connection.executescript('''
 				CREATE TABLE IF NOT EXISTS objectives
 				(
 					id INTEGER NOT NULL,
@@ -47,16 +47,16 @@ class Model:
 
 
 	def unconnect(self):
-		if self.connection:
-			self.connection.close()
-			self.connection = None
+		if self.__connection:
+			self.__connection.close()
+			self.__connection = None
 
 
 	# Access functions
 	def GetObjective(self,objective_id):
-		query = self.connection.execute('''
+		query = self.__connection.execute('''
 			SELECT * FROM objectives
-			WHERE objectives.id == ?
+			WHERE id == ?
 			LIMIT 1
 			''',
 			(objective_id,))
@@ -96,11 +96,11 @@ class Model:
 
 #		print "sql=",sql
 
-		return self.connection.execute(sql).fetchall()
+		return self.__connection.execute(sql).fetchall()
 
 
 	def DirectDependents(self, objective_id):
-		return self.connection.execute('''
+		return self.__connection.execute('''
 			SELECT * FROM requeriments
 			WHERE alternative==?
 			GROUP BY objective
@@ -109,7 +109,7 @@ class Model:
 
 
 	def DirectDependents_minQuantity(self,objective_id):
-		query = self.connection.execute('''
+		query = self.__connection.execute('''
 			SELECT MIN(quantity) AS min_quantity FROM requeriments
 			WHERE alternative==?
 			LIMIT 1
@@ -119,7 +119,7 @@ class Model:
 
 
 	def GetId(self, name):
-		query = self.connection.execute('''
+		query = self.__connection.execute('''
 			SELECT id FROM objectives
 				WHERE name==?
 				LIMIT 1
@@ -138,7 +138,7 @@ class Model:
 		if objective_id:
 			# Increase quantity
 			if quantity!=None:
-				self.connection.execute('''
+				self.__connection.execute('''
 					UPDATE objectives
 					SET quantity=?
 					WHERE id=?
@@ -148,7 +148,7 @@ class Model:
 
 			# Update expiration
 			if expiration!="no valid expiration":
-				self.connection.execute('''
+				self.__connection.execute('''
 					UPDATE objectives
 					SET expiration=?
 					WHERE id=?
@@ -165,7 +165,7 @@ class Model:
 		if(quantity==None):
 			quantity=0
 
-		cursor = self.connection.cursor()
+		cursor = self.__connection.cursor()
 		cursor.execute('''
 			INSERT INTO objectives(name,quantity,expiration)
 				VALUES(?,?,?)
@@ -179,7 +179,7 @@ class Model:
 	def AddAlternative(self, alternative, objective, requeriment=None, priority=0, quantity=1):
 		# Get first empty requeriment for this objective
 		def AddRequeriment(objective):
-			query = self.connection.execute('''
+			query = self.__connection.execute('''
 				SELECT DISTINCT requeriment FROM requeriments
 				WHERE objective==?
 				ORDER BY requeriment
@@ -215,7 +215,7 @@ class Model:
 			requeriment = AddRequeriment(objective)
 
 
-		self.connection.execute('''
+		self.__connection.execute('''
 			INSERT INTO requeriments(objective,requeriment,priority,alternative,quantity)
 				VALUES(?,?,?,?,?)
 			''',
@@ -227,7 +227,7 @@ class Model:
 
 
 	def GetName(self, objective):
-		query = self.connection.execute('''
+		query = self.__connection.execute('''
 			SELECT name FROM objectives
 				WHERE id==?
 				LIMIT 1
@@ -240,7 +240,7 @@ class Model:
 
 
 	def DelRequeriments_ById(self, objective_id):
-		return self.connection.execute('''
+		return self.__connection.execute('''
 			DELETE FROM requeriments
 			WHERE objective==?
 			''',
@@ -252,7 +252,7 @@ class Model:
 
 
 #	def GetRequeriment(self, objective,alternative):
-#		query = self.connection.execute('''
+#		query = self.__connection.execute('''
 #			SELECT requeriment FROM requeriments
 #			WHERE objective==?
 #			AND alternative==?
@@ -275,7 +275,7 @@ class Model:
 #		print "\ndependents 1:",dependents
 
 		# Delete alternatives
-		self.connection.execute('''
+		self.__connection.execute('''
 			DELETE FROM requeriments
 			WHERE alternative==?
 			''',
@@ -293,7 +293,7 @@ class Model:
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
 
-					count = self.connection.execute('''
+					count = self.__connection.execute('''
 						SELECT COUNT(*) AS count FROM requeriments
 						WHERE objective==?
 						AND requeriment==?
@@ -301,7 +301,7 @@ class Model:
 						(dependent['objective'],
 						dependent['requeriment'])).fetchone()['count']
 
-				self.connection.execute('''
+				self.__connection.execute('''
 					UPDATE requeriments
 					SET priority=
 						CASE
@@ -325,7 +325,7 @@ class Model:
 #		print "\ndependents 3:",self.DirectDependents(objective_id)
 
 		# Delete objective
-		self.connection.execute('''
+		self.__connection.execute('''
 			DELETE FROM objectives
 			WHERE id==?
 			''',

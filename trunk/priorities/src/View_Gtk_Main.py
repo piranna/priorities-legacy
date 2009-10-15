@@ -486,9 +486,13 @@ class Main(View_Gtk.View):
 		and len(self.controller.DirectDependencies(objective_id))>1):
 			dialog = DeleteCascade(objective_id)
 
-			dialog.window.set_transient_for(self.window)
-			response = dialog.window.run()
-			dialog.window.destroy()
+			if self.config.Get('confirmDeleteCascade'):
+				dialog.window.set_transient_for(self.window)
+				response = dialog.window.run()
+				dialog.window.destroy()
+
+			else:
+				response = dialog.DeleteObjective_recursive()
 
 			if response > 0:
 				self.__CreateTree()
