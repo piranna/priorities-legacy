@@ -70,6 +70,7 @@ class DeleteCascade(View_Gtk.View):
 
 
 	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+		print widget.get_active()
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 		self.config.Store()
 

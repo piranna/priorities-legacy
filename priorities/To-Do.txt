@@ -1,10 +1,8 @@
 0.8:
 ====
-Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
-	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
-	? Usar indices para acelerar su acceso
+[BUG] Opcion si se desea preguntar al eliminar en cascada en DeleteCascade
 
-Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
+? Eliminar requisitos huerfanos
 
 ? Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
@@ -14,9 +12,11 @@ Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 Gravity de los botones
 
-(Opcion si se desea preguntar al eliminar en cascada (Preferences y DeleteCascade))
+Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
+	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
+	? Usar indices para acelerar su acceso
 
-? Eliminar requisitos huerfanos
+Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 
 0.9:
