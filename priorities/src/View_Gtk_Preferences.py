@@ -90,6 +90,8 @@ class Preferences(View_Gtk.View):
 
 		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
 
+		self.redraw_tree = False
+
 
 	def __on_chkDefaultDB_toggled(self, widget):
 		self.config.Set("useDefaultDB", widget.get_active())
@@ -104,6 +106,7 @@ class Preferences(View_Gtk.View):
 
 	def __on_colorbutton_colorset(self, widget):
 		self.config.Set(widget.get_title(), widget.get_color())
+		self.redraw_tree = True
 
 
 	def __on_Preferences_response(self, widget, response):
@@ -113,10 +116,12 @@ class Preferences(View_Gtk.View):
 
 	def __on_chkShowSharp_toggled(self, widget):
 		self.config.Set("showSharp", widget.get_active())
+		self.redraw_tree = True
 
 
 	def __on_chkShowArrowHeads_toggled(self, widget):
 		self.config.Set("showArrowHeads", widget.get_active())
+		self.redraw_tree = True
 
 
 	def __on_chkRemoveOrphanRequeriments_toggled(self, widget):
@@ -134,8 +139,10 @@ class Preferences(View_Gtk.View):
 
 	def __on_cbShowExceededDependencies_changed(self, widget):
 		self.config.Set("showExceededDependencies", widget.get_active())
+		self.redraw_tree = True
 
 
 	def __on_sbExpirationWarning_valuechanged(self, widget):
 		self.config.Set("expirationWarning", widget.get_value_as_int())
+		self.redraw_tree = True
 
