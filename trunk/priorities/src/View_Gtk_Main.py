@@ -444,7 +444,7 @@ class Main(View_Gtk.View):
 
 		layout_size = self.layout.get_size()
 		self.layout.set_size(layout_size[0] + self.x_step/2,
-									layout_size[1] + self.y_step/2)
+								layout_size[1] + self.y_step/2)
 
 
 	def __CleanTree(self):
@@ -461,24 +461,21 @@ class Main(View_Gtk.View):
 
 	def __About(self, widget):
 		about = About()
-
 		about.window.set_transient_for(self.window)
+
 		about.window.run()
+
 		about.window.destroy()
 
 
 	def __AddObjective(self, widget, objective_id=None):
 		addObjective = AddObjective(objective_id)
-
 		addObjective.window.set_transient_for(self.window)
-		response = addObjective.window.run()
-		addObjective.window.destroy()
 
-		print "response =",response
-
-		# Redraw the requeriments tree
-		if response > 0:
+		if addObjective.window.run() > 0:
 			self.__CreateTree()
+
+		addObjective.window.destroy()
 
 
 	def __DelObjective(self, menuitem,objective_id):
@@ -503,11 +500,10 @@ class Main(View_Gtk.View):
 										gtk.MESSAGE_QUESTION,
 										gtk.BUTTONS_YES_NO,
 										"Desea eliminar el objetivo "+self.controller.GetName(objective_id)+"?")
-			response = dialog.run()
-			dialog.destroy()
-			if response == gtk.RESPONSE_YES:
+			if dialog.run() == gtk.RESPONSE_YES:
 				self.controller.DeleteObjective(objective_id)
 				self.__CreateTree()
+			dialog.destroy()
 
 
 	def __on_objective_clicked(self, widget,event):
@@ -539,15 +535,14 @@ class Main(View_Gtk.View):
 
 	def __Preferences(self, widget):
 		dialog = Preferences()
-
 		dialog.window.set_transient_for(self.window)
-		response = dialog.window.run()
-		dialog.window.destroy()
 
-		# Reload config if neccesary
-		if response > 0:
-#			self.config = config.Load()
+		# Redraw tree if necesary
+		if(dialog.window.run() > 0
+		and dialog.redraw_tree):
 			self.__CreateTree()
+
+		dialog.window.destroy()
 
 
 	def __on_Main_destroy(self, widget, data=None):
