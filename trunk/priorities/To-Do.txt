@@ -2,7 +2,7 @@
 ====
 ? Eliminar requisitos huerfanos
 
-? Estudiar distribucion de botones
+* Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
 	Distribuir los demas proporcionalmente
 	Con las alternativas, registrarlas y distribuirlas a posteriori
@@ -12,26 +12,26 @@ Gravity de los botones
 
 Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
 	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
-	? Usar indices para acelerar su acceso
+	* Usar indices para acelerar su acceso
 
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
 
 0.9:
 ====
-Pasar de getopts a optparse
+* Pasar de getopts a optparse
 Usar (exclusivamente) opciones largas
 Usar opciones afirmativas y negativas
 
-? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
-	Animacion de zoom in y zoom out
+Definir archivo de preferencias como parametro
 
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
 	Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
-Definir archivo de preferencias como parametro
+? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
+	Animacion de zoom in y zoom out
 
 
 1.0:
@@ -60,6 +60,8 @@ Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
 Modificar clave de objetivos de autonumerado a campo name
 Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
 
+Estudiar campo para identificar fines en si mismo de medios
+
 Opciones de hacer/deshacer
 
 Buscar con autocompletado
@@ -71,9 +73,9 @@ Dibujar comandos en modo texto o NCurses
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
-Version en PyGUI
-
 Resaltar lineas de requisitos recursivamente
+
+Version en PyGUI
 
 
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
