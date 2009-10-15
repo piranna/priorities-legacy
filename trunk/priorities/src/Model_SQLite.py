@@ -165,6 +165,9 @@ class Model:
 		if(quantity==None):
 			quantity=0
 
+		if(expiration=="no valid expiration"):
+			expiration=None
+
 		cursor = self.__connection.cursor()
 		cursor.execute('''
 			INSERT INTO objectives(name,quantity,expiration)
