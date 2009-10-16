@@ -100,6 +100,8 @@ class AddObjective(View_Gtk.View):
 				self.expiration = None
 
 			# Requeriments
+			dependencies = None
+
 			txtBuffer = self.txtRequeriments.get_buffer()
 			start,end = txtBuffer.get_bounds()
 			txtBuffer = txtBuffer.get_text(start,end)
@@ -111,6 +113,10 @@ class AddObjective(View_Gtk.View):
 				print "\tdistintos"
 				print "\t",self.oldRequeriments
 				print "\t",txtBuffer
+
+				if self.config.Get('removeOrphanRequeriments'):
+					dependencies = self.controller.DirectDependencies(self.controller.GetId(self.txtObjective.get_text()))
+
 				self.controller.DelRequeriments(self.txtObjective.get_text())
 
 				# Requeriments
@@ -138,6 +144,8 @@ class AddObjective(View_Gtk.View):
 											self.txtQuantity.get_text(),
 											self.expiration,
 											txtBuffer)
+
+			self.controller.DeleteOrphans(dependencies)
 
 		return closeDialog
 

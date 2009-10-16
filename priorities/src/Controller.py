@@ -306,3 +306,6 @@ class Controller:
 
 		return txt
 
+
+	def DeleteOrphans(self, dependencies):
+		self.__model.DeleteOrphans(dependencies)

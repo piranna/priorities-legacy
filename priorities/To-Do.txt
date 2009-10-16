@@ -1,6 +1,6 @@
 0.8:
 ====
-? Eliminar requisitos huerfanos
+(? Eliminar requisitos huerfanos)
 
 * Estudiar distribucion de botones
 ?	Calcular longitud del nivel mas ancho
