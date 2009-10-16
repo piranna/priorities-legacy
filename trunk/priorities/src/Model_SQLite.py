@@ -274,6 +274,8 @@ class Model:
 
 
 		# Delete requeriments
+		if delete_orphans:
+			dependencies = self.DirectDependencies(objective_id)
 		self.DelRequeriments_ById(objective_id)
 
 		# Get dependents
@@ -339,3 +341,13 @@ class Model:
 
 #		print "\ndependents 4:",self.DirectDependents(objective_id)
 
+		if delete_orphans:
+			self.DeleteOrphans(dependencies)
+
+
+	def DeleteOrphans(self):
+		for dependency in dependencies:
+			# If dependency doesn't have a dependent,
+			# delete the orphan
+			if not len(self.DirectDependents(dependency['objective_id'])):
+				self.DeleteObjective(dependency['objective_id'], delete_orphans)
