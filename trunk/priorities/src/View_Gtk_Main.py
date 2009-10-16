@@ -1,6 +1,6 @@
 import glib
 import gtk
-import random
+#import random
 import math
 import datetime
 
@@ -274,7 +274,8 @@ class Main(View_Gtk.View):
 				button.connect('leave_notify_event',self.__IncreaseLineWidth)
 				return button
 
-			x = random.randint(self.x_step/2.0,self.x_step)
+			x = self.x_step/2.0
+#			x = random.randint(self.x_step/2.0,self.x_step)
 			coords = None
 			level_requeriments = {}
 
@@ -309,7 +310,8 @@ class Main(View_Gtk.View):
 							if not level_requeriments.has_key(objective['objective_id']):
 								level_requeriments[objective['objective_id']] = []
 							level_requeriments[objective['objective_id']].append(objective['requeriment'])
-							x += self.x_step + random.randint(0, self.x_step/2)
+							x += self.x_step
+#							x += self.x_step + random.randint(0, self.x_step/2)
 
 						# Store the requeriment arrow coordinates
 						self.__req_arrows.append((objective['objective_id'],coords, GetCoordinates(objective['alternative'])))
@@ -317,7 +319,8 @@ class Main(View_Gtk.View):
 			# If level has had requeriments,
 			# reset objectives coordinates
 			if(level_requeriments):
-				x = random.randint(0, self.x_step)
+				x = 0
+#				x = random.randint(0, self.x_step)
 				y += self.y_step
 
 				level_requeriments = {}
@@ -429,7 +432,8 @@ class Main(View_Gtk.View):
 						# Register objective to prevent be printed twice
 						objectives.append(objective['objective_id'])
 
-						x += self.x_step + random.randint(0, self.x_step/2)
+						x += self.x_step
+#						x += self.x_step + random.randint(0, self.x_step/2)
 
 				# If objective has requeriments,
 				# store the requeriment arrow coordinates
@@ -627,4 +631,3 @@ class Main(View_Gtk.View):
 		print "__ZoomOut"
 		self.__zoomlevel -= 1
 		self.__CreateTree(objective_name)
-
