@@ -171,23 +171,20 @@ class Main(View_Gtk.View):
 			def ArrowPoint(arrow, angle, lenght):
 				angle = math.radians(angle)
 
-#				print arrow,angle,lenght
 				cotan = arrow[1][1]-arrow[2][1]
 				if cotan:
 					cotan = math.atan((arrow[1][0]-arrow[2][0])/cotan)+angle
 
 				return (arrow[2][0]+math.sin(cotan)*lenght, arrow[2][1]+math.cos(cotan)*lenght)
 
-			arrowPoint = ArrowPoint(arrow, 15, 15)
+			arrowPoint = ArrowPoint(arrow, 15, 30)
 			self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
 												int(arrowPoint[0]),int(arrowPoint[1]))
 
-			arrowPoint = ArrowPoint(arrow, -15, 15)
+			arrowPoint = ArrowPoint(arrow, -15, 30)
 			self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
 												int(arrowPoint[0]),int(arrowPoint[1]))
 
-
-#		self.layout.queue_draw()
 
 		# Background sharp
 		layout_size = self.layout.get_size()
@@ -214,10 +211,7 @@ class Main(View_Gtk.View):
 											layout_size[0],layout_size[1])
 
 		# Arrows
-#		print self.__req_arrows
 		for arrow in self.__req_arrows:
-#			print "\t",arrow
-
 			if arrow[0]==self.__cursorObjective:
 				gc.set_line_attributes(2, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 			else:
@@ -231,7 +225,6 @@ class Main(View_Gtk.View):
 				DrawHead(arrow)
 
 		gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
-#		print
 
 
 	def __CreateTree(self, objective_name=None):
@@ -251,34 +244,34 @@ class Main(View_Gtk.View):
 
 			return None
 
-#		self.layout.set_size(self.x_step/2,self.y_step/2)
-
 		layout_size_x = 0
 		y = self.y_step/2.0
 
 		# Niveles
 		for level in self.controller.ShowTree(objective_name):
-#			def UpdateLayoutSize(width,height):
-#				print "1.",self.layout.get_size()
-#				layout_size_x = self.layout.get_size()[0]
-#				layout_size_y = self.layout.get_size()[1]
-#				if layout_size_x < width:
-#					layout_size_x = width
-#				if layout_size_y < height:
-#					layout_size_y = height
-#				self.layout.set_size(int(layout_size_x),
-#											int(layout_size_y))
-#				print "2.",self.layout.get_size()
-#				print
-
 			def CreateButton(label,objective_id):
 				button = gtk.Button(label)
 				button.set_focus_on_click(False)
-				button.show()
 				button.connect('clicked',self.__AddObjective, objective_id)
 				button.connect('enter_notify_event',self.__IncreaseLineWidth, objective_id)
 				button.connect('leave_notify_event',self.__IncreaseLineWidth)
 				return button
+
+			def PutButton(button, x,y):
+#				print button, x,y
+
+				x = int(x)
+				y = int(y)
+
+				self.layout.put(button, x,y)
+#				button.realize()
+				self.layout.move(button,
+								x - int(button.get_allocation().width/2),
+								y - int(button.get_allocation().height/2))
+				button.show()
+
+				print button.get_allocation()
+
 
 			requeriment_button = None
 			coords = None
@@ -292,7 +285,7 @@ class Main(View_Gtk.View):
 				if requeriment_button:
 					# Put requeriment button
 					x = (first_x+last_x)/2.0
-					self.layout.put(requeriment_button, int(x),int(y))
+					PutButton(requeriment_button, x,y)
 					coords = (x,y)
 
 #					if x > layout_size_x:
@@ -476,7 +469,7 @@ class Main(View_Gtk.View):
 						# If level doesn't have requeriments (usually level 0)
 						if x:
 							# Put objective button
-							self.layout.put(button, int(x),int(y))
+							PutButton(button, x,y)
 							obj_coords[objective['objective_id']] = (x,y)
 
 							if x > layout_size_x:
@@ -503,7 +496,7 @@ class Main(View_Gtk.View):
 							aux_x = (min_x+max_x)/2
 
 							# Put objective button
-							self.layout.put(button, int(aux_x),int(y))
+							PutButton(button, aux_x,y)
 							obj_coords[objective['objective_id']] = (aux_x,y)
 
 							if aux_x > layout_size_x:
