@@ -1,6 +1,6 @@
 0.8:
 ====
-Gravity de los botones
+Mostrar objetivos centrados
 
 Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
 	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
