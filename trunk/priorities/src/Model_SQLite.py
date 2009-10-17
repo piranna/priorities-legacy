@@ -345,9 +345,12 @@ class Model:
 			self.DeleteOrphans(dependencies)
 
 
-	def DeleteOrphans(self):
-		for dependency in dependencies:
-			# If dependency doesn't have a dependent,
-			# delete the orphan
-			if not len(self.DirectDependents(dependency['objective_id'])):
-				self.DeleteObjective(dependency['objective_id'], delete_orphans)
+	def DeleteOrphans(self, dependencies=None):
+		if dependencies:
+			for dependency in dependencies:
+				# If dependency doesn't have a dependent,
+				# delete the orphan
+				if(self.GetObjective(dependency['alternative'])
+				and not len(self.DirectDependents(dependency['alternative']))):
+					self.DeleteObjective(dependency['alternative'], True)
+

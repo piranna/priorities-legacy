@@ -116,6 +116,7 @@ class AddObjective(View_Gtk.View):
 
 				if self.config.Get('removeOrphanRequeriments'):
 					dependencies = self.controller.DirectDependencies(self.controller.GetId(self.txtObjective.get_text()))
+					print dependencies
 
 				self.controller.DelRequeriments(self.txtObjective.get_text())
 

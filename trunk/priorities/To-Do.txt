@@ -1,12 +1,7 @@
 0.8:
 ====
-(? Eliminar requisitos huerfanos)
-
-* Estudiar distribucion de botones
-?	Calcular longitud del nivel mas ancho
-	Distribuir los demas proporcionalmente
-	Con las alternativas, registrarlas y distribuirlas a posteriori
-	Distribucion de requerimientos en un mismo nivel debajo de sus alternativas
+? Estudiar distribucion de botones
+?	Distribucion de requerimientos en un mismo nivel debajo de sus alternativas
 
 Gravity de los botones
 
