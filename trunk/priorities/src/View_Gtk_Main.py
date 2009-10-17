@@ -1,6 +1,5 @@
 import glib
 import gtk
-#import random
 import math
 import datetime
 
@@ -173,7 +172,9 @@ class Main(View_Gtk.View):
 				angle = math.radians(angle)
 
 #				print arrow,angle,lenght
-				cotan = math.atan((arrow[1][0]-arrow[2][0])/(arrow[1][1]-arrow[2][1]))+angle
+				cotan = arrow[1][1]-arrow[2][1]
+				if cotan:
+					cotan = math.atan((arrow[1][0]-arrow[2][0])/cotan)+angle
 
 				return (arrow[2][0]+math.sin(cotan)*lenght, arrow[2][1]+math.cos(cotan)*lenght)
 
@@ -189,8 +190,9 @@ class Main(View_Gtk.View):
 #		self.layout.queue_draw()
 
 		# Background sharp
+		layout_size = self.layout.get_size()
+
 		if(self.config.Get('showSharp')):
-			layout_size = self.layout.get_size()
 			for x in range(1,layout_size[0]/self.x_step):
 				self.layout.bin_window.draw_line(gc, x*self.x_step,0,
 													x*self.x_step,layout_size[1])
@@ -198,18 +200,18 @@ class Main(View_Gtk.View):
 				self.layout.bin_window.draw_line(gc, 0,y*self.y_step,
 													layout_size[0],y*self.y_step)
 
-			# Left
-#			self.layout.bin_window.draw_line(gc, 0,0,
-#												x*self.x_step,layout_size[1])
-			# Top
-#			self.layout.bin_window.draw_line(gc, 0,0,
-#												layout_size[0],y*self.y_step)
-			# Right
-			self.layout.bin_window.draw_line(gc, layout_size[0],0,
-												layout_size[0],layout_size[1])
-			# Down
-			self.layout.bin_window.draw_line(gc, 0,layout_size[1],
-												layout_size[0],layout_size[1])
+		# Left
+		self.layout.bin_window.draw_line(gc, 0,0,
+											0,layout_size[1])
+		# Top
+		self.layout.bin_window.draw_line(gc, 0,0,
+											layout_size[0],0)
+		# Right
+		self.layout.bin_window.draw_line(gc, layout_size[0],0,
+											layout_size[0],layout_size[1])
+		# Down
+		self.layout.bin_window.draw_line(gc, 0,layout_size[1],
+											layout_size[0],layout_size[1])
 
 		# Arrows
 #		print self.__req_arrows
@@ -251,6 +253,7 @@ class Main(View_Gtk.View):
 
 #		self.layout.set_size(self.x_step/2,self.y_step/2)
 
+		layout_size_x = 0
 		y = self.y_step/2.0
 
 		# Niveles
@@ -278,98 +281,113 @@ class Main(View_Gtk.View):
 				return button
 
 			requeriment_button = None
-
 			coords = None
-			level_requeriments = {}
-
-			# Requeriments
 			first_x = 0
 			last_x = 0
 			obj_arrows = None
 			last_objective = None
 			last_requeriment = None
 
+			def PutOldButton(layout_size_x):
+				if requeriment_button:
+					# Put requeriment button
+					x = (first_x+last_x)/2.0
+					self.layout.put(requeriment_button, int(x),int(y))
+					coords = (x,y)
+
+#					if x > layout_size_x:
+#						layout_size_x = x
+
+					# Store requeriment button coordinates
+					if not req_coords.has_key(last_objective):
+						req_coords[last_objective] = {}
+					req_coords[last_objective][last_requeriment] = coords
+
+					# Store the requeriment arrows coordinates
+					for obj_arrow in obj_arrows:
+						self.__req_arrows.append((last_objective,coords, GetCoordinates(obj_arrow)))
+
+			# Requeriments
+
+			level_requeriments = {}
+
 			for objective in level:
-
-				def PutButton():
-					if requeriment_button:
-						# Put requeriment button
-						x = (first_x+last_x)/2.0
-						self.layout.put(requeriment_button, int(x),int(y))
-						coords = (x,y)
-
-						# Store requeriment button coordinates
-						if not req_coords.has_key(last_objective):
-							req_coords[last_objective] = {}
-						req_coords[last_objective][last_requeriment] = coords
-
-						# Store the requeriment arrows coordinates
-#						obj_arrows.append(objective['alternative'])
-						for obj_arrow in obj_arrows:
-							self.__req_arrows.append((last_objective,coords, GetCoordinates(obj_arrow)))
-
-
-				# Requeriments with alternatives
-				if objective['requeriment'] and objective['priority']:
-					# If requeriment is registered,
-					# add alternative
+				# Requeriments
+				if objective['requeriment']:
 					if not level_requeriments.has_key(objective['objective_id']):
 						level_requeriments[objective['objective_id']] = []
 
-					if objective['requeriment'] in level_requeriments[objective['objective_id']]:
-						requeriment_button.set_label(requeriment_button.get_label()+"\n"
-													+self.controller.GetName(objective['alternative']))
-						last_x = GetCoordinates(objective['alternative'])[0]
-						obj_arrows.append(objective['alternative'])
-						last_objective = objective['objective_id']
-						last_requeriment = objective['requeriment']
+					# Requeriment with alternatives
+					if objective['priority']:
 
-					# else create a new one
+						# If requeriment is registered,
+						# add alternative
+						if objective['requeriment'] in level_requeriments[objective['objective_id']]:
+							requeriment_button.set_label(requeriment_button.get_label()+"\n"
+														+self.controller.GetName(objective['alternative']))
+
+							last_x = GetCoordinates(objective['alternative'])[0]
+							last_objective = objective['objective_id']
+							last_requeriment = objective['requeriment']
+
+							obj_arrows.append(objective['alternative'])
+
+						# else create a new one
+						else:
+							level_requeriments[objective['objective_id']].append(objective['requeriment'])
+
+							PutOldButton(layout_size_x)
+
+							# Create requeriment button
+							requeriment_button = CreateButton(self.controller.GetName(objective['alternative']),
+																objective['objective_id'])
+
+							first_x = GetCoordinates(objective['alternative'])[0]
+
+							obj_arrows = []
+							obj_arrows.append(objective['alternative'])
+
+					# Requeriments without alternatives
 					else:
 						level_requeriments[objective['objective_id']].append(objective['requeriment'])
 
-						PutButton()
+						if not req_coords.has_key(objective['objective_id']):
+							req_coords[objective['objective_id']] = {}
+						req_coords[objective['objective_id']][objective['requeriment']] = GetCoordinates(objective['alternative'])
 
-						# Create requeriment button
-						requeriment_button = CreateButton(self.controller.GetName(objective['alternative']),
-															objective['objective_id'])
-						first_x = GetCoordinates(objective['alternative'])[0]
-
-						obj_arrows = []
-						obj_arrows.append(objective['alternative'])
-
-			PutButton()
+			PutOldButton(layout_size_x)
 
 
 			# If level has had requeriments,
 			# reset objectives coordinates
 			if(level_requeriments):
-				x = 0
+				x = None
 				y += self.y_step
-				level_requeriments = {}
 
+			# If level doesn't have requeriments (usually level 0),
+			# set x coordinates
 			else:
 				x = self.x_step/2.0
+
+
+			level_objectives = {}
 
 			# Objectives
 			for objective in level:
 				# If objective have a requeriment,
 				# get the requeriment coordinates
 				if objective['requeriment']:
-					if not level_requeriments.has_key(objective['objective_id']):
-						level_requeriments[objective['objective_id']] = []
+					if not level_objectives.has_key(objective['objective_id']):
+						level_objectives[objective['objective_id']] = []
 
 					# Requeriments with alternatives
 					if objective['priority']:
-						if(objective['requeriment'] not in level_requeriments[objective['objective_id']]):
+						if(objective['requeriment'] not in level_objectives[objective['objective_id']]):
 							coords = GetCoordinates(objective['objective_id'], objective['requeriment'])
-							print req_coords
-							print "coords",objective['objective_id'], objective['requeriment'], coords
 
 					# Requeriment without alternatives
 					else:
 						coords = GetCoordinates(objective['alternative'])
-#						print coords,objective
 
 				# Objective
 				if objective['objective_id'] not in objectives:
@@ -399,8 +417,13 @@ class Main(View_Gtk.View):
 						return gtk.gdk.color_parse(self.config.Get('color_unabordable'))
 
 
+					# Check if objective has to be printed and with what color
 					color = GetColor()
 					if(color):
+
+						# Register objective to prevent be printed twice
+						objectives.append(objective['objective_id'])
+
 						# Create objective button
 						button = CreateButton(objective['name'], objective['objective_id'])
 						button.connect('button-press-event',self.__on_objective_clicked)
@@ -414,7 +437,6 @@ class Main(View_Gtk.View):
 							button.set_tooltip_text(button.get_tooltip_text()+"\nDependents: "+str(len(dependents)))
 
 						def SetExpirationColor():
-
 							# Expired and not satisfacted - Show warning
 							if(objective["expiration"]
 							and not self.controller.IsSatisfacted(objective['objective_id'])):
@@ -451,27 +473,54 @@ class Main(View_Gtk.View):
 
 						SetExpirationColor()
 
-						# Put objective button
-						self.layout.put(button, int(x),int(y))
-						obj_coords[objective['objective_id']] = (x,y)
+						# If level doesn't have requeriments (usually level 0)
+						if x:
+							# Put objective button
+							self.layout.put(button, int(x),int(y))
+							obj_coords[objective['objective_id']] = (x,y)
 
-						# Register objective to prevent be printed twice
-						objectives.append(objective['objective_id'])
+							if x > layout_size_x:
+								layout_size_x = x
 
-						x += self.x_step
+							# increase x coordinates
+							x += self.x_step
+
+						else:
+							# Calculate x coordinates
+							min_x = -1
+							max_x = -1
+							for req in level_requeriments[objective['objective_id']]:
+								aux_x = GetCoordinates(objective['objective_id'], req)[0]
+
+								if(min_x < 0
+								or aux_x < min_x):
+									min_x = aux_x
+
+								if(max_x < 0
+								or aux_x > max_x):
+									max_x = aux_x
+
+							aux_x = (min_x+max_x)/2
+
+							# Put objective button
+							self.layout.put(button, int(aux_x),int(y))
+							obj_coords[objective['objective_id']] = (aux_x,y)
+
+							if aux_x > layout_size_x:
+								layout_size_x = aux_x
+
 
 				# If objective has requeriments,
 				# store the requeriment arrow coordinates
 				if(coords	# [To-Do] Optimizar para requisitos sin alternativas
-				and level_requeriments.has_key(objective['objective_id'])
-				and objective['requeriment'] not in level_requeriments[objective['objective_id']]):
-					level_requeriments[objective['objective_id']].append(objective['requeriment'])
+				and level_objectives.has_key(objective['objective_id'])
+				and objective['requeriment'] not in level_objectives[objective['objective_id']]):
+					level_objectives[objective['objective_id']].append(objective['requeriment'])
 					self.__req_arrows.append((objective['objective_id'],GetCoordinates(objective['objective_id']), coords))
-#					print self.__req_arrows
 
 			y += self.y_step
 
-		self.layout.set_size(int(x + self.x_step/2), int(y + self.y_step/2))
+		self.layout.set_size(int(layout_size_x + self.x_step/2), int(y - self.y_step/2))
 		print self.layout.get_size()
 
 

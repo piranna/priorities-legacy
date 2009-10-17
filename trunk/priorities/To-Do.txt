@@ -1,8 +1,5 @@
 0.8:
 ====
-? Estudiar distribucion de botones
-?	Distribucion de requerimientos en un mismo nivel debajo de sus alternativas
-
 Gravity de los botones
 
 Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
