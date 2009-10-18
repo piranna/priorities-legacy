@@ -46,7 +46,7 @@ class Main(View_Gtk.View):
 		vbox1.reorder_child(self.navBar, 1)
 
 		# Start button
-		self.navBar.add_with_id("gtk-home", self.__Zoom, 0)
+		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
 		self.navBar.get_button_from_id(0).set_use_stock(True)
 
 		#
@@ -116,8 +116,8 @@ class Main(View_Gtk.View):
 		mnuLayout_ZoomIn = self.builder.get_object("mnuLayout_ZoomIn")
 		mnuLayout_ZoomIn.connect('activate',self.__ZoomIn)
 
-		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
-		mnuLayout_ZoomOut.connect('activate',self.__ZoomOut)
+#		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
+#		mnuLayout_ZoomOut.connect('activate',self.__ZoomOut)
 
 		# Objective
 		self.mnuCtxObjective = self.builder.get_object("mnuCtxObjective")
@@ -126,10 +126,10 @@ class Main(View_Gtk.View):
 
 		self.mnuObjective_ZoomIn = self.builder.get_object("mnuObjective_ZoomIn")
 
-		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
-		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
+#		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
+#		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
 
-		self.__CreateTree()
+#		self.__CreateTree()
 
 		self.window.show()
 		gtk.main()
@@ -599,7 +599,7 @@ class Main(View_Gtk.View):
 
 	def __ShowLayoutMenu(self, widget,event):
 		print "__ShowLayoutMenu"
-		if(event.button == 3):	# Secondary button
+		if(event.button == 3):		# Secondary button
 			print "\tsecondary button"
 			self.mnuCtxLayout.popup(None,None,None, event.button,event.time)
 
@@ -680,23 +680,26 @@ class Main(View_Gtk.View):
 		self.layout.queue_draw()
 
 
-	def __Zoom(self):
-		self.__CreateTree(objective_name)
+	# Zoom
+	def __NavbarHome(self, widget):
+		self.__CreateTree()
+
+
+	def __NavbarZoom(self, widget):
+		self.__CreateTree(widget.get_label())
 
 
 	def __ZoomIn(self, widget, objective_name=None):
 		print "__ZoomIn"
 		if objective_name:
-			self.__zoomlevel += 1
-			self.navBar.add_with_id(objective_name, self.__CreateTree, self.__zoomlevel)
+			self.navBar.remove_remanents()
+			self.navBar.add_with_id(objective_name, self.__NavbarZoom, self.controller.GetId(objective_name))
 			self.__CreateTree(objective_name)
 
 		else:
-			pass
+			self.navBar.get_children()[self.navBar.get_active_position()+1].toggled()
 
 
 	def __ZoomOut(self, widget):
 		print "__ZoomOut"
-		self.__zoomlevel -= 1
-		self.__CreateTree(objective_name)
 

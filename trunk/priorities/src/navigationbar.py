@@ -33,7 +33,7 @@ class NavigationBar(gtk.HBox):
     def add_with_id(self, label, callback, id):
         """
         Add a new button with the given label/callback
-        
+
         If there is the same id already, replace the existing one
         with the new one
         """
@@ -72,7 +72,7 @@ class NavigationBar(gtk.HBox):
             self.remove(w)
         self.id_to_widget = {}
         self.id_to_callback = {}
-        
+
     def get_button_from_id(self, id):
         """
         return the button for the given id (or None)
@@ -89,4 +89,28 @@ class NavigationBar(gtk.HBox):
             return
         return self.id_to_widget[id].get_label()
 
-    
+
+    # Added by Piranna <piranna@gmail.com>
+    def get_active_position(self):
+        """
+        Return the position of the active button
+        """
+        position = 0
+        for children in self.get_children():
+            if children.get_active():
+                return position
+            position += 1
+        return None
+
+    def remove_remanents(self):
+        """
+        Remove all the navigation buttons whose position
+        is greater than the current active one
+        """
+        active_position = self.get_active_position()
+        position = 0
+        for children in self.get_children():
+            if position > active_position:
+                self.remove_id(dict([[v,k] for k,v in self.id_to_widget.items()])[children])
+            position += 1
+
