@@ -3,7 +3,10 @@
 Mostrar objetivos centrados
 
 Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
+	Usar recursividades solo para eliminar o mantener hijos
 	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
+	Eliminar requerimientos marcados
+	Eliminar objetivos solo si estan marcados y sin inestabilidad
 	* Usar indices para acelerar su acceso
 
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
@@ -22,8 +25,8 @@ Exportar/importar a texto plano
 	Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
-? Opcion de mostrar solo un objetivo y sus requisitos (menu estilo iTunes Store en la parte superior)
-	Animacion de zoom in y zoom out
+[BUG] No sale menu contextual en el layout
+Animacion de zoom in y zoom out
 
 
 1.0:
