@@ -88,6 +88,17 @@ class Main(View_Gtk.View):
 		mnuPreferences.connect('activate',self.__Preferences)
 
 		#
+		# View
+
+		# Zoom In
+		mnuZoomIn = self.builder.get_object("mnuZoomIn")
+		mnuZoomIn.connect('activate',self.__ZoomIn)
+
+		# Zoom Out
+		mnuZoomOut = self.builder.get_object("mnuZoomOut")
+		mnuZoomOut.connect('activate',self.__ZoomOut)
+
+		#
 		# Objective
 
 		# Add
@@ -116,8 +127,8 @@ class Main(View_Gtk.View):
 		mnuLayout_ZoomIn = self.builder.get_object("mnuLayout_ZoomIn")
 		mnuLayout_ZoomIn.connect('activate',self.__ZoomIn)
 
-#		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
-#		mnuLayout_ZoomOut.connect('activate',self.__ZoomOut)
+		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
+		mnuLayout_ZoomOut.connect('activate',self.__ZoomOut)
 
 		# Objective
 		self.mnuCtxObjective = self.builder.get_object("mnuCtxObjective")
@@ -126,8 +137,8 @@ class Main(View_Gtk.View):
 
 		self.mnuObjective_ZoomIn = self.builder.get_object("mnuObjective_ZoomIn")
 
-#		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
-#		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
+		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
+		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
 
 #		self.__CreateTree()
 
@@ -691,15 +702,23 @@ class Main(View_Gtk.View):
 
 	def __ZoomIn(self, widget, objective_name=None):
 		print "__ZoomIn"
+
 		if objective_name:
 			self.navBar.remove_remanents()
 			self.navBar.add_with_id(objective_name, self.__NavbarZoom, self.controller.GetId(objective_name))
 			self.__CreateTree(objective_name)
 
 		else:
-			self.navBar.get_children()[self.navBar.get_active_position()+1].toggled()
+			try:
+				self.navBar.get_children()[self.navBar.get_active_position()+1].clicked()
+			except:
+				pass
 
 
 	def __ZoomOut(self, widget):
 		print "__ZoomOut"
+
+		position = self.navBar.get_active_position()
+		if position:
+			self.navBar.get_children()[position-1].clicked()
 

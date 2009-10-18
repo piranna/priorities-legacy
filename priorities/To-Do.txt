@@ -31,6 +31,8 @@ Animacion de zoom in y zoom out
 
 1.0:
 ====
+Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
+
 Icono de la aplicacion
 
 Barra de herramientas
@@ -45,8 +47,6 @@ Internacionalizacion con gettext
 i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
-
-Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 
 Post 1.0:
@@ -88,7 +88,7 @@ Wont-fix:
 =========
 * [Hackeo en Glade] Cancelar cierre de ventana al pulsar cuadro de cierre
 i Excepcion al cargar GTK
-Quitar foco a todos los botones en GTK
+(Quitar foco a todos los botones en GTK)
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
