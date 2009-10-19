@@ -1126,6 +1126,7 @@ los siguientes objetivos en cascada</property>
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                       <attributes>
+                        <attribute name="strikethrough">2</attribute>
                         <attribute name="text">1</attribute>
                       </attributes>
                     </child>

@@ -105,7 +105,9 @@ class NavigationBar(gtk.HBox):
     def remove_remanents(self):
         """
         Remove all the navigation buttons whose position
-        is greater than the current active one
+        is greater than the current active one.
+        WARNING: if there are two or more IDs with the same children
+        it will remove the last one
         """
         active_position = self.get_active_position()
         position = 0

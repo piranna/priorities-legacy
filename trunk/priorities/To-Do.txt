@@ -3,11 +3,12 @@
 Mostrar objetivos centrados
 
 Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
-	Usar recursividades solo para eliminar o mantener hijos
-	Usar inestabilidad para identificar cuando se van a eliminar y cuando no
+	? Usar recursividades solo para eliminar o mantener hijos
+	? Usar inestabilidad para identificar cuando se van a eliminar y cuando no
 	Eliminar requerimientos marcados
 	Eliminar objetivos solo si estan marcados y sin inestabilidad
-	* Usar indices para acelerar su acceso
+
+* Usar indices para acelerar su acceso
 
 Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
 
