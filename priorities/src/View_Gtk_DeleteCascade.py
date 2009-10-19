@@ -77,22 +77,59 @@ class DeleteCascade(View_Gtk.View):
 
 	def __on_deleteCell_toggled(self, cell, path):
 		def Preserve(iterator, objective_id):
-			while iterator:
-				if self.__model.get_value(iterator,0)==objective_id:
 
-					if self.__model.get_value(iterator,2):
-						self.__model.set_value(iterator,2, False)
+			# Disable requeriment checkbox
+			self.__model.set_value(iterator,2, False)
 
-						iter_childs = self.__model.iter_children(iterator)
-						while iter_childs:
-							Preserve(self.__model.get_iter_root(),
-									self.__model.get_value(iter_childs,0))
-							iter_childs = self.__model.iter_next(iter_childs)
+			# Preserve childrens
 
-				else:
-					Preserve(self.__model.iter_children(iterator), objective_id)
+			# Check if all duplicates are uniform
+			def IsUniform(iterator, value):
+				while iterator:
+					if self.__model.get_value(iterator,0)==objective_id:
+						if self.__model.get_value(iterator,2)!=value:
+							return False
 
-				iterator = self.__model.iter_next(iterator)
+					elif not IsUniform(self.__model.iter_children(iterator), value):
+						return False
+
+					iterator = self.__model.iter_next(iterator)
+
+				return True
+
+
+			uniform = IsUniform(self.__model.get_iter_root(), False)
+
+			# Set indetermination
+			def SetIndetermination(iterator, value):
+				while iterator:
+					if self.__model.get_value(iterator,0)==objective_id:
+						self.__model.set_value(iterator,3, value)
+
+					else:
+						SetIndetermination(self.__model.iter_children(iterator), value)
+
+					iterator = self.__model.iter_next(iterator)
+
+
+			SetIndetermination(self.__model.get_iter_root(), not uniform)
+
+#			while iterator:
+#				if self.__model.get_value(iterator,0)==objective_id:
+#
+#					if self.__model.get_value(iterator,2):
+#						self.__model.set_value(iterator,2, False)
+#
+#						iter_childs = self.__model.iter_children(iterator)
+#						while iter_childs:
+#							Preserve(self.__model.get_iter_root(),
+#									self.__model.get_value(iter_childs,0))
+#							iter_childs = self.__model.iter_next(iter_childs)
+#
+#				else:
+#					Preserve(self.__model.iter_children(iterator), objective_id)
+#
+#				iterator = self.__model.iter_next(iterator)
 
 
 		def Delete(iterator, objective_id):
@@ -156,11 +193,11 @@ class DeleteCascade(View_Gtk.View):
 
 		# Active - Set preserve
 		if self.__model.get_value(iterator,2):
-			Preserve(self.__model.get_iter_root(),
-					self.__model.get_value(iterator,0))
+			Preserve(iterator, self.__model.get_value(iterator,0))
+#			Preserve(self.__model.get_iter_root(),
+#					self.__model.get_value(iterator,0))
 
 		# Inactive - Set delete
 		else:
 			Delete(self.__model.get_iter_root(),
 					self.__model.get_value(iterator,0))
-
