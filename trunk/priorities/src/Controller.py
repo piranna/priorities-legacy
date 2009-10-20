@@ -182,8 +182,11 @@ class Controller:
 				return True
 		return False
 
-	def DelRequeriments(self, objective_name):
-		return self.__model.DelRequeriments_ById(self.GetId(objective_name))
+	def DelAlternatives(self, objective_id,parent_id):
+		return self.__model.DeleteAlternatives(objective_id, parent_id)
+
+	def DelRequeriments_ById(self, objective_id):
+		return self.__model.DelRequeriments_ById(objective_id)
 
 
 	def Get_DeleteObjective_Tree(self, objective_id):

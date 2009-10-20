@@ -52,14 +52,22 @@ class DeleteCascade(View_Gtk.View):
 		# If objective is marked,
 		# delete it
 		if self.__model.get_value(iterator,2):
-			self.controller.DeleteObjective(self.__model.get_value(iterator,0),
-											self.config.Get('removeOrphanRequeriments'))
-			response |= 1
+			if self.__model.get_value(iterator,3):
+				print "DelRequeriment",self.__model.get_value(self.__model.iter_parent(iterator),0),self.__model.get_value(iterator,0)
+				self.controller.DelAlternatives(self.__model.get_value(iterator,0),
+												self.__model.get_value(self.__model.iter_parent(iterator),0))
+
+			else:
+				print "DelObjective",self.__model.get_value(iterator,0)
+				self.controller.DeleteObjective(self.__model.get_value(iterator,0),
+												self.config.Get('removeOrphanRequeriments'))
+
+			response += 1
 
 		# Delete objective marqued requeriments, if any
 		iterator = self.__model.iter_children(iterator)
 		while iterator:
-			response |= self.DeleteObjective_recursive(iterator)
+			response += self.DeleteObjective_recursive(iterator)
 			iterator = self.__model.iter_next(iterator)
 
 		return response
@@ -106,22 +114,29 @@ class DeleteCascade(View_Gtk.View):
 			# Preserve requeriment requeriments
 			iterator = self.__model.iter_children(iterator)
 			while iterator:
-				Preserve(iterator, objective_id)
+				Preserve(iterator, self.__model.get_value(iterator,0))
 				iterator = self.__model.iter_next(iterator)
 
-			# Check inestability
-			uniform = IsUniform(self.__model.get_iter_root(), objective_id,False)
-
-			# Set inextability
-			SetIndetermination(self.__model.get_iter_root(), objective_id, not uniform)
+			# Set inestability
+			SetIndetermination(self.__model.get_iter_root(), objective_id,
+								not IsUniform(self.__model.get_iter_root(),
+												objective_id,False))
 
 		def Delete(iterator, objective_id):
 			# [To-Do] Add recursive code for delete on cascade
 			self.__model.set_value(iterator,2, True)
-			uniform = IsUniform(self.__model.get_iter_root(), objective_id,True)
+
+#			# Delete on cascade
+#			if self.config.Get('deleteCascade'):
+#				iterator = self.__model.iter_children(iterator)
+#				while iterator:
+#					Delete(iterator, self.__model.get_value(iterator,0))
+#					iterator = self.__model.iter_next(iterator)
 
 			# Set inextability
-			SetIndetermination(self.__model.get_iter_root(), objective_id, not uniform)
+			SetIndetermination(self.__model.get_iter_root(), objective_id,
+								not IsUniform(self.__model.get_iter_root(),
+												objective_id,True))
 
 
 		iterator = self.__model.get_iter(path)
@@ -262,3 +277,4 @@ class DeleteCascade(View_Gtk.View):
 #		else:
 #			Delete(self.__model.get_iter_root(),
 #					self.__model.get_value(iterator,0))
+

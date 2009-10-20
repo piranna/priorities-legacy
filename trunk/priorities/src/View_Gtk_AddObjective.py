@@ -114,11 +114,13 @@ class AddObjective(View_Gtk.View):
 				print "\t",self.oldRequeriments
 				print "\t",txtBuffer
 
+				objective_id = self.controller.GetId(self.txtObjective.get_text())
+
 				if self.config.Get('removeOrphanRequeriments'):
-					dependencies = self.controller.DirectDependencies(self.controller.GetId(self.txtObjective.get_text()))
+					dependencies = self.controller.DirectDependencies(objective_id)
 					print dependencies
 
-				self.controller.DelRequeriments(self.txtObjective.get_text())
+				self.controller.DelRequeriments_ById(objective_id)
 
 				# Requeriments
 				txtBuffer = txtBuffer.splitlines()
