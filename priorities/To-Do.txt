@@ -1,18 +1,3 @@
-0.8:
-====
-Mostrar objetivos centrados
-
-Poder seleccionar al eliminar en cascada solo requerimientos en lugar de objetivos completos cuando sean requeridos por varios
-	? Usar recursividades solo para eliminar o mantener hijos
-	? Usar inestabilidad para identificar cuando se van a eliminar y cuando no
-	Eliminar requerimientos marcados
-	Eliminar objetivos solo si estan marcados y sin inestabilidad
-
-* Usar indices para acelerar su acceso
-
-Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
-
-
 0.9:
 ====
 * Pasar de getopts a optparse
@@ -28,6 +13,8 @@ Exportar/importar a texto plano
 
 [BUG] No sale menu contextual en el layout
 Animacion de zoom in y zoom out
+
+Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
 
 
 1.0:
@@ -72,6 +59,11 @@ Dibujar lineas en modo texto
 Resaltar lineas de requisitos recursivamente
 
 Version en PyGUI
+
+Mostrar objetivos centrados
+
+Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
+	* Usar indices para acelerar su acceso
 
 
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)

@@ -242,6 +242,34 @@ class Model:
 		return None
 
 
+	def DeleteAlternatives(self, objective_id,parent_id=None):			# Overseed by Foreign Key
+		sql = '''
+			DELETE FROM requeriments
+			WHERE alternative==?
+			'''
+		if parent_id:
+			sql += "AND objective==?"
+
+			dependency = self.__connection.execute('''
+				SELECT * FROM requeriments
+				WHERE objective==?
+				AND alternative==?
+				LIMIT 1
+				''',
+				(parent_id,objective_id)).fetchone()
+
+		self.__connection.execute(
+			sql,
+			(objective_id,parent_id))
+
+		if parent_id:
+			self.__UpdateDependencyPriority(self.__Count(dependency['objective'],
+														dependency['requeriment']),
+											dependency['objective'],
+											dependency['requeriment'],
+											dependency['priority'])
+
+
 	def DelRequeriments_ById(self, objective_id):			# Overseed by Foreign Key
 		return self.__connection.execute('''
 			DELETE FROM requeriments
@@ -250,29 +278,37 @@ class Model:
 			(objective_id,))
 
 
-#	def GetRequeriment(self, objective,alternative):
-#		query = self.__connection.execute('''
-#			SELECT requeriment FROM requeriments
-#			WHERE objective==?
-#			AND alternative==?
-#			LIMIT 1
-#			''',
-#			(objective,alternative))
-#		query = query.fetchone()
-#		if query:
-#			return query['requeriment']
-#		return None
+	def __UpdateDependencyPriority(self, count, objective,requeriment,priority):
+		self.__connection.execute('''
+			UPDATE requeriments
+			SET priority=
+				CASE
+					WHEN(?>1 AND priority>?) THEN
+						priority-1
+					WHEN(?>1) THEN
+						priority
+					ELSE
+						0
+				END
+			WHERE objective==?
+			AND requeriment==?
+			''',
+			(count,priority,
+			count,
+			objective,
+			requeriment))
+
+
+	def __Count(self, objective_id,requeriment):
+		return self.__connection.execute('''
+			SELECT COUNT(*) AS count FROM requeriments
+			WHERE objective==?
+			AND requeriment==?
+			''',
+			(objective_id,requeriment)).fetchone()['count']
 
 
 	def DeleteObjective(self, objective_id, delete_orphans = False):
-		def DeleteAlternatives():			# Overseed by Foreign Key
-			return self.__connection.execute('''
-				DELETE FROM requeriments
-				WHERE alternative==?
-				''',
-				(objective_id,))
-
-
 		# Delete requeriments
 		if delete_orphans:
 			dependencies = self.DirectDependencies(objective_id)
@@ -284,12 +320,13 @@ class Model:
 #		print "\ndependents 1:",dependents
 
 		# Delete alternatives
-		DeleteAlternatives()
+		self.DeleteAlternatives(objective_id)
 
 #		print "\ndependents 2:",self.DirectDependents(objective_id)
 
 		# Re-adjust priorities
 		checked = []
+		count = None
 		for dependent in dependents:
 
 			# If dependency has alternatives
@@ -299,35 +336,13 @@ class Model:
 				# get it's number of alternatives
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
+					count = self.Count(dependent['objective'],
+										dependent['requeriment'])
 
-					count = self.__connection.execute('''
-						SELECT COUNT(*) AS count FROM requeriments
-						WHERE objective==?
-						AND requeriment==?
-						''',
-						(dependent['objective'],
-						dependent['requeriment'])).fetchone()['count']
-
-				# Update dependency priority
-				self.__connection.execute('''
-					UPDATE requeriments
-					SET priority=
-						CASE
-							WHEN(?>1 AND priority>?) THEN
-								priority-1
-							WHEN(?>1) THEN
-								priority
-							ELSE
-								0
-						END
-					WHERE objective==?
-					AND requeriment==?
-					''',
-					(count,
-					dependent['priority'],
-					count,
-					dependent['objective'],
-					dependent['requeriment']))
+				self.__UpdateDependencyPriority(count,
+												dependent['objective'],
+												dependent['requeriment'],
+												dependent['priority'])
 
 
 #		print "\ndependents 3:",self.DirectDependents(objective_id)
