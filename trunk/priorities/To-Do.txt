@@ -1,15 +1,15 @@
 0.9:
 ====
-* Pasar de getopts a optparse
-Usar (exclusivamente) opciones largas
-Usar opciones afirmativas y negativas
-
-Definir archivo de preferencias como parametro
-
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
-	Exportar toda la base de datos o solo una parte del arbol
+	* Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
+
+* Pasar de getopts a optparse
+	Usar (exclusivamente) opciones largas
+	Usar opciones afirmativas y negativas
+
+Definir archivo de preferencias como parametro
 
 [BUG] No sale menu contextual en el layout
 Animacion de zoom in y zoom out
@@ -49,7 +49,7 @@ Opciones de hacer/deshacer
 
 Buscar con autocompletado
 
-Cargar/importar archivo de exportacion desde terminal
+? Cargar/importar archivo de exportacion desde terminal en modo texto y gtk
 Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
