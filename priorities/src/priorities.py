@@ -10,12 +10,12 @@ config_path = "~/.priorities"
 
 
 def usage():
-	print("usage:",sys.argv[0],
-					"[(-d|--database) <database path>]",
-					"[(-i|--input) <input file>]",
-					"[-t|--textmode]",
-					"[-T|--test]",
-					"[-A|--askDB]",
+	print("usage:"+sys.argv[0]+
+					"[(-d|--database) <database path>]"+
+					"[(-i|--input) <input file>]"+
+					"[-t|--textmode]"+
+					"[-T|--test]"+
+					"[-A|--askDB]"+
 					"[-D|--defaultDB]")
 
 
@@ -99,5 +99,5 @@ if __name__ == "__main__":
 
 	if textmode:
 		import View_Text
-		interface = View_Text.View(controller, db,useDefaultDB,input)
+		interface = View_Text.View(db,useDefaultDB,input)
 

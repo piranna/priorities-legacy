@@ -42,10 +42,6 @@ class Parser(cmd.Cmd):
 
 	# Actions
 	def do_AddObjective(self, line):
-		quantity = 0
-		expiration = None
-		requeriments = []
-
 		# Objective
 		if line[0:2]=="'''":
 			line = line[3:].split("'''",1)
@@ -57,7 +53,11 @@ class Parser(cmd.Cmd):
 			line = line[1:].split('"',1)
 		else:
 			line = line.split(None,1)
+
 		objective = line[0].strip()
+		quantity = 0
+		expiration = None
+		requeriments = []
 
 		if len(line)>1:
 			# Requeriments
