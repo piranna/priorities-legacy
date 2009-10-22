@@ -664,24 +664,26 @@ class Main(View_Gtk.View):
 		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-			if dialog.get_filter().get_name() == "PNG image":
-				pixbuf = gtk.gdk.Pixbuf.get_from_drawable(self.layout.get_bin_window(),
-															None,
-															0,0,0,0,
-															-1,-1)
-				if pixbuf:
-					print "Saving image"
-					pixbuf.save(dialog.get_filename(), "png")
-				else:
-					print "Error creating image"
+			try:
+				if dialog.get_filter().get_name() == "PNG image":
+###
+					pixbuf = gtk.gdk.Pixbuf.get_from_drawable(self.layout.get_bin_window(),
+																None,
+																0,0,0,0,
+																-1,-1)
+					if pixbuf:
+						print "Saving image"
+						pixbuf.save(dialog.get_filename(), "png")
+###
 
-#			else:
-#				try:
-#					file = open(dialog.get_filename(), "w")
-#					file.write(self.controller.Export())
-#					file.close()
-#				except:
-#					print "Exception exporting database"
+				else:
+						file = open(dialog.get_filename(), "w")
+						file.write(self.controller.Export())
+						file.close()
+
+			except:
+				print "Exception exporting database"
+
 		dialog.destroy()
 
 
