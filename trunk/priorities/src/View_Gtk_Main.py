@@ -35,6 +35,7 @@ class Main(View_Gtk.View):
 		self.window.connect('destroy',self.__on_Main_destroy)
 
 		self.layout = self.builder.get_object("layout")
+#		self.layout.modify_bg()
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
 
@@ -652,7 +653,7 @@ class Main(View_Gtk.View):
 										gtk.FILE_CHOOSER_ACTION_SAVE,
 										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
 											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-		dialog.set_current_name("export.priorities")
+		dialog.set_current_name("export")
 
 		self.__SetFileFilters(dialog)
 
@@ -664,25 +665,27 @@ class Main(View_Gtk.View):
 		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-			try:
+#			try:
 				if dialog.get_filter().get_name() == "PNG image":
 ###
-					pixbuf = gtk.gdk.Pixbuf.get_from_drawable(self.layout.get_bin_window(),
-																None,
-																0,0,0,0,
-																-1,-1)
+					layout_size = self.layout.get_size()
+					pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True,8,
+											layout_size[0],layout_size[1]).get_from_drawable(self.layout.get_bin_window(),
+																							gtk.gdk.colormap_get_system(),
+																							0,0,0,0,
+																							layout_size[0],layout_size[1])
 					if pixbuf:
 						print "Saving image"
-						pixbuf.save(dialog.get_filename(), "png")
+						pixbuf.save(dialog.get_filename()+".png", "png")
 ###
 
 				else:
-						file = open(dialog.get_filename(), "w")
+						file = open(dialog.get_filename()+".priorities", "w")
 						file.write(self.controller.Export())
 						file.close()
 
-			except:
-				print "Exception exporting database"
+#			except:
+#				print "Exception exporting database"
 
 		dialog.destroy()
 
