@@ -25,7 +25,7 @@ Icono de la aplicacion
 
 Barra de herramientas
 
-Exportar a imagen
+* Exportar a imagen
 
 Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
