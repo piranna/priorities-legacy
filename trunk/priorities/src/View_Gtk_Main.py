@@ -656,13 +656,32 @@ class Main(View_Gtk.View):
 
 		self.__SetFileFilters(dialog)
 
+		"""Create and add the 'all files' filter"""
+		filter = gtk.FileFilter()
+		filter.set_name("PNG image")
+		filter.add_pattern("*.png")
+#		filter.add_pixbuf_formats()
+		dialog.add_filter(filter)
+
 		if dialog.run()==gtk.RESPONSE_OK:
-			try:
-				file = open(dialog.get_filename(), "w")
-				file.write(self.controller.Export())
-				file.close()
-			except:
-				print "Exception exporting database"
+			if dialog.get_filter().get_name() == "PNG image":
+				pixbuf = gtk.gdk.Pixbuf.get_from_drawable(self.layout.get_bin_window(),
+															None,
+															0,0,0,0,
+															-1,-1)
+				if pixbuf:
+					print "Saving image"
+					pixbuf.save(dialog.get_filename(), "png")
+				else:
+					print "Error creating image"
+
+#			else:
+#				try:
+#					file = open(dialog.get_filename(), "w")
+#					file.write(self.controller.Export())
+#					file.close()
+#				except:
+#					print "Exception exporting database"
 		dialog.destroy()
 
 
