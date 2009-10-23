@@ -260,11 +260,11 @@ class Controller:
 		self.__model.DeleteObjective(objective_id, delete_orphans)
 
 
-	def Export(self):
+	def Export(self, objective_id=None):
 		txt = ""
 		obj = None
 		req = None
-		for level in self.RecursiveDependencies(export=True):
+		for level in self.RecursiveDependencies(objective_id, True):
 			for objective in level:
 				if(req and req!=objective['requeriment']):
 					txt += ")"
