@@ -25,8 +25,6 @@ Icono de la aplicacion
 
 Barra de herramientas
 
-Exportar a imagen con fondo transparente
-
 Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
 Internacionalizacion con gettext
@@ -87,4 +85,4 @@ Reordenar manualmente los objetivos (Drag & Drop)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 Cambiar indices en base de datos a UNSIGNED
-
+* Exportar a imagen con fondo transparente (PNG)

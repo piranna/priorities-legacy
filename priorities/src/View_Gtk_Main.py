@@ -26,8 +26,6 @@ class Main(View_Gtk.View):
 
 		self.__cursorObjective = None
 
-		self.__zoomlevel = 0
-
 		if not (database and useDefaultDB):
 			self.__AskDB(database)
 
@@ -35,7 +33,7 @@ class Main(View_Gtk.View):
 		self.window.connect('destroy',self.__on_Main_destroy)
 
 		self.layout = self.builder.get_object("layout")
-#		self.layout.modify_bg()
+		self.layout.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
 		self.layout.connect('expose-event',self.__DrawRequerimentsArrows)
 		self.layout.connect('button-press-event',self.__ShowLayoutMenu)
 
@@ -671,11 +669,11 @@ class Main(View_Gtk.View):
 		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-				filter_name = dialog.get_filter().get_name()
-#			try:
+			filter_name = dialog.get_filter().get_name()
+
+			try:
 				if(filter_name == "PNG image"
 				or filter_name == "JPEG image"):
-###
 					layout_size = self.layout.get_size()
 					if self.config.Get('showSharp'):
 						layout_size = (layout_size[0]+1,layout_size[1]+1)
@@ -692,15 +690,14 @@ class Main(View_Gtk.View):
 
 					elif filter_name == "JPEG image":
 						pixbuf.save(dialog.get_filename()+".jpeg", "jpeg")
-###
 
 				else:
 						file = open(dialog.get_filename()+".priorities", "w")
-						file.write(self.controller.Export())
+						file.write(self.controller.Export(self.navBar.get_active()))
 						file.close()
 
-#			except:
-#				print "Exception exporting database"
+			except:
+				print "Exception exporting database"
 
 		dialog.destroy()
 
