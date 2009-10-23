@@ -293,7 +293,7 @@ class Controller:
 
 					txt += "'''"+objective['alternative_name']
 					if objective['requeriment_quantity']:
-						txt += ":"+objective['requeriment_quantity']
+						txt += ":"+str(objective['requeriment_quantity'])
 					txt += "'''"
 
 					if not req:
