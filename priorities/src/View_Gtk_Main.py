@@ -669,9 +669,9 @@ class Main(View_Gtk.View):
 		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-			filter_name = dialog.get_filter().get_name()
+				filter_name = dialog.get_filter().get_name()
 
-			try:
+#			try:
 				if(filter_name == "PNG image"
 				or filter_name == "JPEG image"):
 					layout_size = self.layout.get_size()
@@ -693,11 +693,12 @@ class Main(View_Gtk.View):
 
 				else:
 						file = open(dialog.get_filename()+".priorities", "w")
-						file.write(self.controller.Export(self.navBar.get_active()))
+						file.write(self.controller.Export(None))
+#						file.write(self.controller.Export(self.navBar.get_active_id()))
 						file.close()
 
-			except:
-				print "Exception exporting database"
+#			except:
+#				print "Exception exporting database"
 
 		dialog.destroy()
 

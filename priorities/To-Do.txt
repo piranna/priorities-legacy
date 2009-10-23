@@ -2,8 +2,10 @@
 ====
 Exportar/importar a texto plano
 	Nuevo, abrir, guardar y guardar como afectan a la base de datos
-	* Exportar toda la base de datos o solo una parte del arbol
+	? Exportar toda la base de datos o solo una parte del arbol
 	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
+
+[BUG] Fallo en el archivo de exportacion
 
 * Pasar de getopts a optparse
 	Usar (exclusivamente) opciones largas

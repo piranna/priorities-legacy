@@ -91,16 +91,25 @@ class NavigationBar(gtk.HBox):
 
 
     # Added by Piranna <piranna@gmail.com>
-    def get_active_position(self):
-        """
-        Return the position of the active button
-        """
-        position = 0
-        for children in self.get_children():
-            if children.get_active():
-                return position
-            position += 1
-        return None
+	def get_active_id(self):
+		"""
+		Return the active button
+		"""
+		for children in self.get_children():
+			if children.get_active():
+				return dict([[v,k] for k,v in self.id_to_widget.items()])[children]
+		return None
+
+	def get_active_position(self):
+		"""
+		Return the position of the active button
+		"""
+		position = 0
+		for children in self.get_children():
+			if children.get_active():
+				return position
+			position += 1
+		return None
 
     def remove_remanents(self):
         """
