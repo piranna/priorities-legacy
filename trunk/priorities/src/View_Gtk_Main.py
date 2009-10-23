@@ -657,26 +657,41 @@ class Main(View_Gtk.View):
 
 		self.__SetFileFilters(dialog)
 
-		"""Create and add the 'all files' filter"""
+		"""PNG"""
 		filter = gtk.FileFilter()
 		filter.set_name("PNG image")
 		filter.add_pattern("*.png")
 #		filter.add_pixbuf_formats()
 		dialog.add_filter(filter)
+		"""JPEG"""
+		filter = gtk.FileFilter()
+		filter.set_name("JPEG image")
+		filter.add_pattern("*.jpeg")
+#		filter.add_pixbuf_formats()
+		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
+				filter_name = dialog.get_filter().get_name()
 #			try:
-				if dialog.get_filter().get_name() == "PNG image":
+				if(filter_name == "PNG image"
+				or filter_name == "JPEG image"):
 ###
 					layout_size = self.layout.get_size()
-					pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True,8,
-											layout_size[0],layout_size[1]).get_from_drawable(self.layout.get_bin_window(),
-																							gtk.gdk.colormap_get_system(),
-																							0,0,0,0,
-																							layout_size[0],layout_size[1])
-					if pixbuf:
-						print "Saving image"
+					if self.config.Get('showSharp'):
+						layout_size = (layout_size[0]+1,layout_size[1]+1)
+
+					pixbuf = (gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True,8,
+											layout_size[0],layout_size[1])
+										.get_from_drawable(self.layout.get_bin_window(),
+														gtk.gdk.colormap_get_system(),
+														0,0,0,0,
+														layout_size[0],layout_size[1]))
+
+					if filter_name == "PNG image":
 						pixbuf.save(dialog.get_filename()+".png", "png")
+
+					elif filter_name == "JPEG image":
+						pixbuf.save(dialog.get_filename()+".jpeg", "jpeg")
 ###
 
 				else:
