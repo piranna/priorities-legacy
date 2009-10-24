@@ -7,7 +7,7 @@ class AddObjective(View_Gtk.View_Gtk):
 	__destroy = True
 
 	def __init__(self, objective=None):
-		View_Gtk.View.__init__(self)
+		View_Gtk.View_Gtk.__init__(self)
 
 		self.__objective = objective
 

@@ -43,7 +43,7 @@ class TextmodeParser(Parser.Parser):
 
 
 
-class View(View.View):
+class Main(View.View):
 	def __init__(self, database,useDefaultDB, input=None):
 		if not (database and useDefaultDB):
 			self.__AskDB(database)
