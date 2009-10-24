@@ -1,8 +1,5 @@
 0.9:
 ====
-Unificar codigo de pregunta inicial, Abrir, Nuevo y Guardar Como
-	* Poner filtros
-
 * Pasar de getopts a optparse
 	Usar (exclusivamente) opciones largas
 	Usar opciones afirmativas y negativas
@@ -16,6 +13,8 @@ Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son
 
 1.0:
 ====
+Eliminar objetivo desde opcion de menu en Main
+
 Desactivar dibujado y exportacion si no hay nada en la base de datos
 
 Excepcion al pulsar Control+C en la consola
@@ -32,14 +31,20 @@ Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
 i Cerrar dialog con insert
-Limpiar, simplificar y personalizar consultas SQL y funciones
-Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 Recolocar objetivos si un nivel tiene mas elementos que el anterior
+
+Limpiar, simplificar y personalizar consultas SQL y funciones
+Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
+Comentar todo el codigo
 
 
 Post 1.0:
 =========
+Crear objeto en Glade para navigation bar
+
+Tener en cuenta cuando la base de datos esta en memoria
+
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 
 Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
