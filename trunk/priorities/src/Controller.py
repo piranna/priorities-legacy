@@ -150,6 +150,9 @@ class Controller:
 	def Connect(self, db_name):
 		return self.__model.Connect(db_name)
 
+	def Backup(self, db_name):
+		return self.__model.Backup(db_name)
+
 
 	def IsSatisfacted(self, objective_id):
 		dependents = self.DirectDependents(objective_id)

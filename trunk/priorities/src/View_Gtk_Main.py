@@ -168,7 +168,7 @@ class Main(View_Gtk.View):
 		dialog.destroy()
 
 
-	def __OpenDB(self):
+	def __OpenDB(self, widget):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
 												None,
 												gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -185,11 +185,12 @@ class Main(View_Gtk.View):
 		if response == gtk.RESPONSE_OK:
 			print dialog.get_filename(), 'selected'
 			self.controller.Connect(dialog.get_filename())
+			self.__CreateTree()
 
 		dialog.destroy()
 
 
-	def __NewDB(self):
+	def __NewDB(self, widget):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a crear",
 												None,
 												gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -206,11 +207,12 @@ class Main(View_Gtk.View):
 		if response == gtk.RESPONSE_OK:
 			print dialog.get_filename(), 'created'
 			self.controller.Connect(dialog.get_filename())
+			self.__CreateTree()
 
 		dialog.destroy()
 
 
-	def __SaveDBAs(self):
+	def __SaveDBAs(self, widget):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a guardar",
 												None,
 												gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -225,11 +227,9 @@ class Main(View_Gtk.View):
 
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
+			self.controller.Backup(dialog.get_filename())
+			self.controller.Connect(dialog.get_filename())
 			print dialog.get_filename(), 'saved'
-#			aux =
-#			aux.Connect(dialog.get_filename())
-#			self.controller.Connect(dialog.get_filename())
-#			self.controller.Connect(dialog.get_filename())
 
 		dialog.destroy()
 

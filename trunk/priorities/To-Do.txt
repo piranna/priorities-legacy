@@ -1,10 +1,5 @@
-[BUG] Fallo en el archivo de exportacion
-Exportar toda la base de datos o solo una parte del arbol
-
-
 0.9:
 ====
-Nuevo, abrir y guardar como afectan a la base de datos
 Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
 * Pasar de getopts a optparse
