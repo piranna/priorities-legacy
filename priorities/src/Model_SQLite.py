@@ -52,6 +52,20 @@ class Model:
 			self.__connection = None
 
 
+	def Backup(self, db_name):
+		backup = Model(db_name)
+
+		# objectives
+		for row in self.__connection.execute("SELECT * FROM objectives"):
+			backup.__connection.execute("INSERT INTO objectives(id,name,quantity,expiration) VALUES(?,?,?,?)",
+										(row['id'],row['name'],row['quantity'],row['expiration']))
+
+		# requeriments
+		for row in self.__connection.execute("SELECT * FROM requeriments"):
+			backup.__connection.execute("INSERT INTO requeriments(objective,requeriment,priority,alternative,quantity) VALUES(?,?,?,?,?)",
+										(row['objective'],row['requeriment'],row['priority'],row['alternative'],row['quantity']))
+
+
 	# Access functions
 	def GetObjective(self,objective_id):
 		query = self.__connection.execute('''
@@ -247,8 +261,11 @@ class Model:
 			DELETE FROM requeriments
 			WHERE alternative==?
 			'''
+		bindings = [objective_id]
+
 		if parent_id:
 			sql += "AND objective==?"
+			bindings.append(parent_id)
 
 			dependency = self.__connection.execute('''
 				SELECT * FROM requeriments
@@ -260,7 +277,7 @@ class Model:
 
 		self.__connection.execute(
 			sql,
-			(objective_id,parent_id))
+			bindings)
 
 		if parent_id:
 			self.__UpdateDependencyPriority(self.__Count(dependency['objective'],
@@ -336,7 +353,7 @@ class Model:
 				# get it's number of alternatives
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
-					count = self.Count(dependent['objective'],
+					count = self.__Count(dependent['objective'],
 										dependent['requeriment'])
 
 				self.__UpdateDependencyPriority(count,
