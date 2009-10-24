@@ -3,7 +3,7 @@ import gtk
 import View_Gtk
 
 
-class Preferences(View_Gtk.View):
+class Preferences(View_Gtk.View_Gtk):
 	def __init__(self):
 		View_Gtk.View.__init__(self)
 

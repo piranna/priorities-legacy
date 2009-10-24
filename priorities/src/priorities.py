@@ -81,11 +81,12 @@ if __name__ == "__main__":
 	controller = Controller.Controller(model)
 
 	# Load view
+	import View
+	View.View.controller = controller
+	View.View.config = config
+
 	if not textmode:
 #		try:
-			import View_Gtk
-			View_Gtk.View.controller = controller
-			View_Gtk.View.config = config
 			import View_Gtk_Main
 			interface = View_Gtk_Main.Main(db,useDefaultDB)
 #		except: #gtk.GtkWarning, e:

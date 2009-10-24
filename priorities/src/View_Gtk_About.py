@@ -1,7 +1,7 @@
 import View_Gtk
 
 
-class About(View_Gtk.View):
+class About(View_Gtk.View_Gtk):
 	def __init__(self):
 		View_Gtk.View.__init__(self)
 

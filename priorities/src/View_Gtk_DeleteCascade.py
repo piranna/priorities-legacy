@@ -1,7 +1,7 @@
 import View_Gtk
 
 
-class DeleteCascade(View_Gtk.View):
+class DeleteCascade(View_Gtk.View_Gtk):
 	def __init__(self, objective_id):
 		View_Gtk.View.__init__(self)
 

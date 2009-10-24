@@ -13,7 +13,7 @@ from View_Gtk_DeleteCascade import *
 from View_Gtk_Preferences import *
 
 
-class Main(View_Gtk.View):
+class Main(View_Gtk.View_Gtk):
 	x_step = 100
 	y_step = 50
 
