@@ -18,7 +18,7 @@ class Main(View_Gtk.View_Gtk):
 	y_step = 50
 
 	def __init__(self, database,useDefaultDB):
-		View_Gtk.View.__init__(self)
+		View_Gtk.View_Gtk.__init__(self)
 
 		self.__objectiveHI_edit = None
 		self.__objectiveHI_delete = None
@@ -138,7 +138,11 @@ class Main(View_Gtk.View_Gtk):
 #		self.__CreateTree()
 
 		self.window.show()
-		gtk.main()
+
+		try:
+			gtk.main()
+		except KeyboardInterrupt:
+			pass
 
 
 	def __OpenDB_dialog(self, database=None):

@@ -5,7 +5,7 @@ import View_Gtk
 
 class Preferences(View_Gtk.View_Gtk):
 	def __init__(self):
-		View_Gtk.View.__init__(self)
+		View_Gtk.View_Gtk.__init__(self)
 
 		# [To-Do] Check diferences between stored and loaded config
 

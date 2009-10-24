@@ -17,8 +17,6 @@ Eliminar objetivo desde opcion de menu en Main
 
 Desactivar dibujado y exportacion si no hay nada en la base de datos
 
-Excepcion al pulsar Control+C en la consola
-
 Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 Icono de la aplicacion
