@@ -3,7 +3,7 @@ import datetime
 import View_Gtk
 
 
-class AddObjective(View_Gtk.View):
+class AddObjective(View_Gtk.View_Gtk):
 	__destroy = True
 
 	def __init__(self, objective=None):
