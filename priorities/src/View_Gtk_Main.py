@@ -141,7 +141,7 @@ class Main(View_Gtk.View):
 		gtk.main()
 
 
-	def __AskDB(self, database):
+	def __OpenDB_dialog(self, database=None):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
 												None,
 												gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -150,56 +150,58 @@ class Main(View_Gtk.View):
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		dialog.set_filename(database)
 
-#		dialogFilter = gtk.FileFilter()
-#		dialogFilter.set_name("All files")
-#		dialogFilter.add_pattern("*")
-#		dialog.add_filter(dialogFilter)
-
-		response = dialog.run()
-		if response == gtk.RESPONSE_OK:
-			print dialog.get_filename(), 'selected'
-			self.controller.Connect(dialog.get_filename())
-
-		elif response == gtk.RESPONSE_CANCEL:
-			print 'Closed, no files selected'
-			import sys
-			sys.exit(0)
-
-		dialog.destroy()
-
-
-	def __OpenDB(self, widget):
-		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
-												None,
-												gtk.FILE_CHOOSER_ACTION_OPEN,
-												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-												gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-		dialog.set_default_response(gtk.RESPONSE_OK)
-
-#		dialogFilter = gtk.FileFilter()
-#		dialogFilter.set_name("All files")
-#		dialogFilter.add_pattern("*")
-#		dialog.add_filter(dialogFilter)
+		# sqlite files
+		dialogFilter = gtk.FileFilter()
+		dialogFilter.set_name("SQLite database")
+		dialogFilter.add_pattern("*.sqlite")
+		dialog.add_filter(dialogFilter)
+		# Priorities export file
+		dialogFilter = gtk.FileFilter()
+		dialogFilter.set_name("Priorities export file")
+		dialogFilter.add_pattern("*.priorities")
+		dialog.add_filter(dialogFilter)
+		# All files
+		dialogFilter = gtk.FileFilter()
+		dialogFilter.set_name("All files")
+		dialogFilter.add_pattern("*")
+		dialog.add_filter(dialogFilter)
 
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
 			response = dialog.get_filename()
-			print response, 'selected'
-			if response[-11:] == ".priorities":	# Database
+
+			# Export file
+			if response[-11:] == ".priorities":
 				self.controller.Connect(":memory:")
-				if self.controller.Import(response):
-					self.__CreateTree()
-				else:
+				if not self.controller.Import(response):
 					print "Exception importing database"
+					dialog.destroy()
+					return False
 
-			else:	# Export file
+			# Database
+			else:
 				self.controller.Connect(response)
-				self.__CreateTree()
 
-		dialog.destroy()
+			dialog.destroy()
+			return True
+
+		else:
+			dialog.destroy()
+			return False
 
 
-	def __NewDB(self, widget):
+	def __AskDB(self, database):
+		if not self.__OpenDB_dialog():
+			import sys
+			sys.exit(0)
+
+
+	def __OpenDB(self, widget):
+		if self.__OpenDB_dialog():
+			self.__CreateTree()
+
+
+	def __SaveDB_dialog(self):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a crear",
 												None,
 												gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -208,39 +210,34 @@ class Main(View_Gtk.View):
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		dialog.set_do_overwrite_confirmation(True)
 
-#		dialogFilter = gtk.FileFilter()
-#		dialogFilter.set_name("All files")
-#		dialogFilter.add_pattern("*")
-#		dialog.add_filter(dialogFilter)
+		# sqlite files
+		dialogFilter = gtk.FileFilter()
+		dialogFilter.set_name("SQLite database")
+		dialogFilter.add_pattern("*.sqlite")
+		dialog.add_filter(dialogFilter)
+		# All files
+		dialogFilter = gtk.FileFilter()
+		dialogFilter.set_name("All files")
+		dialogFilter.add_pattern("*")
+		dialog.add_filter(dialogFilter)
 
-		response = dialog.run()
-		if response == gtk.RESPONSE_OK:
-			print dialog.get_filename(), 'created'
-			self.controller.Connect(dialog.get_filename())
+
+	def __NewDB(self, widget):
+		dialog = self.__SaveDB_dialog()
+
+		if dialog.run() == gtk.RESPONSE_OK:
+			self.controller.Connect(dialog.get_filename()+".sqlite")
 			self.__CreateTree()
 
 		dialog.destroy()
 
 
 	def __SaveDBAs(self, widget):
-		dialog = gtk.FileChooserDialog("Seleccione la base de datos a guardar",
-												None,
-												gtk.FILE_CHOOSER_ACTION_SAVE,
-												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-												gtk.STOCK_SAVE,gtk.RESPONSE_OK))
-		dialog.set_default_response(gtk.RESPONSE_OK)
-		dialog.set_do_overwrite_confirmation(True)
+		dialog = self.__SaveDB_dialog()
 
-#		dialogFilter = gtk.FileFilter()
-#		dialogFilter.set_name("All files")
-#		dialogFilter.add_pattern("*")
-#		dialog.add_filter(dialogFilter)
-
-		response = dialog.run()
-		if response == gtk.RESPONSE_OK:
-			self.controller.Backup(dialog.get_filename())
-			self.controller.Connect(dialog.get_filename())
-			print dialog.get_filename(), 'saved'
+		if dialog.run() == gtk.RESPONSE_OK:
+			self.controller.Backup(dialog.get_filename()+".sqlite")
+			self.controller.Connect(dialog.get_filename()+".sqlite")
 
 		dialog.destroy()
 
