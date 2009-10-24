@@ -42,10 +42,11 @@ class Parser(cmd.Cmd):
 
 	# Actions
 	def do_AddObjective(self, line):
+		print line
 		# Objective
-		if line[0:2]=="'''":
+		if line[0:3]=="'''":
 			line = line[3:].split("'''",1)
-		elif line[0:2]=='"""':
+		elif line[0:3]=='"""':
 			line = line[3:].split('"""',1)
 		elif line[0]=="'":
 			line = line[1:].split("'",1)
@@ -73,4 +74,8 @@ class Parser(cmd.Cmd):
 					expiration=option[2:]
 
 		self.__controller.AddObjective(objective, quantity, expiration, requeriments)
+
+
+	def do_EOF(self, line):
+		return True
 
