@@ -183,9 +183,18 @@ class Main(View_Gtk.View):
 
 		response = dialog.run()
 		if response == gtk.RESPONSE_OK:
-			print dialog.get_filename(), 'selected'
-			self.controller.Connect(dialog.get_filename())
-			self.__CreateTree()
+			response = dialog.get_filename()
+			print response, 'selected'
+			if response[-11:] == ".priorities":	# Database
+				self.controller.Connect(":memory:")
+				if self.controller.Import(response):
+					self.__CreateTree()
+				else:
+					print "Exception importing database"
+
+			else:	# Export file
+				self.controller.Connect(response)
+				self.__CreateTree()
 
 		dialog.destroy()
 
@@ -197,6 +206,7 @@ class Main(View_Gtk.View):
 												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
 												gtk.STOCK_NEW,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		dialog.set_do_overwrite_confirmation(True)
 
 #		dialogFilter = gtk.FileFilter()
 #		dialogFilter.set_name("All files")
@@ -219,6 +229,7 @@ class Main(View_Gtk.View):
 												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
 												gtk.STOCK_SAVE,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
+		dialog.set_do_overwrite_confirmation(True)
 
 #		dialogFilter = gtk.FileFilter()
 #		dialogFilter.set_name("All files")
@@ -778,15 +789,11 @@ class Main(View_Gtk.View):
 		self.__SetFileFilters(dialog)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-			try:
-				import Parser
-				parser = Parser.Parser(self.controller, dialog.get_filename())
-				parser.cmdloop()
-
+			if self.controller.Import(dialog.get_filename()):
 				self.__CreateTree(self.navBar.get_active_id())
-
-			except:
+			else:
 				print "Exception importing database"
+
 		dialog.destroy()
 
 

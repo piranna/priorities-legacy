@@ -263,6 +263,16 @@ class Controller:
 		self.__model.DeleteObjective(objective_id, delete_orphans)
 
 
+	def Import(self, file):
+		try:
+			import Parser
+			parser = Parser.Parser(self, file)
+			parser.cmdloop()
+			return True
+
+		except:
+			return False
+
 	def Export(self, objective_id=None):
 		txt = ""
 		obj = None

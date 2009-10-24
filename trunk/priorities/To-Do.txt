@@ -1,6 +1,7 @@
 0.9:
 ====
-Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
+Unificar codigo de pregunta inicial, Abrir, Nuevo y Guardar Como
+	* Poner filtros
 
 * Pasar de getopts a optparse
 	Usar (exclusivamente) opciones largas
