@@ -266,12 +266,15 @@ class Controller:
 		req = None
 		for level in self.RecursiveDependencies(objective_id, True):
 			for objective in level:
+				if(obj and obj!=objective['objective_id']):
+					if req:
+						txt += ")"
+						req=None
+					txt += "]\n"
+					obj=None
 				if(req and req!=objective['requeriment']):
 					txt += ")"
 					req=None
-				if(obj and obj!=objective['objective_id']):
-					txt += "]\n"
-					obj=None
 
 				if not obj:
 					txt += "AddObjective '''"+objective['name']+"'''"

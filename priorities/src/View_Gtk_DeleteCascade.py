@@ -47,7 +47,7 @@ class DeleteCascade(View_Gtk.View):
 		if not iterator:
 			iterator = self.__model.get_iter_root()
 
-		response = 0
+		deleted = 0
 
 		# If objective is marked,
 		# delete it
@@ -62,20 +62,21 @@ class DeleteCascade(View_Gtk.View):
 				self.controller.DeleteObjective(self.__model.get_value(iterator,0),
 												self.config.Get('removeOrphanRequeriments'))
 
-			response += 1
+			deleted += 1
 
 		# Delete objective marqued requeriments, if any
 		iterator = self.__model.iter_children(iterator)
 		while iterator:
-			response += self.DeleteObjective_recursive(iterator)
+			deleted += self.DeleteObjective_recursive(iterator)
 			iterator = self.__model.iter_next(iterator)
 
-		return response
+		return deleted
 
 
 	def __on_DeleteCascade_response(self, widget, response):
 		if response>0:
-			self.DeleteObjective_recursive()
+			# [To-Do] Poner response a 0 si no se elimina ningun objetivo
+			deleted = self.DeleteObjective_recursive()
 
 
 	def __on_chkConfirmDeleteCascade_toggled(self, widget):

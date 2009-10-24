@@ -42,13 +42,6 @@ class TextmodeParser(Parser.Parser):
 			print dependent
 
 
-###
-	def do_EOF(self, line):
-		print
-		return True
-###
-
-
 
 class View(View.View):
 	def __init__(self, database,useDefaultDB, input=None):

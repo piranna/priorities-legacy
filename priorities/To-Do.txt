@@ -1,11 +1,11 @@
+[BUG] Fallo en el archivo de exportacion
+Exportar toda la base de datos o solo una parte del arbol
+
+
 0.9:
 ====
-Exportar/importar a texto plano
-	Nuevo, abrir, guardar y guardar como afectan a la base de datos
-	? Exportar toda la base de datos o solo una parte del arbol
-	Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
-
-[BUG] Fallo en el archivo de exportacion
+Nuevo, abrir y guardar como afectan a la base de datos
+Un archivo de texto plano se puede abrir pero en una nueva base de datos en memoria
 
 * Pasar de getopts a optparse
 	Usar (exclusivamente) opciones largas
@@ -14,13 +14,16 @@ Exportar/importar a texto plano
 Definir archivo de preferencias como parametro
 
 [BUG] No sale menu contextual en el layout
-Animacion de zoom in y zoom out
 
 Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
 
 
 1.0:
 ====
+Desactivar dibujado y exportacion si no hay nada en la base de datos
+
+Excepcion al pulsar Control+C en la consola
+
 Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 Icono de la aplicacion
@@ -36,14 +39,20 @@ i Cerrar dialog con insert
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
+Recolocar objetivos si un nivel tiene mas elementos que el anterior
+
 
 Post 1.0:
 =========
+Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
+
 Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
 Modificar clave de objetivos de autonumerado a campo name
 Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
 
-Estudiar campo para identificar fines en si mismo de medios
+Animacion de zoom in y zoom out
+
+Estudiar campo para diferenciar fines en si mismo de medios
 
 Opciones de hacer/deshacer
 
@@ -85,6 +94,6 @@ i Excepcion al cargar GTK
 Reordenar manualmente los objetivos (Drag & Drop)
 	Recordar cambio de posiciones (¿cambio de ids?)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
-Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 Cambiar indices en base de datos a UNSIGNED
 * Exportar a imagen con fondo transparente (PNG)
+

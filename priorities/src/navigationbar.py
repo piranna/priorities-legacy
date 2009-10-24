@@ -19,78 +19,78 @@
 import gtk
 
 class NavigationBar(gtk.HBox):
-    """A navigation bar using button (like nautilus)"""
+	"""A navigation bar using button (like nautilus)"""
 
-    def __init__(self, group=None):
-        super(NavigationBar, self).__init__()
-        self.id_to_widget = {}
-        self.id_to_callback = {}
-        if not group:
-            self.group = gtk.RadioButton()
-        else:
-            self.group = group
+	def __init__(self, group=None):
+		super(NavigationBar, self).__init__()
+		self.id_to_widget = {}
+		self.id_to_callback = {}
+		if not group:
+			self.group = gtk.RadioButton()
+		else:
+			self.group = group
 
-    def add_with_id(self, label, callback, id):
-        """
-        Add a new button with the given label/callback
+	def add_with_id(self, label, callback, id):
+		"""
+		Add a new button with the given label/callback
 
-        If there is the same id already, replace the existing one
-        with the new one
-        """
-        # check if we have the button of that id or need a new one
-        if id in self.id_to_widget:
-            button = self.id_to_widget[id]
-            button.disconnect(self.id_to_callback[id])
-        else:
-            button = gtk.RadioButton(self.group)
-            button.set_mode(False)
-            self.pack_start(button, expand=False)
-            self.id_to_widget[id] = button
-            button.show()
-        # common code
-        handler_id = button.connect("clicked", callback)
-        button.set_label(label)
-        button.set_active(True)
-        self.id_to_callback[id] = handler_id
+		If there is the same id already, replace the existing one
+		with the new one
+		"""
+		# check if we have the button of that id or need a new one
+		if id in self.id_to_widget:
+			button = self.id_to_widget[id]
+			button.disconnect(self.id_to_callback[id])
+		else:
+			button = gtk.RadioButton(self.group)
+			button.set_mode(False)
+			self.pack_start(button, expand=False)
+			self.id_to_widget[id] = button
+			button.show()
+		# common code
+		handler_id = button.connect("clicked", callback)
+		button.set_label(label)
+		button.set_active(True)
+		self.id_to_callback[id] = handler_id
 
-    def remove_id(self, id):
-        """
-        Remove the navigation button with the given id
-        """
-        if not id in self.id_to_widget:
-            return
-        self.remove(self.id_to_widget[id])
-        del self.id_to_widget[id]
-        try:
-            del self.id_to_callback[id]
-        except KeyError:
-            pass
+	def remove_id(self, id):
+		"""
+		Remove the navigation button with the given id
+		"""
+		if not id in self.id_to_widget:
+			return
+		self.remove(self.id_to_widget[id])
+		del self.id_to_widget[id]
+		try:
+			del self.id_to_callback[id]
+		except KeyError:
+			pass
 
-    def remove_all(self):
-        """remove all elements"""
-        for w in self:
-            self.remove(w)
-        self.id_to_widget = {}
-        self.id_to_callback = {}
+	def remove_all(self):
+		"""remove all elements"""
+		for w in self:
+			self.remove(w)
+		self.id_to_widget = {}
+		self.id_to_callback = {}
 
-    def get_button_from_id(self, id):
-        """
-        return the button for the given id (or None)
-        """
-        if not id in self.id_to_widget:
-            return None
-        return self.id_to_widget[id]
+	def get_button_from_id(self, id):
+		"""
+		return the button for the given id (or None)
+		"""
+		if not id in self.id_to_widget:
+			return None
+		return self.id_to_widget[id]
 
-    def get_label(self, id):
-        """
-        Return the label of the navigation button with the given id
-        """
-        if not id in self.id_to_widget:
-            return
-        return self.id_to_widget[id].get_label()
+	def get_label(self, id):
+		"""
+		Return the label of the navigation button with the given id
+		"""
+		if not id in self.id_to_widget:
+			return
+		return self.id_to_widget[id].get_label()
 
 
-    # Added by Piranna <piranna@gmail.com>
+	# Added by Piranna <piranna@gmail.com>
 	def get_active_id(self):
 		"""
 		Return the active button
@@ -111,17 +111,17 @@ class NavigationBar(gtk.HBox):
 			position += 1
 		return None
 
-    def remove_remanents(self):
-        """
-        Remove all the navigation buttons whose position
-        is greater than the current active one.
-        WARNING: if there are two or more IDs with the same children
-        it will remove the last one
-        """
-        active_position = self.get_active_position()
-        position = 0
-        for children in self.get_children():
-            if position > active_position:
-                self.remove_id(dict([[v,k] for k,v in self.id_to_widget.items()])[children])
-            position += 1
+	def remove_remanents(self):
+		"""
+		Remove all the navigation buttons whose position
+		is greater than the current active one.
+		WARNING: if there are two or more IDs with the same children
+		it will remove the last one
+		"""
+		active_position = self.get_active_position()
+		position = 0
+		for children in self.get_children():
+			if position > active_position:
+				self.remove_id(dict([[v,k] for k,v in self.id_to_widget.items()])[children])
+			position += 1
 

@@ -52,20 +52,16 @@ class Main(View_Gtk.View):
 		# File
 
 		# New
-#		mnuNew = self.builder.get_object("mnuNew")
-#		mnuNew.connect('activate',self.__on_Main_destroy)
+		mnuNew = self.builder.get_object("mnuNew")
+		mnuNew.connect('activate',self.__NewDB)
 
 		# Open
-#		mnuOpen = self.builder.get_object("mnuOpen")
-#		mnuOpen.connect('activate',self.__on_Main_destroy)
-
-		# Save
-#		mnuSave = self.builder.get_object("mnuSave")
-#		mnuSave.connect('activate',self.__on_Main_destroy)
+		mnuOpen = self.builder.get_object("mnuOpen")
+		mnuOpen.connect('activate',self.__OpenDB)
 
 		# Save as
-#		mnuSaveAs = self.builder.get_object("mnuSaveAs")
-#		mnuSaveAs.connect('activate',self.__on_Main_destroy)
+		mnuSaveAs = self.builder.get_object("mnuSaveAs")
+		mnuSaveAs.connect('activate',self.__SaveDBAs)
 
 		# Import
 		mnuImport = self.builder.get_object("mnuImport")
@@ -168,6 +164,72 @@ class Main(View_Gtk.View):
 			print 'Closed, no files selected'
 			import sys
 			sys.exit(0)
+
+		dialog.destroy()
+
+
+	def __OpenDB(self):
+		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
+												None,
+												gtk.FILE_CHOOSER_ACTION_OPEN,
+												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+												gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+
+#		dialogFilter = gtk.FileFilter()
+#		dialogFilter.set_name("All files")
+#		dialogFilter.add_pattern("*")
+#		dialog.add_filter(dialogFilter)
+
+		response = dialog.run()
+		if response == gtk.RESPONSE_OK:
+			print dialog.get_filename(), 'selected'
+			self.controller.Connect(dialog.get_filename())
+
+		dialog.destroy()
+
+
+	def __NewDB(self):
+		dialog = gtk.FileChooserDialog("Seleccione la base de datos a crear",
+												None,
+												gtk.FILE_CHOOSER_ACTION_SAVE,
+												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+												gtk.STOCK_NEW,gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+
+#		dialogFilter = gtk.FileFilter()
+#		dialogFilter.set_name("All files")
+#		dialogFilter.add_pattern("*")
+#		dialog.add_filter(dialogFilter)
+
+		response = dialog.run()
+		if response == gtk.RESPONSE_OK:
+			print dialog.get_filename(), 'created'
+			self.controller.Connect(dialog.get_filename())
+
+		dialog.destroy()
+
+
+	def __SaveDBAs(self):
+		dialog = gtk.FileChooserDialog("Seleccione la base de datos a guardar",
+												None,
+												gtk.FILE_CHOOSER_ACTION_SAVE,
+												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+												gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+		dialog.set_default_response(gtk.RESPONSE_OK)
+
+#		dialogFilter = gtk.FileFilter()
+#		dialogFilter.set_name("All files")
+#		dialogFilter.add_pattern("*")
+#		dialog.add_filter(dialogFilter)
+
+		response = dialog.run()
+		if response == gtk.RESPONSE_OK:
+			print dialog.get_filename(), 'saved'
+#			aux =
+#			aux.Connect(dialog.get_filename())
+#			self.controller.Connect(dialog.get_filename())
+#			self.controller.Connect(dialog.get_filename())
 
 		dialog.destroy()
 
@@ -280,7 +342,7 @@ class Main(View_Gtk.View):
 								y - int(button.get_allocation().height/2))
 				button.show()
 
-				print button.get_allocation()
+#				print button.get_allocation()
 
 
 			requeriment_button = None
@@ -313,6 +375,7 @@ class Main(View_Gtk.View):
 			# Requeriments
 
 			level_requeriments = {}
+			level_need_alternatives = False
 
 			for objective in level:
 				# Requeriments
@@ -338,6 +401,7 @@ class Main(View_Gtk.View):
 						# else create a new one
 						else:
 							level_requeriments[objective['objective_id']].append(objective['requeriment'])
+							level_need_alternatives = True
 
 							PutOldButton(layout_size_x)
 
@@ -365,7 +429,8 @@ class Main(View_Gtk.View):
 			# reset objectives coordinates
 			if(level_requeriments):
 				x = None
-				y += self.y_step
+				if level_need_alternatives:
+					y += self.y_step
 
 			# If level doesn't have requeriments (usually level 0),
 			# set x coordinates
@@ -669,9 +734,9 @@ class Main(View_Gtk.View):
 		dialog.add_filter(filter)
 
 		if dialog.run()==gtk.RESPONSE_OK:
-				filter_name = dialog.get_filter().get_name()
+			filter_name = dialog.get_filter().get_name()
 
-#			try:
+			try:
 				if(filter_name == "PNG image"
 				or filter_name == "JPEG image"):
 					layout_size = self.layout.get_size()
@@ -692,23 +757,22 @@ class Main(View_Gtk.View):
 						pixbuf.save(dialog.get_filename()+".jpeg", "jpeg")
 
 				else:
-						file = open(dialog.get_filename()+".priorities", "w")
-						file.write(self.controller.Export(None))
-#						file.write(self.controller.Export(self.navBar.get_active_id()))
-						file.close()
+					file = open(dialog.get_filename()+".priorities", "w")
+					file.write(self.controller.Export(self.navBar.get_active_id()))
+					file.close()
 
-#			except:
-#				print "Exception exporting database"
+			except:
+				print "Exception exporting database"
 
 		dialog.destroy()
 
 
 	def __Import(self, widget):
-		dialog = gtk.FileChooserDialog("Export priorities database",
+		dialog = gtk.FileChooserDialog("Import priorities database",
 										None,
 										gtk.FILE_CHOOSER_ACTION_OPEN,
 										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-											gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+											gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 #		dialog.set_current_name("export.priorities")
 
 		self.__SetFileFilters(dialog)
@@ -718,6 +782,9 @@ class Main(View_Gtk.View):
 				import Parser
 				parser = Parser.Parser(self.controller, dialog.get_filename())
 				parser.cmdloop()
+
+				self.__CreateTree(self.navBar.get_active_id())
+
 			except:
 				print "Exception importing database"
 		dialog.destroy()
