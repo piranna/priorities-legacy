@@ -5,7 +5,7 @@ import Parser
 
 class TextmodeParser(Parser.Parser):
 	def __init__(self, controller, input=None):
-		Parser.Parser.__init__(controller, input):
+		Parser.Parser.__init__(controller, input)
 
 
 	# Actions
@@ -44,14 +44,11 @@ class TextmodeParser(Parser.Parser):
 
 
 class Main(View.View):
-	def __init__(self, database,useDefaultDB, input=None):
-		if not (database and useDefaultDB):
-			self.__AskDB(database)
+	def __init__(self, input=None):
+		if not self.controller.Connection():
+			self.__AskDB()
 
-		if input:
-			self.__parser = TextmodeParser(stdin=open(input, 'rt'))
-		else:
-			self.__parser = TextmodeParser()
+		self.__parser = TextmodeParser(self.controller, input)
 
 		self.__parser.do_ShowTree(None)
 		self.__parser.cmdloop()

@@ -1,80 +1,72 @@
 #!/usr/bin/python
 
 
-import sys
-
-import Config
-
-
 config_path = "~/.priorities"
 
 
-def usage():
-	print("usage:"+sys.argv[0]+
-					"[(-d|--database) <database path>]"+
-					"[(-i|--input) <input file>]"+
-					"[-t|--textmode]"+
-					"[-T|--test]"+
-					"[-A|--askDB]"+
-					"[-D|--defaultDB]")
+def ParseArguments(config):
+	# Parser
+	import optparse
+	parser = optparse.OptionParser(version="0.8")
 
+	# Defaults
+	if config.Get('useDefaultDB'):
+		default_database=config.Get('database')
+	else:
+		default_database=None
 
-def CheckArgs(args):
-	try:
-		import getopt
-		return getopt.getopt(args,
-							"d:i:tTAD",
-							["database=","input=","textmode","test","askDB","defaultDB"])
+	parser.set_defaults(database=default_database,
+						textmode=False)
 
-	except getopt.GetoptError, err:
-		print str(err)
-		usage()
-		sys.exit(2)
+	# Options
+
+	# Database
+	parser.add_option('--database',				help="Database to use",
+						dest="database",
+						action="store")
+	parser.add_option('--in-memory-database',	help="Use a temporal, in RAM memory database",
+						dest="database",
+						action="store_const",
+						const=":memory:")
+	parser.add_option('--use-default-database',	help="Force use of config file default database",
+						dest="database",
+						action="store_constant",
+						const=config.Get('database'))
+	parser.add_option('--ask-database',			help="Force ask the database to use",
+						dest="database",
+						action="store_constant",
+						const=None)
+
+	# Import file
+	parser.add_option('--import-file',			help="Parse data from script file",
+						dest="importFile",
+						action="store")
+
+	# User interface
+	parser.add_option('--textmode',				help="Use textmode",
+						dest="textmode",
+						action="store_true")
+	parser.add_option('--gui',					help="Use gui (default)",
+						dest="textmode",
+						action="store_false")
+
+	# Return parsed arguments
+	return parser.parse_args()
 
 
 
 if __name__ == "__main__":
 
 	# Load config
+	import Config
 	config = Config.Config(config_path)
 
-	# Set default vars
-	useDefaultDB = config.Get('useDefaultDB')
-	db = config.Get('database')
-	textmode = False
-	input = None
-
-	# Check arguments
-	opts,args = CheckArgs(sys.argv[1:])
-#	parser = OptionParser()
-#	parser.add_option(None,"--database")
-
 	# Parse arguments
-	for o,a in opts:
-		if o in ("-d", "--database"):
-			db = a
-			useDefaultDB = True
-
-		elif o in ("-i", "--input"):
-			textmode = True
-			input = a
-
-		elif o in ("-t", "--textmode"):
-			textmode = True
-
-		elif o in ("-T", "--teat"):
-			db = ":memory:"
-			useDefaultDB = True
-
-		elif o in ("-A", "--askDB"):
-			useDefaultDB = False
-
-		elif o in ("-D", "--defaultDB"):
-			useDefaultDB = True
+	options, remainder = ParseArguments(config)
 
 	# Load model
 	import Model_SQLite
-	model = Model_SQLite.Model(db)
+	model = Model_SQLite.Model(options.database)
 
 	# Load controller
 	import Controller
@@ -85,21 +77,23 @@ if __name__ == "__main__":
 	View.View.controller = controller
 	View.View.config = config
 
-	if not textmode:
-#		try:
-			import View_Gtk_Main
-			interface = View_Gtk_Main.Main(db,useDefaultDB)
-#		except: #gtk.GtkWarning, e:
-#		except ImportError:
-#			print
-#			print "An error has ocurred loading GTK interface"
-#			print "Loading text mode interface"
-#			textmode = True
-
-#		import View_Curses
-#		interface = View_Curses.View(controller, db,useDefaultDB)
-
-	if textmode:
+	def TextMode():
 		import View_Text
-		interface = View_Text.Main(db,useDefaultDB,input)
+		View_Text.Main(options.importFile)
+
+	def Gtk():
+		import View_Gtk_Main
+		View_Gtk_Main.Main(options.importFile)
+
+	if options.textmode:
+		TextMode()
+	else:
+		try:
+			Gtk()
+		except: #gtk.GtkWarning, e:
+#		except ImportError:
+			print
+			print "An error has ocurred loading GTK interface"
+			print "Loading text mode interface"
+			TextMode()
 

@@ -1,9 +1,5 @@
 0.9:
 ====
-* Pasar de getopts a optparse
-	Usar (exclusivamente) opciones largas
-	Usar opciones afirmativas y negativas
-
 Definir archivo de preferencias como parametro
 
 [BUG] No sale menu contextual en el layout
@@ -21,9 +17,9 @@ Mantener nombre de la base de datos por defecto en Preferences al pulsar cancela
 
 Icono de la aplicacion
 
-Barra de herramientas
+? Barra de herramientas
 
-Modificar inconsistencia de los ancentros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
 Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles

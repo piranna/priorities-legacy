@@ -17,17 +17,20 @@ class Main(View_Gtk.View_Gtk):
 	x_step = 100
 	y_step = 50
 
-	def __init__(self, database,useDefaultDB):
+	def __init__(self, input=None):
 		View_Gtk.View_Gtk.__init__(self)
+
+		if not self.controller.Connection():
+			self.__AskDB()
+
+		if input and not self.controller.Import(input):
+			print "Exception importing database"
 
 		self.__objectiveHI_edit = None
 		self.__objectiveHI_delete = None
 		self.__objectiveHI_zoomin = None
 
 		self.__cursorObjective = None
-
-		if not (database and useDefaultDB):
-			self.__AskDB(database)
 
 		self.window = self.builder.get_object("Main")
 		self.window.connect('destroy',self.__on_Main_destroy)
@@ -42,7 +45,7 @@ class Main(View_Gtk.View_Gtk):
 		self.navBar.show()
 		vbox1 = self.builder.get_object("vbox1")
 		vbox1.pack_start(self.navBar, False)
-		vbox1.reorder_child(self.navBar, 1)
+		vbox1.reorder_child(self.navBar, 2)
 
 		# Start button
 		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
@@ -145,14 +148,13 @@ class Main(View_Gtk.View_Gtk):
 			pass
 
 
-	def __OpenDB_dialog(self, database=None):
+	def __OpenDB_dialog(self):
 		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
 												None,
 												gtk.FILE_CHOOSER_ACTION_OPEN,
 												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
 												gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
-		dialog.set_filename(database)
 
 		# sqlite files
 		dialogFilter = gtk.FileFilter()
@@ -194,7 +196,7 @@ class Main(View_Gtk.View_Gtk):
 			return False
 
 
-	def __AskDB(self, database):
+	def __AskDB(self):
 		if not self.__OpenDB_dialog():
 			import sys
 			sys.exit(0)
