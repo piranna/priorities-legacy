@@ -1,10 +1,8 @@
 0.9:
 ====
-Definir archivo de preferencias como parametro
-
 [BUG] No sale menu contextual en el layout
 
-Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
+? Barra de herramientas
 
 
 1.0:
@@ -16,8 +14,6 @@ Desactivar dibujado y exportacion si no hay nada en la base de datos
 Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 Icono de la aplicacion
-
-? Barra de herramientas
 
 Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
@@ -35,7 +31,12 @@ Comentar todo el codigo
 
 Post 1.0:
 =========
+Definir archivo de preferencias como parametro
+	Procesar el archivo antes que el resto de opciones
+
 Usar optparse en Parser.py
+
+Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
 
 Crear objeto en Glade para navigation bar
 
