@@ -52,6 +52,10 @@ class Model:
 			self.__connection = None
 
 
+	def Connection(self):
+		return self.__connection
+
+
 	def Backup(self, db_name):
 		backup = Model(db_name)
 

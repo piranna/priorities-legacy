@@ -329,3 +329,7 @@ class Controller:
 	def DeleteOrphans(self, dependencies=None):
 		self.__model.DeleteOrphans(dependencies)
 
+
+	def Connection(self):
+		return self.__model.Connection()
+
