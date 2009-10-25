@@ -30,11 +30,11 @@ def ParseArguments(config):
 						const=":memory:")
 	parser.add_option('--use-default-database',	help="Force use of config file default database",
 						dest="database",
-						action="store_constant",
+						action="store_const",
 						const=config.Get('database'))
 	parser.add_option('--ask-database',			help="Force ask the database to use",
 						dest="database",
-						action="store_constant",
+						action="store_const",
 						const=None)
 
 	# Import file
