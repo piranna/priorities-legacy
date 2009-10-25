@@ -35,6 +35,8 @@ Comentar todo el codigo
 
 Post 1.0:
 =========
+Usar optparse en Parser.py
+
 Crear objeto en Glade para navigation bar
 
 Tener en cuenta cuando la base de datos esta en memoria
