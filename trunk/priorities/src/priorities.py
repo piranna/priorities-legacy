@@ -7,7 +7,7 @@ config_path = "~/.priorities"
 def ParseArguments(config):
 	# Parser
 	import optparse
-	parser = optparse.OptionParser(version="0.8")
+	parser = optparse.OptionParser(version="0.9")
 
 	# Defaults
 	if config.Get('useDefaultDB'):
@@ -85,15 +85,18 @@ if __name__ == "__main__":
 		import View_Gtk_Main
 		View_Gtk_Main.Main(options.importFile)
 
-	if options.textmode:
-		TextMode()
-	else:
-		try:
-			Gtk()
-		except: #gtk.GtkWarning, e:
-#		except ImportError:
-			print
-			print "An error has ocurred loading GTK interface"
-			print "Loading text mode interface"
+	try:
+		if options.textmode:
 			TextMode()
+		else:
+			try:
+				Gtk()
+			except: #gtk.GtkWarning, e:
+	#		except ImportError:
+				print
+				print "An error has ocurred loading GTK interface"
+				print "Loading text mode interface"
+				TextMode()
+	except KeyboardInterrupt:
+		pass
 

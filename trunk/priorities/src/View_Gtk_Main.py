@@ -115,6 +115,37 @@ class Main(View_Gtk.View_Gtk):
 		mnuAbout.connect('activate',self.__About)
 
 		#
+		# Toolbar
+
+		# New
+		tbNew = self.builder.get_object("tbNew")
+		tbNew.connect('clicked',self.__NewDB)
+
+		# Open
+		tbOpen = self.builder.get_object("tbOpen")
+		tbOpen.connect('clicked',self.__OpenDB)
+
+		# Save as
+		tbSaveAs = self.builder.get_object("tbSaveAs")
+		tbSaveAs.connect('clicked',self.__SaveDBAs)
+
+		# Zoom In
+		tbZoomIn = self.builder.get_object("tbZoomIn")
+		tbZoomIn.connect('clicked',self.__ZoomIn)
+
+		# Zoom Out
+		tbZoomOut = self.builder.get_object("tbZoomOut")
+		tbZoomOut.connect('clicked',self.__ZoomOut)
+
+		# Add
+		tbObjective_Add = self.builder.get_object("tbAdd")
+		tbObjective_Add.connect('clicked',self.__AddObjective)
+
+		# Delete
+#		tbObjective_Del = self.builder.get_object("tbDel")
+#		tbObjective_Del.connect('clicked',self.__AddObjective)
+
+		#
 		# Contextual menues
 
 		# Layout
@@ -138,14 +169,8 @@ class Main(View_Gtk.View_Gtk):
 		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
 		mnuObjective_ZoomOut.connect('activate',self.__ZoomOut)
 
-#		self.__CreateTree()
-
 		self.window.show()
-
-		try:
-			gtk.main()
-		except KeyboardInterrupt:
-			pass
+		gtk.main()
 
 
 	def __OpenDB_dialog(self):

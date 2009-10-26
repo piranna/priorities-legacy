@@ -1,10 +1,3 @@
-0.9:
-====
-[BUG] No sale menu contextual en el layout
-
-? Barra de herramientas
-
-
 1.0:
 ====
 Eliminar objetivo desde opcion de menu en Main
@@ -31,6 +24,8 @@ Comentar todo el codigo
 
 Post 1.0:
 =========
+[BUG] No sale menu contextual en el layout
+
 Definir archivo de preferencias como parametro
 	Procesar el archivo antes que el resto de opciones
 

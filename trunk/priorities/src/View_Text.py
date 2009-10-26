@@ -5,7 +5,9 @@ import Parser
 
 class TextmodeParser(Parser.Parser):
 	def __init__(self, controller, input=None):
-		Parser.Parser.__init__(controller, input)
+		self.__controller = controller
+
+		Parser.Parser.__init__(self, controller,input)
 
 
 	# Actions
