@@ -224,7 +224,7 @@
           <object class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToolButton" id="toolbutton7">
+              <object class="GtkToolButton" id="tbNew">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Nuevo</property>
                 <property name="use_underline">True</property>
@@ -236,7 +236,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton1">
+              <object class="GtkToolButton" id="tbOpen">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Abrir</property>
                 <property name="use_underline">True</property>
@@ -248,7 +248,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton2">
+              <object class="GtkToolButton" id="tbSaveAs">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Guardar como</property>
                 <property name="use_underline">True</property>
@@ -268,7 +268,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton6">
+              <object class="GtkToolButton" id="tbZoomIn">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Ampliar</property>
                 <property name="use_underline">True</property>
@@ -280,7 +280,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton5">
+              <object class="GtkToolButton" id="tbZoomOut">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Reducir</property>
                 <property name="use_underline">True</property>
@@ -300,7 +300,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton3">
+              <object class="GtkToolButton" id="tbAdd">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">A&#xF1;adir</property>
                 <property name="use_underline">True</property>
@@ -312,7 +312,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="toolbutton4">
+              <object class="GtkToolButton" id="tbDel">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Quitar</property>
                 <property name="use_underline">True</property>
@@ -361,7 +361,7 @@
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <property name="program_name">Priorities</property>
-    <property name="version">0.8</property>
+    <property name="version">0.9</property>
     <property name="copyright" translatable="yes">Copyright 2009
 &#xA9; Jes&#xFA;s Legan&#xE9;s Combarro "El Pira&#xF1;a"
 &lt;piranna@gmail.com&gt;</property>
@@ -669,8 +669,8 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="show_hidden">True</property>
                         <property name="use_preview_label">False</property>
+                        <property name="show_hidden">True</property>
                         <property name="title" translatable="yes">Base de datos por defecto</property>
                         <property name="width_chars">0</property>
                       </object>
