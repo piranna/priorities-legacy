@@ -1,25 +1,25 @@
 1.0:
 ====
-Eliminar objetivo desde opcion de menu en Main
-
-Desactivar dibujado y exportacion si no hay nada en la base de datos
-
-Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
+Recolocar objetivos si un nivel tiene mas elementos que el anterior
 
 Icono de la aplicacion
 
-Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
-i Cerrar dialog con insert
-
-Recolocar objetivos si un nivel tiene mas elementos que el anterior
-
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 Comentar todo el codigo
+
+Eliminar objetivo desde opcion de menu en Main y toolbar
+
+Desactivar dibujado y exportacion si no hay nada en la base de datos
+
+Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+
+i Cerrar dialog con insert
 
 
 Post 1.0:
@@ -35,7 +35,7 @@ Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son
 
 Crear objeto en Glade para navigation bar
 
-Tener en cuenta cuando la base de datos esta en memoria
+Tener en cuenta cuando la base de datos esta en memoria y mostrarlo en barra de titulo
 
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 
@@ -50,17 +50,16 @@ Estudiar campo para diferenciar fines en si mismo de medios
 Opciones de hacer/deshacer
 
 Buscar con autocompletado
+	Cuadro de busqueda en toolbox
 
 ? Cargar/importar archivo de exportacion desde terminal en modo texto y gtk
-Hacer version de todas las funciones de GTK en modo texto
+? Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
 Dibujar comandos en modo texto o NCurses
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
 Resaltar lineas de requisitos recursivamente
-
-Version en PyGUI
 
 Mostrar objetivos centrados
 
@@ -77,6 +76,8 @@ Localizacion de tareas/cambio de prioridades por proximidad fisica
 ====
 Limpieza de codigo, reorganizacion y optimizacion
 	Cambiar Insert_array_tree_2d a un diccionario ordenado
+
+Version en PyGUI
 
 
 Wont-fix:
