@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="8cm" height="6cm" viewBox="94 78 151 115" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="133.729" y1="123.002" x2="125.083" y2="109.416"/>
+    <polygon style="fill: #000000" points="123.472,106.885 127.307,109.185 125.083,109.416 123.932,111.333 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="123.472,106.885 127.307,109.185 125.083,109.416 123.932,111.333 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="150.271" y1="123.002" x2="158.917" y2="109.416"/>
+    <polygon style="fill: #000000" points="160.528,106.885 160.068,111.333 158.917,109.416 156.693,109.185 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="160.528,106.885 160.068,111.333 158.917,109.416 156.693,109.185 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="189.729" y1="123.002" x2="181.083" y2="109.416"/>
+    <polygon style="fill: #000000" points="179.472,106.885 183.307,109.185 181.083,109.416 179.932,111.333 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="179.472,106.885 183.307,109.185 181.083,109.416 179.932,111.333 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="206.271" y1="123.002" x2="214.917" y2="109.416"/>
+    <polygon style="fill: #000000" points="216.528,106.885 216.068,111.333 214.917,109.416 212.693,109.185 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="216.528,106.885 216.068,111.333 214.917,109.416 212.693,109.185 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="161.729" y1="167.002" x2="153.083" y2="153.416"/>
+    <polygon style="fill: #000000" points="151.472,150.885 155.307,153.185 153.083,153.416 151.932,155.333 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="151.472,150.885 155.307,153.185 153.083,153.416 151.932,155.333 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="178.271" y1="167.002" x2="186.917" y2="153.416"/>
+    <polygon style="fill: #000000" points="188.528,150.885 188.068,155.333 186.917,153.416 184.693,153.185 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="188.528,150.885 188.068,155.333 186.917,153.416 184.693,153.185 "/>
+  </g>
+  <g>
+    <rect style="fill: #0000ff" x="96" y="80" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="96" y="80" width="36" height="24"/>
+  </g>
+  <g>
+    <rect style="fill: #0000ff" x="152" y="80" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="152" y="80" width="36" height="24"/>
+  </g>
+  <g>
+    <rect style="fill: #00ff00" x="208" y="80" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="208" y="80" width="36" height="24"/>
+  </g>
+  <g>
+    <rect style="fill: #ffff00" x="180" y="124" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="180" y="124" width="36" height="24"/>
+  </g>
+  <g>
+    <rect style="fill: #00ff00" x="124" y="124" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="124" y="124" width="36" height="24"/>
+  </g>
+  <g>
+    <rect style="fill: #ff0000" x="152" y="168" width="36" height="24"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="152" y="168" width="36" height="24"/>
+  </g>
+</svg>
