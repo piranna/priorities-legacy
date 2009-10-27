@@ -1,9 +1,5 @@
 1.0:
 ====
-* Recolocar objetivos si un nivel tiene mas elementos que el anterior
-
-Icono de la aplicacion
-
 Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
 
 Internacionalizacion con gettext
@@ -27,6 +23,13 @@ Post 1.0:
 
 1.1:
 ====
+Nuevo algoritmo de distribucion de objetivos
+	Separar calculo de colocacion final (y flechas)
+	Colocar todos los niveles sin solaparse vertical y horizontalmente
+		Obtener ancho y alto efectivos de los botones
+	Colocar niveles centrados unos con otros
+		Recolocar objetivos de un nivel si el siguiente tiene mas elementos
+
 [BUG] No sale menu contextual en el layout
 
 Crear objeto en Glade para navigation bar
@@ -99,3 +102,4 @@ Reordenar manualmente los objetivos (Drag & Drop)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Cambiar indices en base de datos a UNSIGNED
 * Exportar a imagen con fondo transparente (PNG)
+

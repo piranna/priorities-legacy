@@ -6,7 +6,7 @@ class Model:
 	def __init__(self, db_path):
 		self.__connection = None
 
-		if db_name:
+		if db_path:
 			self.Connect(db_path)
 
 
