@@ -3,21 +3,21 @@ import sqlite3
 
 class Model:
 	# Contructor & destructor
-	def __init__(self, db_name):
+	def __init__(self, db_path):
 		self.__connection = None
 
 		if db_name:
-			self.Connect(db_name)
+			self.Connect(db_path)
 
 
 	def __del__(self):
 		self.unconnect()
 
 
-	def Connect(self, db_name):
+	def Connect(self, db_path):
 		self.unconnect()
 
-		self.__connection = sqlite3.connect(db_name)
+		self.__connection = sqlite3.connect(db_path)
 
 		self.__connection.row_factory = sqlite3.Row
 		self.__connection.isolation_level = None
@@ -68,6 +68,18 @@ class Model:
 		for row in self.__connection.execute("SELECT * FROM requeriments"):
 			backup.__connection.execute("INSERT INTO requeriments(objective,requeriment,priority,alternative,quantity) VALUES(?,?,?,?,?)",
 										(row['objective'],row['requeriment'],row['priority'],row['alternative'],row['quantity']))
+
+
+	def Get_db_path(self):
+		return self.__connection.execute("PRAGMA database_list")[0].split('|')[2]
+
+
+	def Get_db_version(self):
+		return self.__connection.execute("PRAGMA user_cookie")
+
+
+	def Set_db_version(self, value):
+		return self.__connection.execute("PRAGMA user_cookie=?",(value,))
 
 
 	# Access functions

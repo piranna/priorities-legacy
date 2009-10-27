@@ -1,6 +1,6 @@
 1.0:
 ====
-Recolocar objetivos si un nivel tiene mas elementos que el anterior
+* Recolocar objetivos si un nivel tiene mas elementos que el anterior
 
 Icono de la aplicacion
 
@@ -24,30 +24,18 @@ i Cerrar dialog con insert
 
 Post 1.0:
 =========
+
+1.1:
+====
 [BUG] No sale menu contextual en el layout
-
-Definir archivo de preferencias como parametro
-	Procesar el archivo antes que el resto de opciones
-
-Usar optparse en Parser.py
-
-Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
 
 Crear objeto en Glade para navigation bar
 
 Tener en cuenta cuando la base de datos esta en memoria y mostrarlo en barra de titulo
 
+Resaltar lineas de requisitos recursivamente
+
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
-
-Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
-Modificar clave de objetivos de autonumerado a campo name
-Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
-
-Animacion de zoom in y zoom out
-
-Estudiar campo para diferenciar fines en si mismo de medios
-
-Opciones de hacer/deshacer
 
 Buscar con autocompletado
 	Cuadro de busqueda en toolbox
@@ -55,11 +43,26 @@ Buscar con autocompletado
 ? Cargar/importar archivo de exportacion desde terminal en modo texto y gtk
 ? Hacer version de todas las funciones de GTK en modo texto
 	Versatilidad de sintaxis
+
+
+1.2:
+====
+Definir archivo de preferencias como parametro
+	Procesar el archivo antes que el resto de opciones
+
+Usar optparse en Parser.py
+
+Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son basicamente lo mismo)
+
+Animacion de zoom in y zoom out
+
+Estudiar campo para diferenciar fines en si mismo de medios
+
+Opciones de hacer/deshacer
+
 Dibujar comandos en modo texto o NCurses
 Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
-
-Resaltar lineas de requisitos recursivamente
 
 Mostrar objetivos centrados
 
@@ -77,6 +80,12 @@ Localizacion de tareas/cambio de prioridades por proximidad fisica
 Limpieza de codigo, reorganizacion y optimizacion
 	Cambiar Insert_array_tree_2d a un diccionario ordenado
 
+Nueva version de la base de datos
+	Usar user-cookie para identificarla (primer byte o incluso menos)
+	Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
+	Modificar clave de objetivos de autonumerado a campo name
+	Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
+
 Version en PyGUI
 
 
@@ -90,4 +99,3 @@ Reordenar manualmente los objetivos (Drag & Drop)
 Arbol en DeleteCascade no muestra los elementos en orden de prioridad (diccionarios en python son por definicion desordenados)
 Cambiar indices en base de datos a UNSIGNED
 * Exportar a imagen con fondo transparente (PNG)
-
