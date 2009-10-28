@@ -23,6 +23,7 @@ class Preferences(View_Gtk.View_Gtk):
 		# Default database
 		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
 		self.fcDefaultDB.connect('file-set', self.__on_fcDefaultDB_fileset)
+		self.fcDefaultDB.connect('expose-event', self.__on_fcDefaultDB_expose)
 		self.fcDefaultDB.set_filename(self.config.Get('database'))
 		self.fcDefaultDB.set_sensitive(self.config.Get('useDefaultDB'))
 
@@ -98,10 +99,12 @@ class Preferences(View_Gtk.View_Gtk):
 		self.fcDefaultDB.set_sensitive(widget.get_active())
 
 
+	def __on_fcDefaultDB_expose(self, widget,event):
+		if not widget.get_filename():
+			widget.set_filename(self.config.Get('database'))
+
 	def __on_fcDefaultDB_fileset(self, widget):
-		filename = widget.get_filename()
-		if filename:
-			self.config.Set("database", filename)
+		self.config.Set("database", widget.get_filename())
 
 
 	def __on_colorbutton_colorset(self, widget):

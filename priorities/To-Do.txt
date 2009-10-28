@@ -1,7 +1,5 @@
 1.0:
 ====
-Mantener nombre de la base de datos por defecto en Preferences al pulsar cancelar
-
 Internacionalizacion con gettext
 	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
 
