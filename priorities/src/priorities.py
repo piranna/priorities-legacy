@@ -21,34 +21,40 @@ def ParseArguments(config):
 	# Options
 
 	# Database
-	parser.add_option('--database',				help="Database to use",
+	group = optparse.OptionGroup(parser,"Database options")
+	group.add_option('--database',				help="Database to use",
 						dest="database",
 						action="store")
-	parser.add_option('--in-memory-database',	help="Use a temporal, in RAM memory database",
+	group.add_option('--in-memory-database',	help="Use a temporal, in RAM memory database",
 						dest="database",
 						action="store_const",
 						const=":memory:")
-	parser.add_option('--use-default-database',	help="Force use of config file default database",
+	group.add_option('--use-default-database',	help="Force use of config file default database",
 						dest="database",
 						action="store_const",
 						const=config.Get('database'))
-	parser.add_option('--ask-database',			help="Force ask the database to use",
+	group.add_option('--ask-database',			help="Force ask the database to use",
 						dest="database",
 						action="store_const",
 						const=None)
+	parser.add_option_group(group)
 
 	# Import file
-	parser.add_option('--import-file',			help="Parse data from script file",
+	group = optparse.OptionGroup(parser,"Import file option")
+	group.add_option('--import-file',			help="Parse data from script file",
 						dest="importFile",
 						action="store")
+	parser.add_option_group(group)
 
 	# User interface
-	parser.add_option('--textmode',				help="Use textmode",
+	group = optparse.OptionGroup(parser,"User interface options")
+	group.add_option('--textmode',				help="Use textmode",
 						dest="textmode",
 						action="store_true")
-	parser.add_option('--gui',					help="Use gui (default)",
+	group.add_option('--gui',					help="Use gui (default)",
 						dest="textmode",
 						action="store_false")
+	parser.add_option_group(group)
 
 	# Return parsed arguments
 	return parser.parse_args()
