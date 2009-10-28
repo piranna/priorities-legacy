@@ -95,59 +95,79 @@ class Preferences(View_Gtk.View_Gtk):
 
 
 	def __on_chkDefaultDB_toggled(self, widget):
+		"Set if user should be asked for the database at startup"
 		self.config.Set("useDefaultDB", widget.get_active())
 		self.fcDefaultDB.set_sensitive(widget.get_active())
 
 
 	def __on_fcDefaultDB_expose(self, widget,event):
+		"Get the database name from the config if the gtk.filechooserbutton get empty"
 		if not widget.get_filename():
 			widget.set_filename(self.config.Get('database'))
 
 	def __on_fcDefaultDB_fileset(self, widget):
+		"Set the database set by the gtk.filechooserbutton"
 		self.config.Set("database", widget.get_filename())
 
 
 	def __on_colorbutton_colorset(self, widget):
+		"""
+		Set the selected color
+		and redraw the full objectives tree
+		"""
 		self.config.Set(widget.get_title(), widget.get_color())
 		self.redraw = "tree"
 
 
 	def __on_Preferences_response(self, widget, response):
+		"Store the config when closing the dialog"
 		if response == 1:
 			self.config.Store()
 
 
 	def __on_chkShowSharp_toggled(self, widget):
+		"Set to draw the tree sharp"
 		self.config.Set("showSharp", widget.get_active())
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
 
 	def __on_chkShowArrowHeads_toggled(self, widget):
+		"Set to drwa the arrow heads"
 		self.config.Set("showArrowHeads", widget.get_active())
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
 
 	def __on_chkRemoveOrphanRequeriments_toggled(self, widget):
+		"Set to remove orphans"
 		self.config.Set("removeOrphanRequeriments", widget.get_active())
 
 
 	def __on_chkDeleteCascade_toggled(self, widget):
+		"Set if objectives should be deleted in cascade"
 		self.config.Set("deleteCascade", widget.get_active())
 		self.chkConfirmDeleteCascade.set_sensitive(widget.get_active())
 
 
 	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+		"Set if user must be asked to confirm when deleting in cascade"
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 
 
 	def __on_cbShowExceededDependencies_changed(self, widget):
+		"""
+		Set if exceeded dependencies should be showed
+		and redraw the full objectives tree
+		"""
 		self.config.Set("showExceededDependencies", widget.get_active())
 		self.redraw = "tree"
 
 
 	def __on_sbExpirationWarning_valuechanged(self, widget):
+		"""
+		Set the expiration warning days interval
+		and redraw the full objectives tree
+		"""
 		self.config.Set("expirationWarning", widget.get_value_as_int())
 		self.redraw = "tree"
-

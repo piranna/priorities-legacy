@@ -5,7 +5,7 @@ Internacionalizacion con gettext
 
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
-Comentar todo el codigo
+? Comentar todo el codigo
 
 Eliminar objetivo desde opcion de menu en Main y toolbar
 
