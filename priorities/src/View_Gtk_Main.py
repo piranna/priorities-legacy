@@ -24,7 +24,7 @@ class Main(View_Gtk.View_Gtk):
 			self.__AskDB()
 
 		if input and not self.controller.Import(input):
-			print "Exception importing database"
+			print _("Exception importing database")
 
 		self.__objectiveHI_edit = None
 		self.__objectiveHI_delete = None
@@ -174,7 +174,7 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def __OpenDB_dialog(self):
-		dialog = gtk.FileChooserDialog("Seleccione la base de datos a usar",
+		dialog = gtk.FileChooserDialog(_("Select the database to use"),
 												None,
 												gtk.FILE_CHOOSER_ACTION_OPEN,
 												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
@@ -188,7 +188,7 @@ class Main(View_Gtk.View_Gtk):
 		dialog.add_filter(dialogFilter)
 		# Priorities export file
 		dialogFilter = gtk.FileFilter()
-		dialogFilter.set_name("Priorities export file")
+		dialogFilter.set_name(_("Priorities export file"))
 		dialogFilter.add_pattern("*.priorities")
 		dialog.add_filter(dialogFilter)
 		# All files
@@ -205,7 +205,7 @@ class Main(View_Gtk.View_Gtk):
 			if response[-11:] == ".priorities":
 				self.controller.Connect(":memory:")
 				if not self.controller.Import(response):
-					print "Exception importing database"
+					print _("Exception importing database")
 					dialog.destroy()
 					return False
 
@@ -233,7 +233,7 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def __SaveDB_dialog(self):
-		dialog = gtk.FileChooserDialog("Seleccione la base de datos a crear",
+		dialog = gtk.FileChooserDialog(_("Select the database to create"),
 												None,
 												gtk.FILE_CHOOSER_ACTION_SAVE,
 												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
@@ -243,7 +243,7 @@ class Main(View_Gtk.View_Gtk):
 
 		# sqlite files
 		dialogFilter = gtk.FileFilter()
-		dialogFilter.set_name("SQLite database")
+		dialogFilter.set_name(_("SQLite database"))
 		dialogFilter.add_pattern("*.sqlite")
 		dialog.add_filter(dialogFilter)
 		# All files
@@ -683,7 +683,7 @@ class Main(View_Gtk.View_Gtk):
 										0,
 										gtk.MESSAGE_QUESTION,
 										gtk.BUTTONS_YES_NO,
-										"Desea eliminar el objetivo "+self.controller.GetName(objective_id)+"?")
+										_("Do you want to delete the objetive ")+self.controller.GetName(objective_id)+"?")
 			if dialog.run() == gtk.RESPONSE_YES:
 				self.controller.DeleteObjective(objective_id,
 												self.config.Get('removeOrphanRequeriments'))
@@ -750,7 +750,7 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def __Export(self, widget):
-		dialog = gtk.FileChooserDialog("Export priorities database",
+		dialog = gtk.FileChooserDialog(_("Export priorities database"),
 										None,
 										gtk.FILE_CHOOSER_ACTION_SAVE,
 										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
@@ -761,13 +761,13 @@ class Main(View_Gtk.View_Gtk):
 
 		"""PNG"""
 		filter = gtk.FileFilter()
-		filter.set_name("PNG image")
+		filter.set_name(_("PNG image"))
 		filter.add_pattern("*.png")
 #		filter.add_pixbuf_formats()
 		dialog.add_filter(filter)
 		"""JPEG"""
 		filter = gtk.FileFilter()
-		filter.set_name("JPEG image")
+		filter.set_name(_("JPEG image"))
 		filter.add_pattern("*.jpeg")
 #		filter.add_pixbuf_formats()
 		dialog.add_filter(filter)
@@ -776,8 +776,8 @@ class Main(View_Gtk.View_Gtk):
 			filter_name = dialog.get_filter().get_name()
 
 			try:
-				if(filter_name == "PNG image"
-				or filter_name == "JPEG image"):
+				if(filter_name == _("PNG image")
+				or filter_name == _("JPEG image")):
 					layout_size = self.layout.get_size()
 					if self.config.Get('showSharp'):
 						layout_size = (layout_size[0]+1,layout_size[1]+1)
@@ -789,10 +789,10 @@ class Main(View_Gtk.View_Gtk):
 														0,0,0,0,
 														layout_size[0],layout_size[1]))
 
-					if filter_name == "PNG image":
+					if filter_name == _("PNG image"):
 						pixbuf.save(dialog.get_filename()+".png", "png")
 
-					elif filter_name == "JPEG image":
+					elif filter_name == _("JPEG image"):
 						pixbuf.save(dialog.get_filename()+".jpeg", "jpeg")
 
 				else:
@@ -801,13 +801,13 @@ class Main(View_Gtk.View_Gtk):
 					file.close()
 
 			except:
-				print "Exception exporting database"
+				print _("Exception exporting database")
 
 		dialog.destroy()
 
 
 	def __Import(self, widget):
-		dialog = gtk.FileChooserDialog("Import priorities database",
+		dialog = gtk.FileChooserDialog(_("Import priorities database"),
 										None,
 										gtk.FILE_CHOOSER_ACTION_OPEN,
 										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
@@ -820,7 +820,7 @@ class Main(View_Gtk.View_Gtk):
 			if self.controller.Import(dialog.get_filename()):
 				self.__CreateTree(self.navBar.get_active_id())
 			else:
-				print "Exception importing database"
+				print _("Exception importing database")
 
 		dialog.destroy()
 
@@ -860,4 +860,3 @@ class Main(View_Gtk.View_Gtk):
 		position = self.navBar.get_active_position()
 		if position:
 			self.navBar.get_children()[position-1].clicked()
-

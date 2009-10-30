@@ -78,7 +78,7 @@ class Config:
 			self.__config['expirationWarning']			= int(self.__config['expirationWarning'])
 
 		except:
-			print "Exception loading config"
+			print _("Exception loading config")
 
 		finally:
 			file.close()
@@ -92,8 +92,7 @@ class Config:
 				file.write(key+"="+str(value)+"\n")
 
 		except:
-			print "Exception storing config"
+			print _("Exception storing config")
 
 		finally:
 			file.close()
-

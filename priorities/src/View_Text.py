@@ -57,7 +57,7 @@ class Main(View.View):
 
 
 	def __AskDB(self, database):
-		database = raw_input("Seleccione la base de datos a usar:")
+		database = raw_input(_("Select the database to use:"))
 		if database:
 			print database, 'selected'
 			self.controller.Connect(database)
@@ -65,4 +65,3 @@ class Main(View.View):
 			print 'Closed, no files selected'
 			import sys
 			sys.exit(0)
-

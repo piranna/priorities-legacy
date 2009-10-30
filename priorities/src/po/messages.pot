@@ -1,0 +1,323 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-30 18:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../Config.py:81
+msgid "Exception loading config"
+msgstr ""
+
+#: ../Config.py:95
+msgid "Exception storing config"
+msgstr ""
+
+#: ../Model_SQLite.py:46
+msgid "Exception on 'Model_SQLite.py':"
+msgstr ""
+
+#: ../priorities.py:24
+msgid "Database options"
+msgstr ""
+
+#: ../priorities.py:25
+msgid "Database to use"
+msgstr ""
+
+#: ../priorities.py:28
+msgid "Use a temporal, in RAM memory database"
+msgstr ""
+
+#: ../priorities.py:32
+msgid "Use database defined in config file (default)"
+msgstr ""
+
+#: ../priorities.py:36
+msgid "Ask the database to use"
+msgstr ""
+
+#: ../priorities.py:43
+msgid "Import file option"
+msgstr ""
+
+#: ../priorities.py:44
+msgid "Parse data from script file"
+msgstr ""
+
+#: ../priorities.py:50
+msgid "User interface options"
+msgstr ""
+
+#: ../priorities.py:51
+msgid "Use textmode"
+msgstr ""
+
+#: ../priorities.py:54
+msgid "Use gui (default)"
+msgstr ""
+
+#: ../priorities.py:103
+msgid "An error has ocurred loading GTK interface"
+msgstr ""
+
+#: ../priorities.py:104
+msgid "Loading text mode interface"
+msgstr ""
+
+#: ../View_Gtk_AddObjective.py:174
+msgid "Do you want to delete the objective "
+msgstr ""
+
+#: ../View_Gtk_AddObjective.py:192
+msgid "The objective have been modified"
+msgstr ""
+
+#: ../View_Gtk_AddObjective.py:193
+msgid ""
+"The objective have been modified and the changes will be lost. Are you sure "
+"do you want to continue?"
+msgstr ""
+
+#: ../View_Gtk_Main.py:27 ../View_Gtk_Main.py:208 ../View_Gtk_Main.py:823
+msgid "Exception importing database"
+msgstr ""
+
+#: ../View_Gtk_Main.py:177
+msgid "Select the database to use"
+msgstr ""
+
+#: ../View_Gtk_Main.py:191
+msgid "Priorities export file"
+msgstr ""
+
+#: ../View_Gtk_Main.py:236
+msgid "Select the database to create"
+msgstr ""
+
+#: ../View_Gtk_Main.py:246
+msgid "SQLite database"
+msgstr ""
+
+#: ../View_Gtk_Main.py:686
+msgid "Do you want to delete the objetive "
+msgstr ""
+
+#: ../View_Gtk_Main.py:753
+msgid "Export priorities database"
+msgstr ""
+
+#: ../View_Gtk_Main.py:764 ../View_Gtk_Main.py:779 ../View_Gtk_Main.py:792
+msgid "PNG image"
+msgstr ""
+
+#: ../View_Gtk_Main.py:770 ../View_Gtk_Main.py:780 ../View_Gtk_Main.py:795
+msgid "JPEG image"
+msgstr ""
+
+#: ../View_Gtk_Main.py:804
+msgid "Exception exporting database"
+msgstr ""
+
+#: ../View_Gtk_Main.py:810
+msgid "Import priorities database"
+msgstr ""
+
+#: ../View_Text.py:60
+msgid "Select the database to use:"
+msgstr ""
+
+#: View_Gtk.glade.h:1
+msgid "0"
+msgstr ""
+
+#: View_Gtk.glade.h:2
+msgid "<b>Graph</b>"
+msgstr ""
+
+#: View_Gtk.glade.h:3
+msgid "<b>Objectives colors</b>"
+msgstr ""
+
+#: View_Gtk.glade.h:4
+msgid "<b>Objectives</b>"
+msgstr ""
+
+#: View_Gtk.glade.h:5
+msgid "Actual quantity"
+msgstr ""
+
+#: View_Gtk.glade.h:6
+msgid "Add"
+msgstr ""
+
+#: View_Gtk.glade.h:7
+msgid "Add objective"
+msgstr ""
+
+#: View_Gtk.glade.h:8
+msgid "Always"
+msgstr ""
+
+#: View_Gtk.glade.h:9
+msgid "Available"
+msgstr ""
+
+#: View_Gtk.glade.h:10
+msgid "Confirm objective before deletion"
+msgstr ""
+
+#: View_Gtk.glade.h:11
+msgid "Confirm objectives before deletion"
+msgstr ""
+
+#: View_Gtk.glade.h:12
+msgid "Default database"
+msgstr ""
+
+#: View_Gtk.glade.h:13
+msgid "Delete in cascade"
+msgstr ""
+
+#: View_Gtk.glade.h:14
+msgid "Delete orphan requeriments"
+msgstr ""
+
+#: View_Gtk.glade.h:15
+msgid "Expiration"
+msgstr ""
+
+#: View_Gtk.glade.h:16
+msgid "Expiration pre-warning days"
+msgstr ""
+
+#: View_Gtk.glade.h:17
+msgid "Export"
+msgstr ""
+
+#: View_Gtk.glade.h:18
+msgid "Import"
+msgstr ""
+
+#: View_Gtk.glade.h:19
+msgid "In process"
+msgstr ""
+
+#: View_Gtk.glade.h:20
+msgid "Inavailable"
+msgstr ""
+
+#: View_Gtk.glade.h:21
+msgid "Never"
+msgstr ""
+
+#: View_Gtk.glade.h:22
+msgid "New"
+msgstr ""
+
+#: View_Gtk.glade.h:23
+msgid "Objetive"
+msgstr ""
+
+#: View_Gtk.glade.h:24
+msgid "Only not expired"
+msgstr ""
+
+#: View_Gtk.glade.h:25
+msgid "Open"
+msgstr ""
+
+#: View_Gtk.glade.h:26
+msgid "Preferences"
+msgstr ""
+
+#: View_Gtk.glade.h:27
+msgid "Remove"
+msgstr ""
+
+#: View_Gtk.glade.h:28
+msgid "Requeriments"
+msgstr ""
+
+#: View_Gtk.glade.h:29
+msgid "Satisfacted"
+msgstr ""
+
+#: View_Gtk.glade.h:30
+msgid "Save as"
+msgstr ""
+
+#: View_Gtk.glade.h:31
+msgid "Show arrow heads"
+msgstr ""
+
+#: View_Gtk.glade.h:32
+msgid "Show satisfacted requeriments"
+msgstr ""
+
+#: View_Gtk.glade.h:33
+msgid "Show sharp"
+msgstr ""
+
+#: View_Gtk.glade.h:34
+msgid "The next objectives are going to be deleted in cascade"
+msgstr ""
+
+#: View_Gtk.glade.h:35
+msgid "Use default database"
+msgstr ""
+
+#: View_Gtk.glade.h:36
+msgid "Zoom in"
+msgstr ""
+
+#: View_Gtk.glade.h:37
+msgid "Zoom out"
+msgstr ""
+
+#: View_Gtk.glade.h:38
+msgid "_Edit"
+msgstr ""
+
+#: View_Gtk.glade.h:39
+msgid "_File"
+msgstr ""
+
+#: View_Gtk.glade.h:40
+msgid "_Help"
+msgstr ""
+
+#: View_Gtk.glade.h:41
+msgid "_Objective"
+msgstr ""
+
+#: View_Gtk.glade.h:42
+msgid "_View"
+msgstr ""
+
+#: View_Gtk.glade.h:43
+msgid "color_available"
+msgstr ""
+
+#: View_Gtk.glade.h:44
+msgid "color_inprocess"
+msgstr ""
+
+#: View_Gtk.glade.h:45
+msgid "color_satisfacted"
+msgstr ""
+
+#: View_Gtk.glade.h:46
+msgid "color_unabordable"
+msgstr ""
