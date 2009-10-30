@@ -21,37 +21,37 @@ def ParseArguments(config):
 	# Options
 
 	# Database
-	group = optparse.OptionGroup(parser,"Database options")
-	group.add_option('--database',				help="Database to use",
+	group = optparse.OptionGroup(parser,_("Database options"))
+	group.add_option('--database',				help=_("Database to use"),
 						dest="database",
 						action="store")
-	group.add_option('--in-memory-database',	help="Use a temporal, in RAM memory database",
+	group.add_option('--in-memory-database',	help=_("Use a temporal, in RAM memory database"),
 						dest="database",
 						action="store_const",
 						const=":memory:")
-	group.add_option('--use-default-database',	help="Force use of config file default database",
+	group.add_option('--config-file-database',	help=_("Use database defined in config file (default)"),
 						dest="database",
 						action="store_const",
 						const=config.Get('database'))
-	group.add_option('--ask-database',			help="Force ask the database to use",
+	group.add_option('--ask-database',			help=_("Ask the database to use"),
 						dest="database",
 						action="store_const",
 						const=None)
 	parser.add_option_group(group)
 
 	# Import file
-	group = optparse.OptionGroup(parser,"Import file option")
-	group.add_option('--import-file',			help="Parse data from script file",
+	group = optparse.OptionGroup(parser,_("Import file option"))
+	group.add_option('--import-file',			help=_("Parse data from script file"),
 						dest="importFile",
 						action="store")
 	parser.add_option_group(group)
 
 	# User interface
-	group = optparse.OptionGroup(parser,"User interface options")
-	group.add_option('--textmode',				help="Use textmode",
+	group = optparse.OptionGroup(parser,_("User interface options"))
+	group.add_option('--textmode',				help=_("Use textmode"),
 						dest="textmode",
 						action="store_true")
-	group.add_option('--gui',					help="Use gui (default)",
+	group.add_option('--gui',					help=_("Use gui (default)"),
 						dest="textmode",
 						action="store_false")
 	parser.add_option_group(group)
@@ -100,9 +100,8 @@ if __name__ == "__main__":
 			except: #gtk.GtkWarning, e:
 	#		except ImportError:
 				print
-				print "An error has ocurred loading GTK interface"
-				print "Loading text mode interface"
+				print _("An error has ocurred loading GTK interface")
+				print _("Loading text mode interface")
 				TextMode()
 	except KeyboardInterrupt:
 		pass
-

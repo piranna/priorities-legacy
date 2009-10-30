@@ -1,0 +1,335 @@
+# Spanish translations for PACKAGE package
+# Traducciones al español para el paquete PACKAGE.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Jesús Leganés Combarro <piranna@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-30 18:44+0100\n"
+"PO-Revision-Date: 2009-10-30 18:45+0100\n"
+"Last-Translator: Jesús Leganés Combarro <piranna@gmail.com>\n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../Config.py:81
+msgid "Exception loading config"
+msgstr "Excepción cargando configuración"
+
+#: ../Config.py:95
+msgid "Exception storing config"
+msgstr "Excepcion guardando configuración"
+
+#: ../Model_SQLite.py:46
+msgid "Exception on 'Model_SQLite.py':"
+msgstr "Excepción en 'Model_SQLite.py':"
+
+#: ../priorities.py:24
+msgid "Database options"
+msgstr "Opciónes de la Base de Datos"
+
+#: ../priorities.py:25
+msgid "Database to use"
+msgstr "Base de Datos a usar"
+
+#: ../priorities.py:28
+msgid "Use a temporal, in RAM memory database"
+msgstr "Usar una base de datos temporal en RAM"
+
+#: ../priorities.py:32
+msgid "Use database defined in config file (default)"
+msgstr "Usar base de datos definida en el archivo de configuracion (por defecto)"
+
+#: ../priorities.py:36
+msgid "Ask the database to use"
+msgstr "Pregunta la base de datos a usar"
+
+#: ../priorities.py:43
+msgid "Import file option"
+msgstr "Opción para importar archivo"
+
+#: ../priorities.py:44
+msgid "Parse data from script file"
+msgstr "Parsear datos desde archivo de script"
+
+#: ../priorities.py:50
+msgid "User interface options"
+msgstr "Opciones de la interfaz de usuario"
+
+#: ../priorities.py:51
+msgid "Use textmode"
+msgstr "Usar modo de texto"
+
+#: ../priorities.py:54
+msgid "Use gui (default)"
+msgstr "Usar gui (por defecto)"
+
+#: ../priorities.py:103
+msgid "An error has ocurred loading GTK interface"
+msgstr "Ha ocurrido un error cargando la interfaz GTK"
+
+#: ../priorities.py:104
+msgid "Loading text mode interface"
+msgstr "Cargando interfaz en modo texto"
+
+#: ../View_Gtk_AddObjective.py:174
+msgid "Do you want to delete the objective "
+msgstr "¿Desea eliminar el objetivo "
+
+#: ../View_Gtk_AddObjective.py:192
+msgid "The objective have been modified"
+msgstr "El objetivo ha sido modificado"
+
+#: ../View_Gtk_AddObjective.py:193
+#, fuzzy
+msgid "The objective have been modified and the changes will be lost. Are you sure do you want to continue?"
+msgstr "El objetivo ha sido modificado y los cambios se perderan. ¿Esta seguro de que desea continuar?"
+
+#: ../View_Gtk_Main.py:27
+#: ../View_Gtk_Main.py:208
+#: ../View_Gtk_Main.py:823
+msgid "Exception importing database"
+msgstr "Excepción importando base de datos"
+
+#: ../View_Gtk_Main.py:177
+msgid "Select the database to use"
+msgstr "Seleccione la base de datos a usar"
+
+#: ../View_Gtk_Main.py:191
+msgid "Priorities export file"
+msgstr "Archivo de exportación de Priorities"
+
+#: ../View_Gtk_Main.py:236
+msgid "Select the database to create"
+msgstr "Seleccione la base de datos a crear"
+
+#: ../View_Gtk_Main.py:246
+msgid "SQLite database"
+msgstr "Base de datos SQLite"
+
+#: ../View_Gtk_Main.py:686
+msgid "Do you want to delete the objetive "
+msgstr "¿Desea eliminar el objetivo "
+
+#: ../View_Gtk_Main.py:753
+msgid "Export priorities database"
+msgstr "Exportar base de datos de Priorities"
+
+#: ../View_Gtk_Main.py:764
+#: ../View_Gtk_Main.py:779
+#: ../View_Gtk_Main.py:792
+msgid "PNG image"
+msgstr "Imagen PNG"
+
+#: ../View_Gtk_Main.py:770
+#: ../View_Gtk_Main.py:780
+#: ../View_Gtk_Main.py:795
+msgid "JPEG image"
+msgstr "Imagen JPEG"
+
+#: ../View_Gtk_Main.py:804
+msgid "Exception exporting database"
+msgstr "Excepción exportando base de datos"
+
+#: ../View_Gtk_Main.py:810
+msgid "Import priorities database"
+msgstr "Importar base de datos de Priorities"
+
+#: ../View_Text.py:60
+msgid "Select the database to use:"
+msgstr "Seleccione la base de datos a usar:"
+
+#: View_Gtk.glade.h:1
+msgid "0"
+msgstr ""
+
+#: View_Gtk.glade.h:2
+msgid "<b>Graph</b>"
+msgstr "<b>Grafo</b>"
+
+#: View_Gtk.glade.h:3
+msgid "<b>Objectives colors</b>"
+msgstr "<b>Colores de los objetivos</b>"
+
+#: View_Gtk.glade.h:4
+msgid "<b>Objectives</b>"
+msgstr "<b>Objetivos</b>"
+
+#: View_Gtk.glade.h:5
+msgid "Actual quantity"
+msgstr "Cantidad actual"
+
+#: View_Gtk.glade.h:6
+msgid "Add"
+msgstr "Añadir"
+
+#: View_Gtk.glade.h:7
+msgid "Add objective"
+msgstr "Añadir objetivo"
+
+#: View_Gtk.glade.h:8
+msgid "Always"
+msgstr "Siempre"
+
+#: View_Gtk.glade.h:9
+msgid "Available"
+msgstr "Disponible"
+
+#: View_Gtk.glade.h:10
+msgid "Confirm objective before deletion"
+msgstr "Confirmar objetivo antes de la eliminación"
+
+#: View_Gtk.glade.h:11
+msgid "Confirm objectives before deletion"
+msgstr "Confirmar objetivos antes de la eliminación"
+
+#: View_Gtk.glade.h:12
+msgid "Default database"
+msgstr "Base de datos por defecto"
+
+#: View_Gtk.glade.h:13
+msgid "Delete in cascade"
+msgstr "Eliminar en cascada"
+
+#: View_Gtk.glade.h:14
+msgid "Delete orphan requeriments"
+msgstr "Eliminar requerimientos huerfanos"
+
+#: View_Gtk.glade.h:15
+msgid "Expiration"
+msgstr "Expiración"
+
+#: View_Gtk.glade.h:16
+msgid "Expiration pre-warning days"
+msgstr "Dias de preaviso de la expiración"
+
+#: View_Gtk.glade.h:17
+msgid "Export"
+msgstr "Exportar"
+
+#: View_Gtk.glade.h:18
+msgid "Import"
+msgstr "Importar"
+
+#: View_Gtk.glade.h:19
+msgid "In process"
+msgstr "En proceso"
+
+#: View_Gtk.glade.h:20
+msgid "Inavailable"
+msgstr "Inabarcable"
+
+#: View_Gtk.glade.h:21
+msgid "Never"
+msgstr "Nunca"
+
+#: View_Gtk.glade.h:22
+msgid "New"
+msgstr "Nuevo"
+
+#: View_Gtk.glade.h:23
+msgid "Objetive"
+msgstr "Objetivo"
+
+#: View_Gtk.glade.h:24
+msgid "Only not expired"
+msgstr "Solo no expirados"
+
+#: View_Gtk.glade.h:25
+msgid "Open"
+msgstr "Abrir"
+
+#: View_Gtk.glade.h:26
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: View_Gtk.glade.h:27
+msgid "Remove"
+msgstr "Eliminar"
+
+#: View_Gtk.glade.h:28
+msgid "Requeriments"
+msgstr "Requerimientos"
+
+#: View_Gtk.glade.h:29
+msgid "Satisfacted"
+msgstr "Satisfecho"
+
+#: View_Gtk.glade.h:30
+msgid "Save as"
+msgstr "Salvar como"
+
+#: View_Gtk.glade.h:31
+msgid "Show arrow heads"
+msgstr "Mostrar cabeza de las flechas"
+
+#: View_Gtk.glade.h:32
+msgid "Show satisfacted requeriments"
+msgstr "Mostrar requerimientos satisfechos"
+
+#: View_Gtk.glade.h:33
+msgid "Show sharp"
+msgstr "Mostrar cuadricula"
+
+#: View_Gtk.glade.h:34
+msgid "The next objectives are going to be deleted in cascade"
+msgstr "Los siguientes objetivos van a ser eliminados en cascada"
+
+#: View_Gtk.glade.h:35
+msgid "Use default database"
+msgstr "Usar base de datos por defecto"
+
+#: View_Gtk.glade.h:36
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: View_Gtk.glade.h:37
+msgid "Zoom out"
+msgstr "Reducir"
+
+#: View_Gtk.glade.h:38
+msgid "_Edit"
+msgstr "_Editar"
+
+#: View_Gtk.glade.h:39
+msgid "_File"
+msgstr "_Archivo"
+
+#: View_Gtk.glade.h:40
+msgid "_Help"
+msgstr "Ay_uda"
+
+#: View_Gtk.glade.h:41
+msgid "_Objective"
+msgstr "_Objetivo"
+
+#: View_Gtk.glade.h:42
+msgid "_View"
+msgstr "_Ver"
+
+#: View_Gtk.glade.h:43
+msgid "color_available"
+msgstr ""
+
+#: View_Gtk.glade.h:44
+msgid "color_inprocess"
+msgstr ""
+
+#: View_Gtk.glade.h:45
+msgid "color_satisfacted"
+msgstr ""
+
+#: View_Gtk.glade.h:46
+msgid "color_unabordable"
+msgstr ""
+
+#~ msgid "Force use of config file default database"
+#~ msgstr ""
+#~ "Fuerza el uso de la base de datos por defecto definida en el archivo de "
+#~ "configuración"
+

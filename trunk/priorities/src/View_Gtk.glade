@@ -17,7 +17,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Archivo</property>
+                <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
@@ -54,14 +54,14 @@
                     <child>
                       <object class="GtkMenuItem" id="mnuImport">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Importar</property>
+                        <property name="label" translatable="yes">Import</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="mnuExport">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Exportar</property>
+                        <property name="label" translatable="yes">Export</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -85,7 +85,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Editar</property>
+                <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
@@ -142,7 +142,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem9">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Ver</property>
+                <property name="label" translatable="yes">_View</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu5">
@@ -170,7 +170,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem7">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Objetivo</property>
+                <property name="label" translatable="yes">_Objective</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu4">
@@ -198,7 +198,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Ay_uda</property>
+                <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
@@ -227,7 +227,7 @@
             <child>
               <object class="GtkToolButton" id="tbNew">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Nuevo</property>
+                <property name="label" translatable="yes">New</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
               </object>
@@ -239,7 +239,7 @@
             <child>
               <object class="GtkToolButton" id="tbOpen">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Abrir</property>
+                <property name="label" translatable="yes">Open</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
               </object>
@@ -251,7 +251,7 @@
             <child>
               <object class="GtkToolButton" id="tbSaveAs">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Guardar como</property>
+                <property name="label" translatable="yes">Save as</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save-as</property>
               </object>
@@ -271,7 +271,7 @@
             <child>
               <object class="GtkToolButton" id="tbZoomIn">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Ampliar</property>
+                <property name="label" translatable="yes">Zoom in</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-in</property>
               </object>
@@ -283,7 +283,7 @@
             <child>
               <object class="GtkToolButton" id="tbZoomOut">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Reducir</property>
+                <property name="label" translatable="yes">Zoom out</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-out</property>
               </object>
@@ -303,7 +303,7 @@
             <child>
               <object class="GtkToolButton" id="tbAdd">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">A&#xF1;adir</property>
+                <property name="label" translatable="yes">Add</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-add</property>
               </object>
@@ -315,7 +315,7 @@
             <child>
               <object class="GtkToolButton" id="tbDel">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Quitar</property>
+                <property name="label" translatable="yes">Remove</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-remove</property>
               </object>
@@ -363,11 +363,10 @@
     <property name="type_hint">normal</property>
     <property name="program_name">Priorities</property>
     <property name="version">0.9</property>
-    <property name="copyright" translatable="yes">Copyright 2009
+    <property name="copyright">Copyright 2009
 &#xA9; Jes&#xFA;s Legan&#xE9;s Combarro "El Pira&#xF1;a"
 &lt;piranna@gmail.com&gt;</property>
     <property name="website">http://code.google.com/p/priorities/</property>
-    <property name="logo">priorities.svg</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -409,7 +408,7 @@
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Objetivo</property>
+                    <property name="label" translatable="yes">Objetive</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -433,7 +432,7 @@
                 <child>
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Cantidad actual</property>
+                    <property name="label" translatable="yes">Actual quantity</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -545,7 +544,7 @@
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Requisitos</property>
+                    <property name="label" translatable="yes">Requeriments</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -671,15 +670,15 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="show_hidden">True</property>
                         <property name="use_preview_label">False</property>
-                        <property name="title" translatable="yes">Base de datos por defecto</property>
+                        <property name="show_hidden">True</property>
+                        <property name="title" translatable="yes">Default database</property>
                         <property name="width_chars">0</property>
                       </object>
                     </child>
                     <child type="label">
                       <object class="GtkCheckButton" id="chkDefaultDB">
-                        <property name="label" translatable="yes">Usar base de datos por defecto</property>
+                        <property name="label" translatable="yes">Use default database</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -703,7 +702,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkCheckButton" id="chkShowSharp">
-                            <property name="label" translatable="yes">Mostrar cuadricula</property>
+                            <property name="label" translatable="yes">Show sharp</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -716,7 +715,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="chkShowArrowHeads">
-                            <property name="label" translatable="yes">Mostrar cabeza de las flechas</property>
+                            <property name="label" translatable="yes">Show arrow heads</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -733,7 +732,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Grafico&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Graph&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </object>
                     </child>
@@ -760,7 +759,7 @@
                     <child>
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Inabordable</property>
+                        <property name="label" translatable="yes">Inavailable</property>
                       </object>
                       <packing>
                         <property name="y_options">GTK_FILL</property>
@@ -771,7 +770,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="title" translatable="yes">color_unabordable</property>
+                        <property name="title">color_unabordable</property>
                         <property name="color">#000000000000</property>
                       </object>
                       <packing>
@@ -783,7 +782,7 @@
                     <child>
                       <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">En proceso</property>
+                        <property name="label" translatable="yes">In process</property>
                       </object>
                       <packing>
                         <property name="top_attach">1</property>
@@ -796,7 +795,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="title" translatable="yes">color_inprocess</property>
+                        <property name="title">color_inprocess</property>
                         <property name="color">#000000000000</property>
                       </object>
                       <packing>
@@ -810,7 +809,7 @@
                     <child>
                       <object class="GtkLabel" id="label10">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Disponible</property>
+                        <property name="label" translatable="yes">Available</property>
                       </object>
                       <packing>
                         <property name="top_attach">2</property>
@@ -823,7 +822,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="title" translatable="yes">color_available</property>
+                        <property name="title">color_available</property>
                         <property name="color">#000000000000</property>
                       </object>
                       <packing>
@@ -837,7 +836,7 @@
                     <child>
                       <object class="GtkLabel" id="label11">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Satisfecho</property>
+                        <property name="label" translatable="yes">Satisfacted</property>
                       </object>
                       <packing>
                         <property name="top_attach">3</property>
@@ -850,7 +849,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="title" translatable="yes">color_satisfacted</property>
+                        <property name="title">color_satisfacted</property>
                         <property name="color">#000000000000</property>
                       </object>
                       <packing>
@@ -866,7 +865,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Colores de los botones&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Objectives colors&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -898,7 +897,7 @@
                     <child>
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Mostrar dependencias satisfechas</property>
+                        <property name="label" translatable="yes">Show satisfacted requeriments</property>
                       </object>
                     </child>
                     <child>
@@ -920,7 +919,7 @@
                     <child>
                       <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Dias de preaviso de expiraci&#xF3;n</property>
+                        <property name="label" translatable="yes">Expiration pre-warning days</property>
                       </object>
                       <packing>
                         <property name="top_attach">1</property>
@@ -951,7 +950,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="chkRemoveOrphanRequeriments">
-                    <property name="label" translatable="yes">Eliminar requerimientos huerfanos</property>
+                    <property name="label" translatable="yes">Delete orphan requeriments</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -968,7 +967,7 @@
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkCheckButton" id="chkConfirmDeleteCascade">
-                        <property name="label" translatable="yes">Confirmar objetivos antes de eliminar</property>
+                        <property name="label" translatable="yes">Confirm objectives before deletion</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -977,7 +976,7 @@
                     </child>
                     <child type="label">
                       <object class="GtkCheckButton" id="chkDeleteCascade">
-                        <property name="label" translatable="yes">Eliminar en cascada</property>
+                        <property name="label" translatable="yes">Delete in cascade</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -994,7 +993,7 @@
             <child type="label">
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Objetivos&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Objectives&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
             </child>
@@ -1158,13 +1157,13 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Nunca</col>
+        <col id="0" translatable="yes">Never</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Solo no expiradas</col>
+        <col id="0" translatable="yes">Only not expired</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Siempre</col>
+        <col id="0" translatable="yes">Always</col>
       </row>
     </data>
   </object>
@@ -1197,8 +1196,7 @@
         <child>
           <object class="GtkLabel" id="label13">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Se va a proceder a eliminar
-los siguientes objetivos en cascada</property>
+            <property name="label" translatable="yes">The next objectives are going to be deleted in cascade</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -1238,7 +1236,7 @@ los siguientes objetivos en cascada</property>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                    <property name="title">Delete</property>
+                    <property name="title">Remove</property>
                     <child>
                       <object class="GtkCellRendererToggle" id="deleteCell"/>
                       <attributes>
@@ -1257,7 +1255,7 @@ los siguientes objetivos en cascada</property>
         </child>
         <child>
           <object class="GtkCheckButton" id="chkConfirmDeleteCascade1">
-            <property name="label" translatable="yes">Confirmar objetivos antes de eliminar</property>
+            <property name="label" translatable="yes">Confirm objective before deletion</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>

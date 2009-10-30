@@ -171,7 +171,7 @@ class AddObjective(View_Gtk.View_Gtk):
 											0,
 											gtk.MESSAGE_QUESTION,
 											gtk.BUTTONS_YES_NO,
-											"Desea eliminar el objetivo "+self.controller.GetName(self.__objective)+"?")
+											_("Do you want to delete the objective ")+self.controller.GetName(self.__objective)+"?")
 				response = dialog.run()
 				dialog.destroy()
 				if response == gtk.RESPONSE_YES:
@@ -189,8 +189,8 @@ class AddObjective(View_Gtk.View_Gtk):
 										0,
 										gtk.MESSAGE_QUESTION,
 										gtk.BUTTONS_YES_NO,
-										"El objetivo se ha modificado")
-			dialog.format_secondary_text("El objetivo se ha modificado y los cambios se perderan. Esta seguro que desea continuar?")
+										_("The objective have been modified"))
+			dialog.format_secondary_text(_("The objective have been modified and the changes will be lost. Are you sure do you want to continue?"))
 			response = dialog.run()
 			dialog.destroy()
 			if response == gtk.RESPONSE_YES:
@@ -224,4 +224,3 @@ class AddObjective(View_Gtk.View_Gtk):
 
 	def __on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
-

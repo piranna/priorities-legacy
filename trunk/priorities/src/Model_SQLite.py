@@ -43,7 +43,7 @@ class Model:
 				);
 				''')
 		except sqlite3.Error, e:
-			print "Exception on 'Model_SQLite.py':", e.args[0]
+			print _("Exception on 'Model_SQLite.py':"), e.args[0]
 
 
 	def unconnect(self):
@@ -401,4 +401,3 @@ class Model:
 				if(self.GetObjective(dependency['alternative'])
 				and not len(self.DirectDependents(dependency['alternative']))):
 					self.DeleteObjective(dependency['alternative'], True)
-

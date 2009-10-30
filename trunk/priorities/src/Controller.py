@@ -332,4 +332,3 @@ class Controller:
 
 	def Connection(self):
 		return self.__model.Connection()
-

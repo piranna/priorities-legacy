@@ -1,10 +1,3 @@
-#
-#  unused_queries.py
-#  Priorities
-#
-#  Created by El Piraña on 24/08/09.
-#  Copyright (c) 2009 KibiTech. All rights reserved.
-#
 	def ObjectivesWithoutDependences(self):
 		return self.connection.execute('''
 			SELECT name,quantity,expiration FROM objectives

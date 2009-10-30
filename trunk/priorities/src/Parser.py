@@ -78,4 +78,3 @@ class Parser(cmd.Cmd):
 
 	def do_EOF(self, line):
 		return True
-
