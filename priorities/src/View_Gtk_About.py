@@ -6,3 +6,4 @@ class About(View_Gtk.View_Gtk):
 		View_Gtk.View_Gtk.__init__(self)
 
 		self.window = self.builder.get_object("About")
+

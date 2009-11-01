@@ -1,4 +1,5 @@
 import View
+_ = View._
 
 import gtk
 
@@ -12,6 +13,15 @@ class View_Gtk(View.View):
 	def __init__(self):
 #		View.View.__init__(self)
 
+		# Create builder
 		if not self.builder:
 			self.builder = gtk.Builder()
+			self.builder.set_translation_domain(View.APP)
 			self.builder.add_from_file(glade_file)
+
+		# Connect signals
+		import warnings
+		with warnings.catch_warnings():
+			warnings.simplefilter("ignore")
+			self.builder.connect_signals(self)
+

@@ -1,6 +1,7 @@
 import datetime
 
 import View_Gtk
+_ = View_Gtk._
 
 
 class AddObjective(View_Gtk.View_Gtk):
@@ -12,8 +13,6 @@ class AddObjective(View_Gtk.View_Gtk):
 		self.__objective = objective
 
 		self.window = self.builder.get_object("AddObjective")
-		self.window.connect('delete_event',self.__on_AddObjective_delete_event)
-		self.window.connect('response',self.__on_AddObjective_response)
 
 		# Objective & quantity
 		self.txtObjective = self.builder.get_object("txtObjective")
@@ -21,7 +20,6 @@ class AddObjective(View_Gtk.View_Gtk):
 
 		# Expiration
 		self.chkExpiration = self.builder.get_object("chkExpiration")
-		self.chkExpiration.connect('toggled', self.__on_chkExpiration_toggled)
 
 		self.vbCalendarHour = self.builder.get_object("vbCalendarHour")
 		self.calExpiration = self.builder.get_object("calExpiration")
@@ -199,13 +197,13 @@ class AddObjective(View_Gtk.View_Gtk):
 		return closeDialog
 
 
-	def __on_AddObjective_delete_event(self, widget,data=None):
+	def on_AddObjective_delete_event(self, widget,data=None):
 		if not self.__destroy:
 			self.__destroy = True
 			return True
 
 
-	def __on_AddObjective_response(self, widget, response):
+	def on_AddObjective_response(self, widget, response):
 		closeDialog = True
 
 		if response == 1:
@@ -222,5 +220,6 @@ class AddObjective(View_Gtk.View_Gtk):
 			self.window.emit_stop_by_name('response')
 
 
-	def __on_chkExpiration_toggled(self, widget):
+	def on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
+

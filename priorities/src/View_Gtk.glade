@@ -7,6 +7,7 @@
     <property name="default_width">640</property>
     <property name="default_height">480</property>
     <property name="icon">priorities.svg</property>
+    <signal name="destroy" handler="on_Main_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -28,6 +29,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="NewDB"/>
                       </object>
                     </child>
                     <child>
@@ -36,6 +38,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="OpenDB"/>
                       </object>
                     </child>
                     <child>
@@ -44,6 +47,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="SaveDBAs"/>
                       </object>
                     </child>
                     <child>
@@ -56,6 +60,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Import</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="Import"/>
                       </object>
                     </child>
                     <child>
@@ -63,6 +68,7 @@
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Export</property>
                         <property name="use_underline">True</property>
+                        <signal name="activate" handler="Export"/>
                       </object>
                     </child>
                     <child>
@@ -76,6 +82,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_Main_destroy"/>
                       </object>
                     </child>
                   </object>
@@ -83,10 +90,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem2">
+              <object class="GtkImageMenuItem" id="menuitem2">
+                <property name="label">gtk-edit</property>
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
                     <property name="visible">True</property>
@@ -133,6 +141,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="Preferences"/>
                       </object>
                     </child>
                   </object>
@@ -153,6 +162,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="ZoomIn"/>
                       </object>
                     </child>
                     <child>
@@ -161,6 +171,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="ZoomOut"/>
                       </object>
                     </child>
                   </object>
@@ -181,6 +192,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="AddObjective"/>
                       </object>
                     </child>
                     <child>
@@ -196,10 +208,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem4">
+              <object class="GtkImageMenuItem" id="menuitem4">
+                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
                     <property name="visible">True</property>
@@ -209,6 +222,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="About"/>
                       </object>
                     </child>
                   </object>
@@ -230,6 +244,7 @@
                 <property name="label" translatable="yes">New</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-new</property>
+                <signal name="clicked" handler="NewDB"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -242,6 +257,7 @@
                 <property name="label" translatable="yes">Open</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-open</property>
+                <signal name="clicked" handler="OpenDB"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -254,6 +270,7 @@
                 <property name="label" translatable="yes">Save as</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-save-as</property>
+                <signal name="clicked" handler="SaveDBAs"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -274,6 +291,7 @@
                 <property name="label" translatable="yes">Zoom in</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-in</property>
+                <signal name="clicked" handler="ZoomIn"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -286,6 +304,7 @@
                 <property name="label" translatable="yes">Zoom out</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-zoom-out</property>
+                <signal name="clicked" handler="ZoomOut"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -306,6 +325,7 @@
                 <property name="label" translatable="yes">Add</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-add</property>
+                <signal name="clicked" handler="AddObjective"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -347,6 +367,8 @@
                 <property name="visible">True</property>
                 <property name="hadjustment">adjMainH</property>
                 <property name="vadjustment">adjMainV</property>
+                <signal name="button_press_event" handler="ShowLayoutMenu"/>
+                <signal name="expose_event" handler="DrawRequerimentsArrows"/>
               </object>
             </child>
           </object>
@@ -367,6 +389,7 @@
 &#xA9; Jes&#xFA;s Legan&#xE9;s Combarro "El Pira&#xF1;a"
 &lt;piranna@gmail.com&gt;</property>
     <property name="website">http://code.google.com/p/priorities/</property>
+    <property name="logo">priorities.svg</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -392,6 +415,7 @@
     <property name="default_width">640</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
+    <signal name="response" handler="on_AddObjective_response"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
@@ -524,6 +548,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_chkExpiration_toggled"/>
                       </object>
                     </child>
                   </object>
@@ -670,10 +695,11 @@
                     <child>
                       <object class="GtkFileChooserButton" id="fcDefaultDB">
                         <property name="visible">True</property>
-                        <property name="use_preview_label">False</property>
                         <property name="show_hidden">True</property>
+                        <property name="use_preview_label">False</property>
                         <property name="title" translatable="yes">Default database</property>
                         <property name="width_chars">0</property>
+                        <signal name="file_set" handler="on_fcDefaultDB_file_set"/>
                       </object>
                     </child>
                     <child type="label">
@@ -759,7 +785,7 @@
                     <child>
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Inavailable</property>
+                        <property name="label" translatable="yes">Inabordable</property>
                       </object>
                       <packing>
                         <property name="y_options">GTK_FILL</property>
@@ -771,7 +797,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="title">color_unabordable</property>
-                        <property name="color">#000000000000</property>
+                        <property name="color">#ffff77777777</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -796,7 +822,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="title">color_inprocess</property>
-                        <property name="color">#000000000000</property>
+                        <property name="color">#ffffffff7777</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -823,7 +849,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="title">color_available</property>
-                        <property name="color">#000000000000</property>
+                        <property name="color">#7777ffff7777</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -850,7 +876,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="title">color_satisfacted</property>
-                        <property name="color">#000000000000</property>
+                        <property name="color">#77777777ffff</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1115,6 +1141,7 @@
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomOut"/>
       </object>
     </child>
   </object>
@@ -1126,6 +1153,7 @@
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
+        <signal name="activate" handler="AddObjective"/>
       </object>
     </child>
     <child>
@@ -1139,6 +1167,7 @@
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomIn"/>
       </object>
     </child>
     <child>
@@ -1147,6 +1176,7 @@
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomOut"/>
       </object>
     </child>
   </object>
@@ -1238,7 +1268,9 @@
                   <object class="GtkTreeViewColumn" id="treeviewcolumn2">
                     <property name="title">Remove</property>
                     <child>
-                      <object class="GtkCellRendererToggle" id="deleteCell"/>
+                      <object class="GtkCellRendererToggle" id="deleteCell">
+                        <signal name="toggled" handler="on_deleteCell_toggled"/>
+                      </object>
                       <attributes>
                         <attribute name="active">2</attribute>
                         <attribute name="inconsistent">3</attribute>
@@ -1260,6 +1292,7 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="on_chkConfirmDeleteCascade_toggled"/>
           </object>
           <packing>
             <property name="expand">False</property>
