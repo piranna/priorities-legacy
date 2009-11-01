@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-30 18:44+0100\n"
-"PO-Revision-Date: 2009-10-30 18:45+0100\n"
-"Last-Translator: Jesús Leganés Combarro <piranna@gmail.com>\n"
+"PO-Revision-Date: 2009-10-31 23:22+0100\n"
+"Last-Translator: Jesús Leganés Combarro "Piranna" <piranna@gmail.com>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -86,9 +86,8 @@ msgid "The objective have been modified"
 msgstr "El objetivo ha sido modificado"
 
 #: ../View_Gtk_AddObjective.py:193
-#, fuzzy
 msgid "The objective have been modified and the changes will be lost. Are you sure do you want to continue?"
-msgstr "El objetivo ha sido modificado y los cambios se perderan. ¿Esta seguro de que desea continuar?"
+msgstr "El objetivo ha sido modificado y los cambios se perderán. ¿Esta seguro de que desea continuar?"
 
 #: ../View_Gtk_Main.py:27
 #: ../View_Gtk_Main.py:208
