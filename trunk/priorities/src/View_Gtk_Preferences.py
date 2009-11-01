@@ -1,6 +1,7 @@
 import gtk
 
 import View_Gtk
+_ = View_Gtk._
 
 
 class Preferences(View_Gtk.View_Gtk):
@@ -11,106 +12,62 @@ class Preferences(View_Gtk.View_Gtk):
 
 		# Preferences window
 		self.window = self.builder.get_object("Preferences")
-		self.window.connect('response',self.__on_Preferences_response)
 
 		#
 		# DataBase
 
-		# Use default database
-		chkDefaultDB = self.builder.get_object("chkDefaultDB")
-		chkDefaultDB.set_active(self.config.Get('useDefaultDB'))
+		self.builder.get_object("chkDefaultDB").set_active(self.config.Get('useDefaultDB'))
 
-		# Default database
 		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
-		self.fcDefaultDB.connect('file-set', self.__on_fcDefaultDB_fileset)
-		self.fcDefaultDB.connect('expose-event', self.__on_fcDefaultDB_expose)
 		self.fcDefaultDB.set_filename(self.config.Get('database'))
 		self.fcDefaultDB.set_sensitive(self.config.Get('useDefaultDB'))
-
-		chkDefaultDB.connect('toggled', self.__on_chkDefaultDB_toggled)
 
 		#
 		# Graphic
 
 		self.redraw = None
 
-		# Show sharp
-		chkShowSharp = self.builder.get_object("chkShowSharp")
-		chkShowSharp.connect('toggled', self.__on_chkShowSharp_toggled)
-		chkShowSharp.set_active(self.config.Get('showSharp'))
-
-		# Show arrow heads
-		chkShowArrowHeads = self.builder.get_object("chkShowArrowHeads")
-		chkShowArrowHeads.connect('toggled', self.__on_chkShowArrowHeads_toggled)
-		chkShowArrowHeads.set_active(self.config.Get('showArrowHeads'))
+		self.builder.get_object("chkShowSharp").set_active(self.config.Get('showSharp'))
+		self.builder.get_object("chkShowArrowHeads").set_active(self.config.Get('showArrowHeads'))
 
 		#
 		# Button colors
 
-		cbInabordable = self.builder.get_object("cbInabordable")
-		cbInabordable.connect('color-set', self.__on_colorbutton_colorset)
-		cbInabordable.set_color(gtk.gdk.color_parse(self.config.Get('color_unabordable')))
-
-		cbInProcess = self.builder.get_object("cbInProcess")
-		cbInProcess.connect('color-set', self.__on_colorbutton_colorset)
-		cbInProcess.set_color(gtk.gdk.color_parse(self.config.Get('color_inprocess')))
-
-		cbAvailable = self.builder.get_object("cbAvailable")
-		cbAvailable.connect('color-set', self.__on_colorbutton_colorset)
-		cbAvailable.set_color(gtk.gdk.color_parse(self.config.Get('color_available')))
-
-		cbSatisfacted = self.builder.get_object("cbSatisfacted")
-		cbSatisfacted.connect('color-set', self.__on_colorbutton_colorset)
-		cbSatisfacted.set_color(gtk.gdk.color_parse(self.config.Get('color_satisfacted')))
+		self.builder.get_object("cbInabordable").set_color(gtk.gdk.color_parse(self.config.Get('color_unabordable')))
+		self.builder.get_object("cbInProcess").set_color(gtk.gdk.color_parse(self.config.Get('color_inprocess')))
+		self.builder.get_object("cbAvailable").set_color(gtk.gdk.color_parse(self.config.Get('color_available')))
+		self.builder.get_object("cbSatisfacted").set_color(gtk.gdk.color_parse(self.config.Get('color_satisfacted')))
 
 		#
 		# Objectives
 
-		# Show exceeded dependencies
-		cbShowExceededDependencies = self.builder.get_object("cbShowExceededDependencies")
-		cbShowExceededDependencies.connect('changed', self.__on_cbShowExceededDependencies_changed)
-		cbShowExceededDependencies.set_active(self.config.Get('showExceededDependencies'))
+		self.builder.get_object("cbShowExceededDependencies").set_active(self.config.Get('showExceededDependencies'))
+		self.builder.get_object("sbExpirationWarning").set_value(self.config.Get('expirationWarning'))
+		self.builder.get_object("chkRemoveOrphanRequeriments").set_active(self.config.Get('removeOrphanRequeriments'))
+		self.builder.get_object("chkDeleteCascade").set_active(self.config.Get('deleteCascade'))
 
-		# Expiration warning
-		sbExpirationWarning = self.builder.get_object("sbExpirationWarning")
-		sbExpirationWarning.connect('value-changed', self.__on_sbExpirationWarning_valuechanged)
-		sbExpirationWarning.set_value(self.config.Get('expirationWarning'))
-
-		# Remove orphan requeriments
-		chkRemoveOrphanRequeriments = self.builder.get_object("chkRemoveOrphanRequeriments")
-		chkRemoveOrphanRequeriments.connect('toggled', self.__on_chkRemoveOrphanRequeriments_toggled)
-		chkRemoveOrphanRequeriments.set_active(self.config.Get('removeOrphanRequeriments'))
-
-		# Delete on cascade
-		chkDeleteCascade = self.builder.get_object("chkDeleteCascade")
-		chkDeleteCascade.set_active(self.config.Get('deleteCascade'))
-
-		# Confirm delete on cascade
-		self.chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
-		self.chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
-		self.chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
-		self.chkConfirmDeleteCascade.set_sensitive(self.config.Get('deleteCascade'))
-
-		chkDeleteCascade.connect('toggled', self.__on_chkDeleteCascade_toggled)
+		chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
+		chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
+		chkConfirmDeleteCascade.set_sensitive(self.config.Get('deleteCascade'))
 
 
-	def __on_chkDefaultDB_toggled(self, widget):
+	def on_chkDefaultDB_toggled(self, widget):
 		"Set if user should be asked for the database at startup"
 		self.config.Set("useDefaultDB", widget.get_active())
 		self.fcDefaultDB.set_sensitive(widget.get_active())
 
 
-	def __on_fcDefaultDB_expose(self, widget,event):
+	def on_fcDefaultDB_expose_event(self, widget,event):
 		"Get the database name from the config if the gtk.filechooserbutton get empty"
 		if not widget.get_filename():
 			widget.set_filename(self.config.Get('database'))
 
-	def __on_fcDefaultDB_fileset(self, widget):
+	def on_fcDefaultDB_file_set(self, widget):
 		"Set the database set by the gtk.filechooserbutton"
 		self.config.Set("database", widget.get_filename())
 
 
-	def __on_colorbutton_colorset(self, widget):
+	def on_colorbutton_color_set(self, widget):
 		"""
 		Set the selected color
 		and redraw the full objectives tree
@@ -119,43 +76,43 @@ class Preferences(View_Gtk.View_Gtk):
 		self.redraw = "tree"
 
 
-	def __on_Preferences_response(self, widget, response):
+	def on_Preferences_response(self, widget, response):
 		"Store the config when closing the dialog"
 		if response == 1:
 			self.config.Store()
 
 
-	def __on_chkShowSharp_toggled(self, widget):
+	def on_chkShowSharp_toggled(self, widget):
 		"Set to draw the tree sharp"
 		self.config.Set("showSharp", widget.get_active())
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
 
-	def __on_chkShowArrowHeads_toggled(self, widget):
+	def on_chkShowArrowHeads_toggled(self, widget):
 		"Set to drwa the arrow heads"
 		self.config.Set("showArrowHeads", widget.get_active())
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
 
-	def __on_chkRemoveOrphanRequeriments_toggled(self, widget):
+	def on_chkRemoveOrphanRequeriments_toggled(self, widget):
 		"Set to remove orphans"
 		self.config.Set("removeOrphanRequeriments", widget.get_active())
 
 
-	def __on_chkDeleteCascade_toggled(self, widget):
+	def on_chkDeleteCascade_toggled(self, widget):
 		"Set if objectives should be deleted in cascade"
 		self.config.Set("deleteCascade", widget.get_active())
 		self.chkConfirmDeleteCascade.set_sensitive(widget.get_active())
 
 
-	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+	def on_chkConfirmDeleteCascade_toggled(self, widget):
 		"Set if user must be asked to confirm when deleting in cascade"
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 
 
-	def __on_cbShowExceededDependencies_changed(self, widget):
+	def on_cbShowExceededDependencies_changed(self, widget):
 		"""
 		Set if exceeded dependencies should be showed
 		and redraw the full objectives tree
@@ -164,10 +121,11 @@ class Preferences(View_Gtk.View_Gtk):
 		self.redraw = "tree"
 
 
-	def __on_sbExpirationWarning_valuechanged(self, widget):
+	def on_sbExpirationWarning_value_changed(self, widget):
 		"""
 		Set the expiration warning days interval
 		and redraw the full objectives tree
 		"""
 		self.config.Set("expirationWarning", widget.get_value_as_int())
 		self.redraw = "tree"
+
