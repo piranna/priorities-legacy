@@ -1,8 +1,3 @@
-Internacionalizacion con gettext
-	Pasar todas las cadenas de texto de programa e interfaz GTK a ingles
-Definir eventos en archivo .glade
-Desactivar dibujado y exportacion si no hay nada en la base de datos
-
 1.0:
 ====
 ? Comentar todo el codigo
