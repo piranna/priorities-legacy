@@ -1,4 +1,5 @@
 import View_Gtk
+_ = View_Gtk._
 
 
 class DeleteCascade(View_Gtk.View_Gtk):
@@ -31,14 +32,8 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		confirmDeleteCascade = self.config.Get('confirmDeleteCascade')
 		if confirmDeleteCascade:
 			self.window = self.builder.get_object("DeleteCascade")
-			self.window.connect('response',self.__on_DeleteCascade_response)
 
-			deleteCell = self.builder.get_object("deleteCell")
-			deleteCell.connect('toggled', self.__on_deleteCell_toggled)
-
-			chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade1")
-			chkConfirmDeleteCascade.connect('toggled', self.__on_chkConfirmDeleteCascade_toggled)
-			chkConfirmDeleteCascade.set_active(confirmDeleteCascade)
+			self.builder.get_object("chkConfirmDeleteCascade1").set_active(confirmDeleteCascade)
 
 			treeview.expand_all()
 
@@ -73,18 +68,18 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		return deleted
 
 
-	def __on_DeleteCascade_response(self, widget, response):
+	def on_DeleteCascade_response(self, widget, response):
 		if response>0:
 			# [To-Do] Poner response a 0 si no se elimina ningun objetivo
 			deleted = self.DeleteObjective_recursive()
 
 
-	def __on_chkConfirmDeleteCascade_toggled(self, widget):
+	def on_chkConfirmDeleteCascade_toggled(self, widget):
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 		self.config.Store()
 
 
-	def __on_deleteCell_toggled(self, cell, path):
+	def on_deleteCell_toggled(self, cell, path):
 		def IsUniform(iterator, objective_id,value):
 			while iterator:
 				if self.__model.get_value(iterator,0)==objective_id:
@@ -150,3 +145,4 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		# Inactive - Set delete
 		else:
 			Delete(iterator, objective_id)
+
