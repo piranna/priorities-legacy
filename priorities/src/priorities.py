@@ -4,6 +4,11 @@
 config_path = "~/.priorities"
 
 
+import gettext
+gettext.textdomain("priorities")
+_ = gettext.gettext
+
+
 def ParseArguments(config):
 	# Parser
 	import optparse
@@ -95,13 +100,13 @@ if __name__ == "__main__":
 		if options.textmode:
 			TextMode()
 		else:
-			try:
+#			try:
 				Gtk()
-			except: #gtk.GtkWarning, e:
-	#		except ImportError:
-				print
-				print _("An error has ocurred loading GTK interface")
-				print _("Loading text mode interface")
-				TextMode()
+#			except(gtk.GtkWarning,ImportError):
+#				print
+#				print _("An undefined error has ocurred loading GTK interface")
+#				print _("Loading text mode interface")
+#				TextMode()
 	except KeyboardInterrupt:
 		pass
+
