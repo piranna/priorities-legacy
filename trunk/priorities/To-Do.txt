@@ -1,10 +1,13 @@
+1.0 RC1:
+========
+Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+
 1.0:
 ====
-* Resolver bugs al pasar eventos al archivo glade
-
 ? Comentar todo el codigo
+	Limpiar y ordenar codigo
 
-Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+Quitar mensajes de debug
 
 
 Post 1.0:
@@ -99,3 +102,4 @@ Cambiar indices en base de datos a UNSIGNED
 * Exportar a imagen con fondo transparente (PNG)
 i Cerrar dialog con insert
 Eliminar objetivo desde opcion de menu en Main y toolbar
+

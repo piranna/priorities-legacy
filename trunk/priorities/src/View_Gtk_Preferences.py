@@ -6,21 +6,18 @@ _ = View_Gtk._
 
 class Preferences(View_Gtk.View_Gtk):
 	def __init__(self):
-		View_Gtk.View_Gtk.__init__(self)
+		View_Gtk.View_Gtk.__init__(self, "Preferences")
 
 		# [To-Do] Check diferences between stored and loaded config
-
-		# Preferences window
-		self.window = self.builder.get_object("Preferences")
 
 		#
 		# DataBase
 
-		self.builder.get_object("chkDefaultDB").set_active(self.config.Get('useDefaultDB'))
-
 		self.fcDefaultDB = self.builder.get_object("fcDefaultDB")
 		self.fcDefaultDB.set_filename(self.config.Get('database'))
 		self.fcDefaultDB.set_sensitive(self.config.Get('useDefaultDB'))
+
+		self.builder.get_object("chkDefaultDB").set_active(self.config.Get('useDefaultDB'))
 
 		#
 		# Graphic
@@ -44,12 +41,15 @@ class Preferences(View_Gtk.View_Gtk):
 		self.builder.get_object("cbShowExceededDependencies").set_active(self.config.Get('showExceededDependencies'))
 		self.builder.get_object("sbExpirationWarning").set_value(self.config.Get('expirationWarning'))
 		self.builder.get_object("chkRemoveOrphanRequeriments").set_active(self.config.Get('removeOrphanRequeriments'))
+
+		self.chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
+		self.chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
+		self.chkConfirmDeleteCascade.set_sensitive(self.config.Get('deleteCascade'))
+
 		self.builder.get_object("chkDeleteCascade").set_active(self.config.Get('deleteCascade'))
 
-		chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
-		chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
-		chkConfirmDeleteCascade.set_sensitive(self.config.Get('deleteCascade'))
 
+	# Database
 
 	def on_chkDefaultDB_toggled(self, widget):
 		"Set if user should be asked for the database at startup"
@@ -67,6 +67,8 @@ class Preferences(View_Gtk.View_Gtk):
 		self.config.Set("database", widget.get_filename())
 
 
+	# Objectives colors
+
 	def on_colorbutton_color_set(self, widget):
 		"""
 		Set the selected color
@@ -76,11 +78,15 @@ class Preferences(View_Gtk.View_Gtk):
 		self.redraw = "tree"
 
 
+	# Dialog
+
 	def on_Preferences_response(self, widget, response):
 		"Store the config when closing the dialog"
 		if response == 1:
 			self.config.Store()
 
+
+	# Graph
 
 	def on_chkShowSharp_toggled(self, widget):
 		"Set to draw the tree sharp"
@@ -95,6 +101,8 @@ class Preferences(View_Gtk.View_Gtk):
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
+
+	# Objectives
 
 	def on_chkRemoveOrphanRequeriments_toggled(self, widget):
 		"Set to remove orphans"
