@@ -1,10 +1,10 @@
 1.0:
 ====
+* Resolver bugs al pasar eventos al archivo glade
+
 ? Comentar todo el codigo
 
 Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
-
-Resolver bugs al pasar eventos al archivo glade
 
 
 Post 1.0:
