@@ -8,11 +8,9 @@ class AddObjective(View_Gtk.View_Gtk):
 	__destroy = True
 
 	def __init__(self, objective=None):
-		View_Gtk.View_Gtk.__init__(self)
+		View_Gtk.View_Gtk.__init__(self, "AddObjective")
 
 		self.__objective = objective
-
-		self.window = self.builder.get_object("AddObjective")
 
 		# Objective & quantity
 		self.txtObjective = self.builder.get_object("txtObjective")

@@ -19,7 +19,7 @@ class Main(View_Gtk.View_Gtk):
 	y_step = 50
 
 	def __init__(self, input=None):
-		View_Gtk.View_Gtk.__init__(self)
+		View_Gtk.View_Gtk.__init__(self, "Main")
 
 		if not self.controller.Connection():
 			self.__AskDB()
@@ -34,8 +34,6 @@ class Main(View_Gtk.View_Gtk):
 		self.__levels = None
 
 		self.__cursorObjective = None
-
-		self.window = self.builder.get_object("Main")
 
 		self.layout = self.builder.get_object("layout")
 		self.layout.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))

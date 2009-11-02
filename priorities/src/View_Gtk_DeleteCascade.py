@@ -4,7 +4,7 @@ _ = View_Gtk._
 
 class DeleteCascade(View_Gtk.View_Gtk):
 	def __init__(self, objective_id):
-		View_Gtk.View_Gtk.__init__(self)
+		View_Gtk.View_Gtk.__init__(self, "DeleteCascade")
 
 		# Model
 		treeview = self.builder.get_object("treeview")
@@ -31,8 +31,6 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		# show window
 		confirmDeleteCascade = self.config.Get('confirmDeleteCascade')
 		if confirmDeleteCascade:
-			self.window = self.builder.get_object("DeleteCascade")
-
 			self.builder.get_object("chkConfirmDeleteCascade1").set_active(confirmDeleteCascade)
 
 			treeview.expand_all()

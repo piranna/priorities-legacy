@@ -359,6 +359,7 @@
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <signal name="response" handler="on_AddObjective_response"/>
+    <signal name="delete_event" handler="on_AddObjective_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox5">
         <property name="visible">True</property>
@@ -616,6 +617,7 @@
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
+    <signal name="response" handler="on_Preferences_response"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox4">
         <property name="visible">True</property>
@@ -642,6 +644,7 @@
                         <property name="show_hidden">True</property>
                         <property name="title" translatable="yes">Default database</property>
                         <property name="width_chars">0</property>
+                        <signal name="expose_event" handler="on_fcDefaultDB_expose_event"/>
                         <signal name="file_set" handler="on_fcDefaultDB_file_set"/>
                       </object>
                     </child>
@@ -652,6 +655,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_chkDefaultDB_toggled"/>
                       </object>
                     </child>
                   </object>
@@ -676,6 +680,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_chkShowSharp_toggled"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -689,6 +694,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_chkShowArrowHeads_toggled"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -741,6 +747,7 @@
                         <property name="receives_default">True</property>
                         <property name="title">color_unabordable</property>
                         <property name="color">#ffff77777777</property>
+                        <signal name="color_set" handler="on_colorbutton_color_set"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -766,6 +773,7 @@
                         <property name="receives_default">True</property>
                         <property name="title">color_inprocess</property>
                         <property name="color">#ffffffff7777</property>
+                        <signal name="color_set" handler="on_colorbutton_color_set"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -793,6 +801,7 @@
                         <property name="receives_default">True</property>
                         <property name="title">color_available</property>
                         <property name="color">#7777ffff7777</property>
+                        <signal name="color_set" handler="on_colorbutton_color_set"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -820,6 +829,7 @@
                         <property name="receives_default">True</property>
                         <property name="title">color_satisfacted</property>
                         <property name="color">#77777777ffff</property>
+                        <signal name="color_set" handler="on_colorbutton_color_set"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -873,6 +883,7 @@
                       <object class="GtkComboBox" id="cbShowExceededDependencies">
                         <property name="visible">True</property>
                         <property name="model">liststore1</property>
+                        <signal name="changed" handler="on_cbShowExceededDependencies_changed"/>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext1"/>
                           <attributes>
@@ -904,6 +915,7 @@
                         <property name="adjustment">adjExpirationWarning</property>
                         <property name="snap_to_ticks">True</property>
                         <property name="numeric">True</property>
+                        <signal name="value_changed" handler="on_sbExpirationWarning_value_changed"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -924,6 +936,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_chkRemoveOrphanRequeriments_toggled"/>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -941,6 +954,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_chkConfirmDeleteCascade_toggled"/>
                       </object>
                     </child>
                     <child type="label">
@@ -950,6 +964,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_chkDeleteCascade_toggled"/>
                       </object>
                     </child>
                   </object>
@@ -1161,6 +1176,7 @@
     <property name="skip_pager_hint">True</property>
     <property name="urgency_hint">True</property>
     <property name="has_separator">False</property>
+    <signal name="response" handler="on_DeleteCascade_response"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox6">
         <property name="visible">True</property>
