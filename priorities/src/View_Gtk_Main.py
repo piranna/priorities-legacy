@@ -56,32 +56,8 @@ class Main(View_Gtk.View_Gtk):
 		#
 		# View
 
-		# Zoom In
-		# Zoom Out
-
-		#
-		# Objective
-
-		# Delete
-#		mnuObjective_Del = self.builder.get_object("mnuObjective_Del")
-#		mnuObjective_Del.connect('activate',self.__AddObjective)
-
-
-		#
-		# Toolbar
-
-		# Save as
-		self.tbSaveAs = self.builder.get_object("tbSaveAs")
-
-		# Zoom In
-		# Zoom Out
-		# Delete
-#		tbObjective_Del = self.builder.get_object("tbDel")
-#		tbObjective_Del.connect('clicked',self.__AddObjective)
-
-		# Start button
-		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
-		self.navBar.get_button_from_id(0).set_use_stock(True)
+		self.mnuZoomIn = self.builder.get_object("mnuZoomIn")
+		self.mnuZoomOut = self.builder.get_object("mnuZoomOut")
 
 		#
 		# Contextual menues
@@ -98,8 +74,20 @@ class Main(View_Gtk.View_Gtk):
 		self.mnuObjective_Delete = self.builder.get_object("mnuObjective_Delete")
 
 		self.mnuObjective_ZoomIn = self.builder.get_object("mnuObjective_ZoomIn")
+		self.mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
 
-#		mnuObjective_ZoomOut = self.builder.get_object("mnuObjective_ZoomOut")
+		#
+		# Toolbar
+
+		# Save as
+		self.tbSaveAs = self.builder.get_object("tbSaveAs")
+
+		self.tbZoomIn = self.builder.get_object("tbZoomIn")
+		self.tbZoomOut = self.builder.get_object("tbZoomOut")
+
+		# Start button
+		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
+		self.navBar.get_button_from_id(0).set_use_stock(True)
 
 		self.window.show()
 		gtk.main()
@@ -571,12 +559,26 @@ class Main(View_Gtk.View_Gtk):
 		print self.layout.get_size()
 
 		self.__ExportSaveSensitivity()
+		self.__ShowZoom()
 
 
 	def __ExportSaveSensitivity(self):
 		self.tbSaveAs.set_sensitive(len(self.__levels))
 		self.mnuSaveAs.set_sensitive(len(self.__levels))
 		self.mnuExport.set_sensitive(len(self.__levels))
+
+
+	def __ShowZoom(self):
+		actual = self.navBar.get_active_position()
+
+		# Zoom In
+		self.mnuZoomIn.set_sensitive(actual<len(self.navBar.get_children())-1)
+		self.tbZoomIn.set_sensitive(actual<len(self.navBar.get_children())-1)
+
+		# Zoom Out
+		self.mnuZoomOut.set_sensitive(actual>0)
+		self.tbZoomOut.set_sensitive(actual>0)
+		self.mnuObjective_ZoomOut.set_sensitive(actual>0)
 
 
 	def __CleanTree(self):
