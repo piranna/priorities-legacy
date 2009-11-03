@@ -21,9 +21,6 @@ class Main(View_Gtk.View_Gtk):
 	def __init__(self, input=None):
 		View_Gtk.View_Gtk.__init__(self, "Main")
 
-		if not self.controller.Connection():
-			self.__AskDB()
-
 		if input and not self.controller.Import(input):
 			print _("Exception importing database")
 

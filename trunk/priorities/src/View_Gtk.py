@@ -11,7 +11,7 @@ class View_Gtk(View.View):
 	builder = None
 
 	def __init__(self, id):
-#		View.View.__init__(self)
+		View.View.__init__(self)
 
 		# Create builder
 		if not self.builder:

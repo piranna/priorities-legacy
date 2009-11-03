@@ -11,6 +11,10 @@ Post 1.0:
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
+Controller
+# [To-Do] It seems it's called twice when has several dependent
+# that are from the same requeriment
+
 1.1:
 ====
 Ayuda

@@ -11,11 +11,15 @@ class Model:
 
 
 	def __del__(self):
-		self.unconnect()
+		self.__Unconnect()
 
 
 	def Connect(self, db_path):
-		self.unconnect()
+		"""
+		Make a connection to the database
+		or create a new one if it's doesn't exists
+		"""
+		self.__Unconnect()
 
 		self.__connection = sqlite3.connect(db_path)
 
@@ -46,17 +50,19 @@ class Model:
 			print _("Exception on 'Model_SQLite.py':"), e.args[0]
 
 
-	def unconnect(self):
+	def __Unconnect(self):
 		if self.__connection:
 			self.__connection.close()
 			self.__connection = None
 
 
-	def Connection(self):
+	def Get_Connection(self):
+		"Get the current connection"
 		return self.__connection
 
 
 	def Backup(self, db_name):
+		"Make a backup of the database in the defined new database file"
 		backup = Model(db_name)
 
 		# objectives
@@ -84,6 +90,7 @@ class Model:
 
 	# Access functions
 	def GetObjective(self,objective_id):
+		"Get the data of an objective from its objective_id"
 		query = self.__connection.execute('''
 			SELECT * FROM objectives
 			WHERE id == ?
@@ -124,12 +131,11 @@ class Model:
 			sql += " expiration DESC,"
 		sql += " objective_id,requeriment,priority ASC"
 
-#		print "sql=",sql
-
 		return self.__connection.execute(sql).fetchall()
 
 
 	def DirectDependents(self, objective_id):
+		"Get the dependents of a requeriment"
 		return self.__connection.execute('''
 			SELECT * FROM requeriments
 			WHERE alternative==?
@@ -139,29 +145,37 @@ class Model:
 
 
 	def DirectDependents_minQuantity(self,objective_id):
-		query = self.__connection.execute('''
+		"Get the min quantity needed by a objective to satisface a requeriment"
+		return self.__connection.execute('''
 			SELECT MIN(quantity) AS min_quantity FROM requeriments
 			WHERE alternative==?
 			LIMIT 1
 			''',
-			(str(objective_id),))
-		return query.fetchone()['min_quantity']
+			(str(objective_id),)).fetchone()['min_quantity']
 
 
 	def GetId(self, name):
-		query = self.__connection.execute('''
+		"Get the id of the objective with the specified name"
+		return self.__connection.execute('''
 			SELECT id FROM objectives
-				WHERE name==?
-				LIMIT 1
+			WHERE name==?
+			LIMIT 1
 			''',
-			(name,))
-		query = query.fetchone()
-		if query:
-			return query['id']
-		return None
+			(name,)).fetchone()['id']
+
+
+	def GetName(self, objective_id):
+		"Get the name of the objective with the specified id"
+		return self.__connection.execute('''
+			SELECT name FROM objectives
+			WHERE id==?
+			LIMIT 1
+			''',
+			(objective_id,)).fetchone()['name']
 
 
 	def AddObjective(self, name, quantity=None, expiration="no valid expiration"):
+		"Add a new objective"
 		# If it's an old objective,
 		# update it
 		objective_id = self.GetId(name)
@@ -174,7 +188,6 @@ class Model:
 					WHERE id=?
 					''',
 					(quantity, objective_id))
-				print "\t\tQuantity:",quantity
 
 			# Update expiration
 			if expiration!="no valid expiration":
@@ -185,7 +198,6 @@ class Model:
 					''',
 					(expiration, objective_id))
 
-			# Return objective id
 			return objective_id
 
 		# If it's not an old objective,
@@ -219,18 +231,11 @@ class Model:
 				''',
 				(objective,))
 
-#			print
-
 			requeriment = 1
 			for row in query:
-#				print "dentro",row['requeriment'],requeriment
 				if row['requeriment'] != requeriment:
-					break
+					return requeriment
 				requeriment += 1
-
-#			print "fuera",requeriment
-
-			# Return requeriment id
 			return requeriment
 
 
@@ -254,22 +259,9 @@ class Model:
 			''',
 			(objective,requeriment,priority,alternative,quantity))
 
-		print objective,self.GetName(objective),requeriment,priority,alternative,self.GetName(alternative),quantity
+#		print objective,self.GetName(objective),requeriment,priority,alternative,self.GetName(alternative),quantity
 
 		return requeriment
-
-
-	def GetName(self, objective):
-		query = self.__connection.execute('''
-			SELECT name FROM objectives
-				WHERE id==?
-				LIMIT 1
-			''',
-			(objective,))
-		query = query.fetchone()
-		if query:
-			return query['name']
-		return None
 
 
 	def DeleteAlternatives(self, objective_id,parent_id=None):			# Overseed by Foreign Key
@@ -291,9 +283,7 @@ class Model:
 				''',
 				(parent_id,objective_id)).fetchone()
 
-		self.__connection.execute(
-			sql,
-			bindings)
+		self.__connection.execute(sql,bindings)
 
 		if parent_id:
 			self.__UpdateDependencyPriority(self.__Count(dependency['objective'],
@@ -309,36 +299,6 @@ class Model:
 			WHERE objective==?
 			''',
 			(objective_id,))
-
-
-	def __UpdateDependencyPriority(self, count, objective,requeriment,priority):
-		self.__connection.execute('''
-			UPDATE requeriments
-			SET priority=
-				CASE
-					WHEN(?>1 AND priority>?) THEN
-						priority-1
-					WHEN(?>1) THEN
-						priority
-					ELSE
-						0
-				END
-			WHERE objective==?
-			AND requeriment==?
-			''',
-			(count,priority,
-			count,
-			objective,
-			requeriment))
-
-
-	def __Count(self, objective_id,requeriment):
-		return self.__connection.execute('''
-			SELECT COUNT(*) AS count FROM requeriments
-			WHERE objective==?
-			AND requeriment==?
-			''',
-			(objective_id,requeriment)).fetchone()['count']
 
 
 	def DeleteObjective(self, objective_id, delete_orphans = False):
@@ -401,3 +361,55 @@ class Model:
 				if(self.GetObjective(dependency['alternative'])
 				and not len(self.DirectDependents(dependency['alternative']))):
 					self.DeleteObjective(dependency['alternative'], True)
+
+
+	def __Count(self, objective_id,requeriment):
+		"Get the number of alternatives for a objective and requeriment specifieds"
+		return self.__connection.execute('''
+			SELECT COUNT(*) AS count FROM requeriments
+			WHERE objective==?
+				AND requeriment==?
+			''',
+			(objective_id,requeriment)).fetchone()['count']
+
+
+	def __UpdateDependencyPriority(self, count, objective,requeriment,priority):
+		self.__connection.execute('''
+			UPDATE requeriments
+			SET priority=
+				CASE
+					WHEN(?>1) THEN
+						CASE
+							WHEN(priority>?) THEN
+								priority-1
+							ELSE
+								priority
+						END
+					ELSE
+						0
+				END
+			WHERE objective==?
+			AND requeriment==?
+			''',
+			(count,
+			priority,
+			objective,
+			requeriment))
+#		self.__connection.execute('''
+#			UPDATE requeriments
+#			SET priority=
+#				CASE
+#					WHEN(?>1 AND priority>?) THEN
+#						priority-1
+#					WHEN(?>1) THEN
+#						priority
+#					ELSE
+#						0
+#				END
+#			WHERE objective==?
+#			AND requeriment==?
+#			''',
+#			(count,priority,
+#			count,
+#			objective,
+#			requeriment))

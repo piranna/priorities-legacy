@@ -47,8 +47,7 @@ class TextmodeParser(Parser.Parser):
 
 class Main(View.View):
 	def __init__(self, input=None):
-		if not self.controller.Connection():
-			self.__AskDB()
+		View.View.__init__(self)
 
 		self.__parser = TextmodeParser(self.controller, input)
 
