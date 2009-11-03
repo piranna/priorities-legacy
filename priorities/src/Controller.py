@@ -75,10 +75,10 @@ class Controller:
 			PrivateRecursiveDependencies(row['objective_id'])
 
 ###
-		for level in dependencies:
-			for dependency in level:
-				print dependency
-			print
+#		for level in dependencies:
+#			for dependency in level:
+#				print dependency
+#			print
 ###
 
 		return dependencies
@@ -126,34 +126,6 @@ class Controller:
 		return self.RecursiveDependencies(objective)
 
 
-	def GetName(self, objective_id):
-		return self.__model.GetName(objective_id)
-
-	def GetId(self, objective_name):
-		return self.__model.GetId(objective_name)
-
-#	def GetObjective_byName(self, objective_name):
-#		return self.__model.GetObjective(objective_name)
-
-	def GetObjective_byId(self, objective_id):
-		return self.__model.GetObjective(objective_id)
-
-	def DirectDependencies(self, objective_id):
-		return self.__model.DirectDependencies(objective_id)
-
-	def DirectDependents(self, objective_id):
-		return self.__model.DirectDependents(objective_id)
-
-	def DirectDependents_minQuantity(self, objective_id):
-		return self.__model.DirectDependents_minQuantity(objective_id)
-
-	def Connect(self, db_name):
-		return self.__model.Connect(db_name)
-
-	def Backup(self, db_name):
-		return self.__model.Backup(db_name)
-
-
 	def IsSatisfacted(self, objective_id):
 		dependents = self.DirectDependents(objective_id)
 		quantity = self.GetObjective_byId(objective_id)['quantity']
@@ -185,16 +157,10 @@ class Controller:
 				return True
 		return False
 
-	def DelAlternatives(self, objective_id,parent_id):
-		return self.__model.DeleteAlternatives(objective_id, parent_id)
-
-	def DelRequeriments_ById(self, objective_id):
-		return self.__model.DelRequeriments_ById(objective_id)
-
 
 	def Get_DeleteObjective_Tree(self, objective_id):
-		''' Get the tree of the objectives that are going to be deleted
-		'''
+		"Get the tree of the objectives that are going to be deleted"
+
 		# Checked objectives stack
 		checked = []
 
@@ -257,10 +223,6 @@ class Controller:
 
 
 		return Private_Get_DeleteObjective_Tree(objective_id)
-
-
-	def DeleteObjective(self, objective_id, delete_orphans = False):
-		self.__model.DeleteObjective(objective_id, delete_orphans)
 
 
 	def Import(self, file):
@@ -326,9 +288,42 @@ class Controller:
 		return txt
 
 
+	"Interface functions"
+	def Backup(self, db_name):
+		return self.__model.Backup(db_name)
+
+	def Connect(self, db_name):
+		return self.__model.Connect(db_name)
+
+	def Get_Connection(self):
+		return self.__model.Get_Connection()
+
+	def DelAlternatives(self, objective_id,parent_id):
+		return self.__model.DeleteAlternatives(objective_id, parent_id)
+
+	def DelRequeriments_ById(self, objective_id):
+		return self.__model.DelRequeriments_ById(objective_id)
+
+	def DeleteObjective(self, objective_id, delete_orphans = False):
+		self.__model.DeleteObjective(objective_id, delete_orphans)
+
 	def DeleteOrphans(self, dependencies=None):
 		self.__model.DeleteOrphans(dependencies)
 
+	def DirectDependencies(self, objective_id):
+		return self.__model.DirectDependencies(objective_id)
 
-	def Connection(self):
-		return self.__model.Connection()
+	def DirectDependents(self, objective_id):
+		return self.__model.DirectDependents(objective_id)
+
+	def DirectDependents_minQuantity(self, objective_id):
+		return self.__model.DirectDependents_minQuantity(objective_id)
+
+	def GetId(self, objective_name):
+		return self.__model.GetId(objective_name)
+
+	def GetName(self, objective_id):
+		return self.__model.GetName(objective_id)
+
+	def GetObjective_byId(self, objective_id):
+		return self.__model.GetObjective(objective_id)

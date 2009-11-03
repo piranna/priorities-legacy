@@ -63,7 +63,6 @@ class Config:
 			for line in file.readlines():
 				line = line.split('//')[0].split('=')
 				self.__config[line[0].strip()] = line[1].strip()
-#				print line[0].strip(),line[1].strip()
 
 			# Re-define boolean config
 			self.__config['useDefaultDB']				= (self.__config['useDefaultDB']=="True")

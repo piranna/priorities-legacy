@@ -9,3 +9,6 @@ class View:
 	controller = None
 	config = None
 
+	def __init__(self, id):
+		if not self.controller.Get_Connection():
+			self.__AskDB()
