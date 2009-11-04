@@ -9,6 +9,7 @@ class View:
 	controller = None
 	config = None
 
-	def __init__(self, id):
+	def __init__(self):
 		if not self.controller.Get_Connection():
 			self.__AskDB()
+
