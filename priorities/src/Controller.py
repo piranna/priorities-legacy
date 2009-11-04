@@ -5,9 +5,11 @@ class Controller:
 		self.__model = model
 
 
-	# Get all the requeriments tree of an objective.
-	# If objective_id is not defined return the all-objectives tree
 	def RecursiveDependencies(self, objective_id=None, export=False):
+		"""
+		Get all the requeriments tree of an objective.
+		If objective_id is not defined return the all-objectives tree
+		"""
 
 		dependencies = []
 
@@ -25,7 +27,7 @@ class Controller:
 					array[index].append(data)
 
 			# Get the depth of an objective_id inside an array
-			# If not, return the array length
+			# If not, return -1 as error message
 			def GetDepth(objective_id, array):
 				depth = 0
 				for array_level in array:
@@ -74,19 +76,12 @@ class Controller:
 		for row in self.__model.DirectDependencies(objective_id, export=export):
 			PrivateRecursiveDependencies(row['objective_id'])
 
-###
-#		for level in dependencies:
-#			for dependency in level:
-#				print dependency
-#			print
-###
-
 		return dependencies
 
 
-
-	# Add an objective and all it's requeriments to the database
 	def AddObjective(self, name, quantity=None, expiration=None, requeriments=None):
+		"Add an objective and all it's requeriments to the database"
+
 		# Add objective or update it's data
 		objective_id = self.__model.AddObjective(name, quantity, expiration)
 
@@ -110,7 +105,11 @@ class Controller:
 						priority += 1
 
 					# Insert alternative
-					requeriment_id = self.__model.AddAlternative(alternative[0], objective_id, requeriment_id, priority, quantity)
+					requeriment_id = self.__model.AddAlternative(alternative[0],
+																objective_id,
+																requeriment_id,
+																priority,
+																quantity)
 
 
 	def ShowTree(self, objective=None):

@@ -292,19 +292,14 @@ class Main(View_Gtk.View_Gtk):
 					return button
 
 				def PutButton(button, x,y):
-	#				print button, x,y
-
 					x = int(x)
 					y = int(y)
 
 					self.layout.put(button, x,y)
-	#				button.realize()
 					self.layout.move(button,
 									x - int(button.get_allocation().width/2),
 									y - int(button.get_allocation().height/2))
 					button.show()
-
-	#				print button.get_allocation()
 
 
 				requeriment_button = None
@@ -321,9 +316,6 @@ class Main(View_Gtk.View_Gtk):
 						x = (first_x+last_x)/2.0
 						PutButton(requeriment_button, x,y)
 						coords = (x,y)
-
-	#					if x > layout_size_x:
-	#						layout_size_x = x
 
 						# Store requeriment button coordinates
 						if not req_coords.has_key(last_objective):
@@ -551,7 +543,6 @@ class Main(View_Gtk.View_Gtk):
 				y += self.y_step
 
 		self.layout.set_size(int(layout_size_x + self.x_step/2), int(y - self.y_step/2))
-		print self.layout.get_size()
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()

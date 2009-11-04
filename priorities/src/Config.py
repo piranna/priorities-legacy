@@ -87,7 +87,6 @@ class Config:
 			file = open(self.__config_path+"/config", "w")
 
 			for key,value in self.__config.iteritems():
-				print key,value
 				file.write(key+"="+str(value)+"\n")
 
 		except:
