@@ -3,8 +3,6 @@
 ? Comentar todo el codigo
 	Limpiar y ordenar codigo
 
-Quitar mensajes de debug
-
 
 Post 1.0:
 =========

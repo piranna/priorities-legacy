@@ -14,14 +14,11 @@ class DeleteCascade(View_Gtk.View_Gtk):
 
 		# Fill model
 		def Append(tree, parent=None):
-			print "Append antes", parent,tree
 #			self.__tree.get(objective_id, []).append(path)
 			for objective_id in tree.keys():
 				Append(tree[objective_id],
 						self.__model.append(parent,
 									(objective_id, self.controller.GetName(objective_id), True,False)))
-			print "Append despu", parent,tree
-			print
 
 		Append(self.controller.Get_DeleteObjective_Tree(objective_id),
 				self.__model.append(None,
@@ -46,12 +43,10 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		# delete it
 		if self.__model.get_value(iterator,2):
 			if self.__model.get_value(iterator,3):
-				print "DelRequeriment",self.__model.get_value(self.__model.iter_parent(iterator),0),self.__model.get_value(iterator,0)
 				self.controller.DelAlternatives(self.__model.get_value(iterator,0),
 												self.__model.get_value(self.__model.iter_parent(iterator),0))
 
 			else:
-				print "DelObjective",self.__model.get_value(iterator,0)
 				self.controller.DeleteObjective(self.__model.get_value(iterator,0),
 												self.config.Get('removeOrphanRequeriments'))
 
@@ -120,14 +115,7 @@ class DeleteCascade(View_Gtk.View_Gtk):
 			# [To-Do] Add recursive code for delete on cascade
 			self.__model.set_value(iterator,2, True)
 
-#			# Delete on cascade
-#			if self.config.Get('deleteCascade'):
-#				iterator = self.__model.iter_children(iterator)
-#				while iterator:
-#					Delete(iterator, self.__model.get_value(iterator,0))
-#					iterator = self.__model.iter_next(iterator)
-
-			# Set inextability
+			# Set inestability
 			SetIndetermination(self.__model.get_iter_root(), objective_id,
 								not IsUniform(self.__model.get_iter_root(),
 												objective_id,True))
@@ -143,4 +131,3 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		# Inactive - Set delete
 		else:
 			Delete(iterator, objective_id)
-
