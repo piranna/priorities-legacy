@@ -1,6 +1,11 @@
 import os
 
 
+import gettext
+gettext.textdomain("priorities")
+_ = gettext.gettext
+
+
 class Config:
 	"Constructor"
 	def __init__(self, config_path):
@@ -76,11 +81,10 @@ class Config:
 			self.__config['showExceededDependencies']	= int(self.__config['showExceededDependencies'])
 			self.__config['expirationWarning']			= int(self.__config['expirationWarning'])
 
+			file.close()
+
 		except:
 			print _("Exception loading config")
-
-		finally:
-			file.close()
 
 	def Store(self):
 		try:
@@ -94,3 +98,4 @@ class Config:
 
 		finally:
 			file.close()
+

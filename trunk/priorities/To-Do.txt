@@ -1,3 +1,16 @@
+1.0 RC2:
+========
+Nuevo algoritmo de distribucion de objetivos
+	Separar calculo de colocacion final (y flechas)
+	Colocar todos los niveles sin solaparse vertical y horizontalmente
+		Obtener ancho y alto efectivos de los botones
+	Colocar niveles centrados unos con otros
+		Recolocar objetivos de un nivel si el siguiente tiene mas elementos
+
+Redefinir interfaz de AddObjective
+	Busqueda de objetivos previamente definidos como requisitos de nuevos
+
+
 1.0:
 ====
 ? Comentar todo el codigo
@@ -18,13 +31,6 @@ Controller
 Ayuda
 
 Eliminar entradas no validas de ficheros de traduccion
-
-Nuevo algoritmo de distribucion de objetivos
-	Separar calculo de colocacion final (y flechas)
-	Colocar todos los niveles sin solaparse vertical y horizontalmente
-		Obtener ancho y alto efectivos de los botones
-	Colocar niveles centrados unos con otros
-		Recolocar objetivos de un nivel si el siguiente tiene mas elementos
 
 [BUG] No sale menu contextual en el layout
 
@@ -101,3 +107,4 @@ Cambiar indices en base de datos a UNSIGNED
 i Cerrar dialog con insert
 Eliminar objetivo desde opcion de menu en Main y toolbar
 Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
+

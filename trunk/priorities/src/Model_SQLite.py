@@ -156,12 +156,16 @@ class Model:
 
 	def GetId(self, name):
 		"Get the id of the objective with the specified name"
-		return self.__connection.execute('''
+		query = self.__connection.execute('''
 			SELECT id FROM objectives
 			WHERE name==?
 			LIMIT 1
 			''',
-			(name,)).fetchone()['id']
+			(name,)).fetchone()
+
+		if query:
+			return query['id']
+		return None
 
 
 	def GetName(self, objective_id):
@@ -403,3 +407,4 @@ class Model:
 #			count,
 #			objective,
 #			requeriment))
+
