@@ -144,7 +144,7 @@ class Main(View_Gtk.View_Gtk):
 
 	def OpenDB(self, widget):
 		if self.__OpenDB_dialog():
-			self.__CreateTree()
+			self.__RenderGraph()
 
 
 	def __SaveDB_dialog(self):
@@ -175,7 +175,7 @@ class Main(View_Gtk.View_Gtk):
 
 		if dialog.run() == gtk.RESPONSE_OK:
 			self.controller.Connect(dialog.get_filename()+".sqlite")
-			self.__CreateTree()
+			self.__RenderGraph()
 
 		dialog.destroy()
 
@@ -256,8 +256,8 @@ class Main(View_Gtk.View_Gtk):
 			gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 
 
-	def __CreateTree(self, objective_name=None):
-		self.__CleanTree()
+	def __RenderGraph(self, objective_name=None):
+		self.__CleanGraph()
 
 		layout_size_x = 0
 #		layout_size_x = -self.x_step/2
@@ -296,10 +296,16 @@ class Main(View_Gtk.View_Gtk):
 					y = int(y)
 
 					self.layout.put(button, x,y)
+
+					button.realize()
+					print button,button.allocation
+
 					self.layout.move(button,
-									x - int(button.get_allocation().width/2),
-									y - int(button.get_allocation().height/2))
+									x - int(button.allocation.width/2),
+									y - int(button.allocation.height/2))
+					print "\t",button.allocation
 					button.show()
+					print "\t",button.allocation
 
 
 				requeriment_button = None
@@ -567,7 +573,7 @@ class Main(View_Gtk.View_Gtk):
 		self.mnuObjective_ZoomOut.set_sensitive(actual>0)
 
 
-	def __CleanTree(self):
+	def __CleanGraph(self):
 		# Clean arrows array
 		self.__req_arrows = []
 
@@ -593,7 +599,7 @@ class Main(View_Gtk.View_Gtk):
 		addObjective.window.set_transient_for(self.window)
 
 		if addObjective.window.run() > 0:
-			self.__CreateTree()
+			self.__RenderGraph()
 
 		addObjective.window.destroy()
 
@@ -612,7 +618,7 @@ class Main(View_Gtk.View_Gtk):
 				response = dialog.DeleteObjective_recursive()
 
 			if response > 0:
-				self.__CreateTree()
+				self.__RenderGraph()
 
 		else:
 			dialog = gtk.MessageDialog(self.window,
@@ -623,7 +629,7 @@ class Main(View_Gtk.View_Gtk):
 			if dialog.run() == gtk.RESPONSE_YES:
 				self.controller.DeleteObjective(objective_id,
 												self.config.Get('removeOrphanRequeriments'))
-				self.__CreateTree()
+				self.__RenderGraph()
 			dialog.destroy()
 
 
@@ -663,7 +669,7 @@ class Main(View_Gtk.View_Gtk):
 			if dialog.redraw == "arrows":
 				pass
 			elif dialog.redraw == "tree":
-				self.__CreateTree()
+				self.__RenderGraph()
 
 		dialog.window.destroy()
 
@@ -754,7 +760,7 @@ class Main(View_Gtk.View_Gtk):
 
 		if dialog.run()==gtk.RESPONSE_OK:
 			if self.controller.Import(dialog.get_filename()):
-				self.__CreateTree(self.navBar.get_active_id())
+				self.__RenderGraph(self.navBar.get_active_id())
 			else:
 				print _("Exception importing database")
 
@@ -768,11 +774,11 @@ class Main(View_Gtk.View_Gtk):
 
 	# Zoom
 	def __NavbarHome(self, widget):
-		self.__CreateTree()
+		self.__RenderGraph()
 
 
 	def __NavbarZoom(self, widget):
-		self.__CreateTree(widget.get_label())
+		self.__RenderGraph(widget.get_label())
 
 
 	def ZoomIn(self, widget, objective_name=None):
@@ -781,7 +787,7 @@ class Main(View_Gtk.View_Gtk):
 		if objective_name:
 			self.navBar.remove_remanents()
 			self.navBar.add_with_id(objective_name, self.__NavbarZoom, self.controller.GetId(objective_name))
-			self.__CreateTree(objective_name)
+			self.__RenderGraph(objective_name)
 
 		else:
 			try:
