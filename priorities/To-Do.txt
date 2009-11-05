@@ -2,9 +2,11 @@
 ========
 Nuevo algoritmo de distribucion de objetivos
 	Separar calculo de colocacion final (y flechas)
-	Colocar todos los niveles sin solaparse vertical y horizontalmente
-		Obtener ancho y alto efectivos de los botones
-	Colocar niveles centrados unos con otros
+		Crear clase GraphRenderer
+		Hacer clase para automatizar las tareas de los objetivos
+	* Colocar todos los niveles sin solaparse vertical y horizontalmente
+		? Obtener ancho y alto efectivos de los botones
+	* Colocar niveles centrados unos con otros
 		Recolocar objetivos de un nivel si el siguiente tiene mas elementos
 
 Redefinir interfaz de AddObjective
