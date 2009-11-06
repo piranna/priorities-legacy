@@ -259,6 +259,8 @@ class Main(View_Gtk.View_Gtk):
 	def __RenderGraph(self, objective_name=None):
 		self.__CleanGraph()
 
+		import GraphRenderer
+
 		layout_size_x = 0
 #		layout_size_x = -self.x_step/2
 		y = self.y_step/2.0
@@ -283,14 +285,6 @@ class Main(View_Gtk.View_Gtk):
 
 			# Niveles
 			for level in self.__levels:
-				def CreateButton(label,objective_id):
-					button = gtk.Button(label)
-					button.set_focus_on_click(False)
-					button.connect('clicked',self.AddObjective, objective_id)
-					button.connect('enter_notify_event',self.__IncreaseLineWidth, objective_id)
-					button.connect('leave_notify_event',self.__IncreaseLineWidth)
-					return button
-
 				def PutButton(button, x,y):
 					x = int(x)
 					y = int(y)
@@ -366,8 +360,9 @@ class Main(View_Gtk.View_Gtk):
 								PutOldButton(layout_size_x)
 
 								# Create requeriment button
-								requeriment_button = CreateButton(self.controller.GetName(objective['alternative']),
-																	objective['objective_id'])
+								requeriment_button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
+																				objective['objective_id'],
+																				self.layout)
 
 								first_x = GetCoordinates(objective['alternative'])[0]
 
@@ -453,53 +448,8 @@ class Main(View_Gtk.View_Gtk):
 							objectives.append(objective['objective_id'])
 
 							# Create objective button
-							button = CreateButton(objective['name'], objective['objective_id'])
-							button.connect('button-press-event',self.__on_objective_clicked)
+							button = GraphRenderer.Objective(objective['name'], objective['objective_id'], self.layout)
 
-							# Tooltip
-							button.set_tooltip_text("Cantidad: "+str(objective['objective_quantity']))
-							if(objective["expiration"]):
-								button.set_tooltip_text(button.get_tooltip_text()+"\nExpiracion: "+objective['expiration'])
-							dependents = self.controller.DirectDependents(objective['objective_id'])
-							if(dependents):
-								button.set_tooltip_text(button.get_tooltip_text()+"\nDependents: "+str(len(dependents)))
-
-							def SetExpirationColor():
-								# Expired and not satisfacted - Show warning
-								if(objective["expiration"]
-								and not self.controller.IsSatisfacted(objective['objective_id'])):
-
-									# Expired - Set inverted color
-									if datetime.datetime.strptime(objective["expiration"],"%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
-										button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
-										button.child.modify_fg(gtk.STATE_NORMAL, color)
-										return
-
-									# Next to expire - Set color animation
-									elif(datetime.datetime.strptime(objective["expiration"],"%Y-%m-%d %H:%M:%S")
-									< datetime.datetime.now()+datetime.timedelta(self.config.Get('expirationWarning'))):
-
-										def button_expires_inverted(button, color):
-											button.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
-											button.child.modify_fg(gtk.STATE_NORMAL, color)
-
-											glib.timeout_add_seconds(1, button_expires_normal, button, color)
-											return False
-
-										def button_expires_normal(button, color):
-											button.modify_bg(gtk.STATE_NORMAL, color)
-											button.child.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
-
-											glib.timeout_add_seconds(1, button_expires_inverted, button, color)
-											return False
-
-										button_expires_normal(button, color)
-										return
-
-								# Non expired - Set background color
-								button.modify_bg(gtk.STATE_NORMAL, color)
-
-							SetExpirationColor()
 
 							# If level doesn't have requeriments (usually level 0)
 							if x:
