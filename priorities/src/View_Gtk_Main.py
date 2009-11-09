@@ -1,4 +1,3 @@
-import glib
 import gtk
 import math
 import datetime
@@ -15,8 +14,8 @@ from View_Gtk_Preferences import *
 
 
 class Main(View_Gtk.View_Gtk):
-	x_step = 100
-	y_step = 50
+	margin_x = 50
+	margin_y = 50
 
 	def __init__(self, input=None):
 		View_Gtk.View_Gtk.__init__(self, "Main")
@@ -28,6 +27,8 @@ class Main(View_Gtk.View_Gtk):
 		self.__objectiveHI_delete = None
 		self.__objectiveHI_zoomin = None
 
+		self.__needRenderGraph = False
+		self.__objectives = None
 		self.__levels = None
 
 		self.__cursorObjective = None
@@ -58,8 +59,6 @@ class Main(View_Gtk.View_Gtk):
 		# Contextual menues
 
 		# Layout
-		self.mnuCtxLayout = self.builder.get_object("mnuCtxLayout")
-
 #		mnuLayout_ZoomIn = self.builder.get_object("mnuLayout_ZoomIn")
 #		mnuLayout_ZoomOut = self.builder.get_object("mnuLayout_ZoomOut")
 
@@ -74,12 +73,6 @@ class Main(View_Gtk.View_Gtk):
 		#
 		# Toolbar
 
-		# Save as
-		self.tbSaveAs = self.builder.get_object("tbSaveAs")
-
-		self.tbZoomIn = self.builder.get_object("tbZoomIn")
-		self.tbZoomOut = self.builder.get_object("tbZoomOut")
-
 		# Start button
 		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
 		self.navBar.get_button_from_id(0).set_use_stock(True)
@@ -90,10 +83,10 @@ class Main(View_Gtk.View_Gtk):
 
 	def __OpenDB_dialog(self):
 		dialog = gtk.FileChooserDialog(_("Select the database to use"),
-												None,
-												gtk.FILE_CHOOSER_ACTION_OPEN,
-												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-												gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+										None,
+										gtk.FILE_CHOOSER_ACTION_OPEN,
+										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+										gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 
 		# sqlite files
@@ -144,15 +137,15 @@ class Main(View_Gtk.View_Gtk):
 
 	def OpenDB(self, widget):
 		if self.__OpenDB_dialog():
-			self.__RenderGraph()
+			self.__CreateGraph()
 
 
 	def __SaveDB_dialog(self):
 		dialog = gtk.FileChooserDialog(_("Select the database to create"),
-												None,
-												gtk.FILE_CHOOSER_ACTION_SAVE,
-												(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-												gtk.STOCK_NEW,gtk.RESPONSE_OK))
+										None,
+										gtk.FILE_CHOOSER_ACTION_SAVE,
+										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+										gtk.STOCK_NEW,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 		dialog.set_do_overwrite_confirmation(True)
 
@@ -175,7 +168,7 @@ class Main(View_Gtk.View_Gtk):
 
 		if dialog.run() == gtk.RESPONSE_OK:
 			self.controller.Connect(dialog.get_filename()+".sqlite")
-			self.__RenderGraph()
+			self.__CreateGraph()
 
 		dialog.destroy()
 
@@ -191,6 +184,10 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def DrawRequerimentsArrows(self, widget,event):
+		if self.__needRenderGraph:
+			self.__needRenderGraph = False
+			self.__RenderGraph()
+
 		if self.__levels:
 			# Graphic Context
 			gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
@@ -219,12 +216,12 @@ class Main(View_Gtk.View_Gtk):
 			layout_size = self.layout.get_size()
 
 			if(self.config.Get('showSharp')):
-				for x in range(1,layout_size[0]/self.x_step):
-					self.layout.bin_window.draw_line(gc, x*self.x_step,0,
-														x*self.x_step,layout_size[1])
-				for y in range(1,layout_size[1]/self.y_step):
-					self.layout.bin_window.draw_line(gc, 0,y*self.y_step,
-														layout_size[0],y*self.y_step)
+				for x in range(1,layout_size[0]/self.margin_x+1):
+					self.layout.bin_window.draw_line(gc, x*self.margin_x,0,
+														x*self.margin_x,layout_size[1])
+				for y in range(1,layout_size[1]/self.margin_y+1):
+					self.layout.bin_window.draw_line(gc, 0,y*self.margin_y,
+														layout_size[0],y*self.margin_y)
 
 			# Left
 			self.layout.bin_window.draw_line(gc, 0,0,
@@ -239,92 +236,125 @@ class Main(View_Gtk.View_Gtk):
 			self.layout.bin_window.draw_line(gc, 0,layout_size[1],
 												layout_size[0],layout_size[1])
 
-			# Arrows
-			for arrow in self.__req_arrows:
-				if arrow[0]==self.__cursorObjective:
-					gc.set_line_attributes(2, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
-				else:
-					gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
-
-				# Arrow line
-				self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
-													int(arrow[2][0]),int(arrow[2][1]))
-				# Arrow head
-				if self.config.Get("showArrowHeads"):
-					DrawHead(arrow)
+#			# Arrows
+#			for arrow in self.__req_arrows:
+#				line_width = 0
+#				if arrow[0]==self.__cursorObjective:
+#					line_width = 2
+#				gc.set_line_attributes(line_width, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+#
+#				# Arrow line
+#				self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
+#													int(arrow[2][0]),int(arrow[2][1]))
+#				# Arrow head
+#				if self.config.Get("showArrowHeads"):
+#					DrawHead(arrow)
 
 			gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 
 
-	def __RenderGraph(self, objective_name=None):
+	def __RenderGraph(self):
+		if self.__objectives:
+			biggest_row_width = 0
+			y = self.margin_y/2
+
+			print "self.__objectives",self.__objectives
+
+			keys = self.__objectives.keys()
+			keys.sort()
+			for level in keys:
+
+				print level
+
+				biggest_height = 0
+				x = self.margin_x/2
+				for button in self.__objectives[level]:
+
+					# Set button position
+					print "button",button.allocation
+					self.layout.move(button, x,y)
+					print "\t",button.allocation
+
+					# Set new x coordinate
+					# and layout sizes
+					x += button.allocation.width
+					if x > biggest_row_width:
+						biggest_row_width = x
+
+					x += self.margin_x
+
+					if button.allocation.height > biggest_height:
+						biggest_height = button.allocation.height
+
+				# Set new y coordinate
+				y += biggest_height + self.margin_y
+
+			# Set layout size
+			# and show all buttons
+			self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
+			self.layout.show_all()
+
+
+	def __CreateGraph(self, objective_name=None):
 		self.__CleanGraph()
 
 		import GraphRenderer
 
-		layout_size_x = 0
-#		layout_size_x = -self.x_step/2
-		y = self.y_step/2.0
+		y = 0
 
 		self.__levels = self.controller.ShowTree(objective_name)
-		print self.__levels
 		if self.__levels:
 
+			self.__needRenderGraph = True
+			self.__objectives = {}
+
 			objectives = []
-			req_coords = {}
-			obj_coords = {}
+#			req_coords = {}
+#			obj_coords = {}
 
-			def GetCoordinates(objective, requeriment=None):
-				if(requeriment):
-					req = req_coords.get(objective, None)
-					if req:
-						return req.get(requeriment, None)
-				else:
-					return obj_coords.get(objective, None)
-
-				return None
+#			def GetCoordinates(objective, requeriment=None):
+#				if(requeriment):
+#					req = req_coords.get(objective, None)
+#					if req:
+#						return req.get(requeriment, None)
+#				else:
+#					return obj_coords.get(objective, None)
+#
+#				return None
 
 			# Niveles
 			for level in self.__levels:
-				def PutButton(button, x,y):
-					x = int(x)
-					y = int(y)
-
-					self.layout.put(button, x,y)
-
-					button.realize()
-					print button,button.allocation
-
-					self.layout.move(button,
-									x - int(button.allocation.width/2),
-									y - int(button.allocation.height/2))
-					print "\t",button.allocation
-					button.show()
-					print "\t",button.allocation
+				def PutButton(button):
+					self.layout.put(button, 0,0)
+					if not self.__objectives.has_key(y):
+						self.__objectives[y] = []
+					self.__objectives[y].append(button)
 
 
 				requeriment_button = None
 				coords = None
-				first_x = 0
-				last_x = 0
-				obj_arrows = None
+#				first_x = 0
+#				last_x = 0
+#				obj_arrows = None
 				last_objective = None
 				last_requeriment = None
 
-				def PutOldButton(layout_size_x):
+				def PutOldButton():
+					print "PutOldButton",requeriment_button
 					if requeriment_button:
 						# Put requeriment button
-						x = (first_x+last_x)/2.0
-						PutButton(requeriment_button, x,y)
-						coords = (x,y)
+#						x = (first_x+last_x)/2.0
+						PutButton(requeriment_button)
+#						coords = (x,y)
 
-						# Store requeriment button coordinates
-						if not req_coords.has_key(last_objective):
-							req_coords[last_objective] = {}
-						req_coords[last_objective][last_requeriment] = coords
+#						# Store requeriment button coordinates
+#						if not req_coords.has_key(last_objective):
+#							req_coords[last_objective] = {}
+#						req_coords[last_objective][last_requeriment] = coords
 
 						# Store the requeriment arrows coordinates
-						for obj_arrow in obj_arrows:
-							self.__req_arrows.append((last_objective,coords, GetCoordinates(obj_arrow)))
+#						for obj_arrow in obj_arrows:
+#							self.__req_arrows.append((last_objective,coords, GetCoordinates(obj_arrow)))
 
 				# Requeriments
 
@@ -346,51 +376,51 @@ class Main(View_Gtk.View_Gtk):
 								requeriment_button.set_label(requeriment_button.get_label()+"\n"
 															+self.controller.GetName(objective['alternative']))
 
-								last_x = GetCoordinates(objective['alternative'])[0]
+#								last_x = GetCoordinates(objective['alternative'])[0]
 								last_objective = objective['objective_id']
 								last_requeriment = objective['requeriment']
 
-								obj_arrows.append(objective['alternative'])
+#								obj_arrows.append(objective['alternative'])
 
 							# else create a new one
 							else:
 								level_requeriments[objective['objective_id']].append(objective['requeriment'])
 								level_need_alternatives = True
 
-								PutOldButton(layout_size_x)
+								PutOldButton()
 
 								# Create requeriment button
 								requeriment_button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
 																				objective['objective_id'],
-																				self.layout)
+																				self)
 
-								first_x = GetCoordinates(objective['alternative'])[0]
+#								first_x = GetCoordinates(objective['alternative'])[0]
 
-								obj_arrows = []
-								obj_arrows.append(objective['alternative'])
+#								obj_arrows = []
+#								obj_arrows.append(objective['alternative'])
 
 						# Requeriments without alternatives
 						else:
 							level_requeriments[objective['objective_id']].append(objective['requeriment'])
 
-							if not req_coords.has_key(objective['objective_id']):
-								req_coords[objective['objective_id']] = {}
-							req_coords[objective['objective_id']][objective['requeriment']] = GetCoordinates(objective['alternative'])
+#							if not req_coords.has_key(objective['objective_id']):
+#								req_coords[objective['objective_id']] = {}
+#							req_coords[objective['objective_id']][objective['requeriment']] = GetCoordinates(objective['alternative'])
 
-				PutOldButton(layout_size_x)
+				PutOldButton()
 
 
 				# If level has had requeriments,
 				# reset objectives coordinates
 				if(level_requeriments):
-					x = None
+#					x = None
 					if level_need_alternatives:
-						y += self.y_step
+						y += 1
 
-				# If level doesn't have requeriments (usually level 0),
-				# set x coordinates
-				else:
-					x = self.x_step/2.0
+#				# If level doesn't have requeriments (usually level 0),
+#				# set x coordinates
+#				else:
+#					x = self.margin_x/2.0
 
 
 				level_objectives = {}
@@ -403,14 +433,14 @@ class Main(View_Gtk.View_Gtk):
 						if not level_objectives.has_key(objective['objective_id']):
 							level_objectives[objective['objective_id']] = []
 
-						# Requeriments with alternatives
-						if objective['priority']:
-							if(objective['requeriment'] not in level_objectives[objective['objective_id']]):
-								coords = GetCoordinates(objective['objective_id'], objective['requeriment'])
-
-						# Requeriment without alternatives
-						else:
-							coords = GetCoordinates(objective['alternative'])
+#						# Requeriments with alternatives
+#						if objective['priority']:
+#							if(objective['requeriment'] not in level_objectives[objective['objective_id']]):
+#								coords = GetCoordinates(objective['objective_id'], objective['requeriment'])
+#
+#						# Requeriment without alternatives
+#						else:
+#							coords = GetCoordinates(objective['alternative'])
 
 					# Objective
 					if objective['objective_id'] not in objectives:
@@ -448,64 +478,58 @@ class Main(View_Gtk.View_Gtk):
 							objectives.append(objective['objective_id'])
 
 							# Create objective button
-							button = GraphRenderer.Objective(objective['name'], objective['objective_id'], self.layout)
+							button = GraphRenderer.Objective(objective, self,
+															self.controller, color)
 
 
-							# If level doesn't have requeriments (usually level 0)
-							if x:
-								# Put objective button
-								PutButton(button, x,y)
-								obj_coords[objective['objective_id']] = (x,y)
+#							# If level doesn't have requeriments (usually level 0)
+#							if x:
+#								# Put objective button
+							PutButton(button)
+#								obj_coords[objective['objective_id']] = (x,y)
 
-								if x > layout_size_x:
-									layout_size_x = x
+#								# increase x coordinates
+#								x += self.margin_x
 
-								# increase x coordinates
-								x += self.x_step
-
-							else:
-								# Calculate x coordinates
-								min_x = -1
-								max_x = -1
-								for req in level_requeriments[objective['objective_id']]:
-									aux_x = GetCoordinates(objective['objective_id'], req)[0]
-
-									if(min_x < 0
-									or aux_x < min_x):
-										min_x = aux_x
-
-									if(max_x < 0
-									or aux_x > max_x):
-										max_x = aux_x
-
-								aux_x = (min_x+max_x)/2
-
-								# Put objective button
-								PutButton(button, aux_x,y)
-								obj_coords[objective['objective_id']] = (aux_x,y)
-
-								if aux_x > layout_size_x:
-									layout_size_x = aux_x
+#							else:
+#								# Calculate x coordinates
+#								min_x = -1
+#								max_x = -1
+#								for req in level_requeriments[objective['objective_id']]:
+#									aux_x = GetCoordinates(objective['objective_id'], req)[0]
+#
+#									if(min_x < 0
+#									or aux_x < min_x):
+#										min_x = aux_x
+#
+#									if(max_x < 0
+#									or aux_x > max_x):
+#										max_x = aux_x
+#
+#								aux_x = (min_x+max_x)/2
+#
+#								# Put objective button
+#								PutButton(button)
+#								obj_coords[objective['objective_id']] = (aux_x,y)
 
 
-					# If objective has requeriments,
-					# store the requeriment arrow coordinates
-					if(coords	# [To-Do] Optimizar para requisitos sin alternativas
-					and level_objectives.has_key(objective['objective_id'])
-					and objective['requeriment'] not in level_objectives[objective['objective_id']]):
-						level_objectives[objective['objective_id']].append(objective['requeriment'])
-						self.__req_arrows.append((objective['objective_id'],GetCoordinates(objective['objective_id']), coords))
+#					# If objective has requeriments,
+#					# store the requeriment arrow coordinates
+#					if(coords	# [To-Do] Optimizar para requisitos sin alternativas
+#					and level_objectives.has_key(objective['objective_id'])
+#					and objective['requeriment'] not in level_objectives[objective['objective_id']]):
+#						level_objectives[objective['objective_id']].append(objective['requeriment'])
+#						self.__req_arrows.append((objective['objective_id'],GetCoordinates(objective['objective_id']), coords))
 
-				y += self.y_step
-
-		self.layout.set_size(int(layout_size_x + self.x_step/2), int(y - self.y_step/2))
+				y += 1
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
 
 
 	def __ExportSaveSensitivity(self):
-		self.tbSaveAs.set_sensitive(len(self.__levels))
+		"Set the sensitivity of the export buttons"
+		self.builder.get_object("tbSaveAs").set_sensitive(len(self.__levels))
 		self.mnuSaveAs.set_sensitive(len(self.__levels))
 		self.mnuExport.set_sensitive(len(self.__levels))
 
@@ -515,17 +539,18 @@ class Main(View_Gtk.View_Gtk):
 
 		# Zoom In
 		self.mnuZoomIn.set_sensitive(actual<len(self.navBar.get_children())-1)
-		self.tbZoomIn.set_sensitive(actual<len(self.navBar.get_children())-1)
+		self.builder.get_object("tbZoomIn").set_sensitive(actual<len(self.navBar.get_children())-1)
 
 		# Zoom Out
 		self.mnuZoomOut.set_sensitive(actual>0)
-		self.tbZoomOut.set_sensitive(actual>0)
+		self.builder.get_object("tbZoomOut").set_sensitive(actual>0)
 		self.mnuObjective_ZoomOut.set_sensitive(actual>0)
 
 
 	def __CleanGraph(self):
 		# Clean arrows array
-		self.__req_arrows = []
+#		self.__req_arrows = []
+		self.__objectives = {}
 
 		# Delete old buttons
 		for children in self.layout.get_children():
@@ -549,7 +574,7 @@ class Main(View_Gtk.View_Gtk):
 		addObjective.window.set_transient_for(self.window)
 
 		if addObjective.window.run() > 0:
-			self.__RenderGraph()
+			self.__CreateGraph()
 
 		addObjective.window.destroy()
 
@@ -568,7 +593,7 @@ class Main(View_Gtk.View_Gtk):
 				response = dialog.DeleteObjective_recursive()
 
 			if response > 0:
-				self.__RenderGraph()
+				self.__CreateGraph()
 
 		else:
 			dialog = gtk.MessageDialog(self.window,
@@ -579,7 +604,7 @@ class Main(View_Gtk.View_Gtk):
 			if dialog.run() == gtk.RESPONSE_YES:
 				self.controller.DeleteObjective(objective_id,
 												self.config.Get('removeOrphanRequeriments'))
-				self.__RenderGraph()
+				self.__CreateGraph()
 			dialog.destroy()
 
 
@@ -607,7 +632,7 @@ class Main(View_Gtk.View_Gtk):
 		print "ShowLayoutMenu"
 		if(event.button == 3):		# Secondary button
 			print "\tsecondary button"
-			self.mnuCtxLayout.popup(None,None,None, event.button,event.time)
+			self.builder.get_object("mnuCtxLayout").popup(None,None,None, event.button,event.time)
 
 
 	def Preferences(self, widget):
@@ -619,7 +644,7 @@ class Main(View_Gtk.View_Gtk):
 			if dialog.redraw == "arrows":
 				pass
 			elif dialog.redraw == "tree":
-				self.__RenderGraph()
+				self.__CreateGraph()
 
 		dialog.window.destroy()
 
@@ -710,7 +735,7 @@ class Main(View_Gtk.View_Gtk):
 
 		if dialog.run()==gtk.RESPONSE_OK:
 			if self.controller.Import(dialog.get_filename()):
-				self.__RenderGraph(self.navBar.get_active_id())
+				self.__CreateGraph(self.navBar.get_active_id())
 			else:
 				print _("Exception importing database")
 
@@ -724,11 +749,11 @@ class Main(View_Gtk.View_Gtk):
 
 	# Zoom
 	def __NavbarHome(self, widget):
-		self.__RenderGraph()
+		self.__CreateGraph()
 
 
 	def __NavbarZoom(self, widget):
-		self.__RenderGraph(widget.get_label())
+		self.__CreateGraph(widget.get_label())
 
 
 	def ZoomIn(self, widget, objective_name=None):
@@ -737,7 +762,7 @@ class Main(View_Gtk.View_Gtk):
 		if objective_name:
 			self.navBar.remove_remanents()
 			self.navBar.add_with_id(objective_name, self.__NavbarZoom, self.controller.GetId(objective_name))
-			self.__RenderGraph(objective_name)
+			self.__CreateGraph(objective_name)
 
 		else:
 			try:
