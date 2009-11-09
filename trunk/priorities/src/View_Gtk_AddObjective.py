@@ -1,5 +1,7 @@
 import datetime
 
+import gtk
+
 import View_Gtk
 _ = View_Gtk._
 
