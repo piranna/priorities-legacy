@@ -300,27 +300,15 @@ class Main(View_Gtk.View_Gtk):
 
 		import GraphRenderer
 
-		y = 0
-
 		self.__levels = self.controller.ShowTree(objective_name)
 		if self.__levels:
+
+			y = 0
 
 			self.__needRenderGraph = True
 			self.__objectives = {}
 
-			objectives = []
-#			req_coords = {}
-#			obj_coords = {}
-
-#			def GetCoordinates(objective, requeriment=None):
-#				if(requeriment):
-#					req = req_coords.get(objective, None)
-#					if req:
-#						return req.get(requeriment, None)
-#				else:
-#					return obj_coords.get(objective, None)
-#
-#				return None
+			checked_objectives = []
 
 			# Niveles
 			for level in self.__levels:
@@ -331,32 +319,8 @@ class Main(View_Gtk.View_Gtk):
 					self.__objectives[y].append(button)
 
 
-				requeriment_button = None
-				coords = None
-#				first_x = 0
-#				last_x = 0
-#				obj_arrows = None
-				last_objective = None
-				last_requeriment = None
-
-				def PutOldButton():
-					print "PutOldButton",requeriment_button
-					if requeriment_button:
-						# Put requeriment button
-#						x = (first_x+last_x)/2.0
-						PutButton(requeriment_button)
-#						coords = (x,y)
-
-#						# Store requeriment button coordinates
-#						if not req_coords.has_key(last_objective):
-#							req_coords[last_objective] = {}
-#						req_coords[last_objective][last_requeriment] = coords
-
-						# Store the requeriment arrows coordinates
-#						for obj_arrow in obj_arrows:
-#							self.__req_arrows.append((last_objective,coords, GetCoordinates(obj_arrow)))
-
 				# Requeriments
+				requeriment_button = None
 
 				level_requeriments = {}
 				level_need_alternatives = False
@@ -375,76 +339,42 @@ class Main(View_Gtk.View_Gtk):
 							if objective['requeriment'] in level_requeriments[objective['objective_id']]:
 								requeriment_button.set_label(requeriment_button.get_label()+"\n"
 															+self.controller.GetName(objective['alternative']))
-
-#								last_x = GetCoordinates(objective['alternative'])[0]
-								last_objective = objective['objective_id']
-								last_requeriment = objective['requeriment']
-
-#								obj_arrows.append(objective['alternative'])
+								#continue
 
 							# else create a new one
 							else:
-								level_requeriments[objective['objective_id']].append(objective['requeriment'])
-								level_need_alternatives = True
+								# Put old requeriment button, if any
+								if requeriment_button:
+									PutButton(requeriment_button)
 
-								# Put old requeriment button
-								PutOldButton()
-
-								# Create requeriment button
+								# Create new requeriment button
 								requeriment_button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
 																				objective['objective_id'],
 																				self)
-
-#								first_x = GetCoordinates(objective['alternative'])[0]
-
-#								obj_arrows = []
-#								obj_arrows.append(objective['alternative'])
+								level_need_alternatives = True
+###
+								level_requeriments[objective['objective_id']].append(objective['requeriment'])
 
 						# Requeriments without alternatives
 						else:
 							level_requeriments[objective['objective_id']].append(objective['requeriment'])
-
-#							if not req_coords.has_key(objective['objective_id']):
-#								req_coords[objective['objective_id']] = {}
-#							req_coords[objective['objective_id']][objective['requeriment']] = GetCoordinates(objective['alternative'])
-
-				PutOldButton()
+###
+				# Put remanent requeriment button, if any
+				if requeriment_button:
+					PutButton(requeriment_button)
 
 
 				# If level has had requeriments,
 				# reset objectives coordinates
-				if(level_requeriments):
-#					x = None
-					if level_need_alternatives:
-						y += 1
+				if(level_need_alternatives):
+#				if(level_requeriments and level_need_alternatives):
+					y += 1
 
-#				# If level doesn't have requeriments (usually level 0),
-#				# set x coordinates
-#				else:
-#					x = self.margin_x/2.0
-
-
-				level_objectives = {}
 
 				# Objectives
 				for objective in level:
-					# If objective have a requeriment,
-					# get the requeriment coordinates
-					if objective['requeriment']:
-						if not level_objectives.has_key(objective['objective_id']):
-							level_objectives[objective['objective_id']] = []
-
-#						# Requeriments with alternatives
-#						if objective['priority']:
-#							if(objective['requeriment'] not in level_objectives[objective['objective_id']]):
-#								coords = GetCoordinates(objective['objective_id'], objective['requeriment'])
-#
-#						# Requeriment without alternatives
-#						else:
-#							coords = GetCoordinates(objective['alternative'])
-
 					# Objective
-					if objective['objective_id'] not in objectives:
+					if objective['objective_id'] not in checked_objectives:
 
 						# Get color of the requeriment
 						def GetColor():
@@ -476,53 +406,14 @@ class Main(View_Gtk.View_Gtk):
 						if(color):
 
 							# Register objective to prevent be printed twice
-							objectives.append(objective['objective_id'])
+							checked_objectives.append(objective['objective_id'])
 
 							# Create objective button
-							button = GraphRenderer.Objective(objective, self,
-															self.controller, color)
-
-
-#							# If level doesn't have requeriments (usually level 0)
-#							if x:
-#								# Put objective button
-							PutButton(button)
-#								obj_coords[objective['objective_id']] = (x,y)
-
-#								# increase x coordinates
-#								x += self.margin_x
-
-#							else:
-#								# Calculate x coordinates
-#								min_x = -1
-#								max_x = -1
-#								for req in level_requeriments[objective['objective_id']]:
-#									aux_x = GetCoordinates(objective['objective_id'], req)[0]
-#
-#									if(min_x < 0
-#									or aux_x < min_x):
-#										min_x = aux_x
-#
-#									if(max_x < 0
-#									or aux_x > max_x):
-#										max_x = aux_x
-#
-#								aux_x = (min_x+max_x)/2
-#
-#								# Put objective button
-#								PutButton(button)
-#								obj_coords[objective['objective_id']] = (aux_x,y)
-
-
-#					# If objective has requeriments,
-#					# store the requeriment arrow coordinates
-#					if(coords	# [To-Do] Optimizar para requisitos sin alternativas
-#					and level_objectives.has_key(objective['objective_id'])
-#					and objective['requeriment'] not in level_objectives[objective['objective_id']]):
-#						level_objectives[objective['objective_id']].append(objective['requeriment'])
-#						self.__req_arrows.append((objective['objective_id'],GetCoordinates(objective['objective_id']), coords))
+							PutButton(GraphRenderer.Objective(objective, self,
+															self.controller, color))
 
 				y += 1
+
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
