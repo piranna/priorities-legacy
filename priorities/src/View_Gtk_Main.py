@@ -270,6 +270,38 @@ class Main(View_Gtk.View_Gtk):
 				x = self.margin_x/2
 				for button in self.__objectives[level]:
 
+#####
+					# Get requeriment coordinates
+					def Get_RequerimentCoordinate_X():
+						min_x = None
+						max_x = None
+###
+#						requeriments = button.Get_Requeriments()
+#						if requeriments:
+#							for req in requeriments:
+#								if(min_x == None
+#								or req.allocation.x < min_x):
+#									min_x = req.allocation.x
+#
+#								if(max_x == None
+#								or req.allocation.x+req.allocation.width > max_x):
+#									max_x = req.allocation.x+req.allocation.width
+#
+#							return (min_x+max_x)/2
+###
+						return None
+
+					def Set_DependenceCoordinate_X():
+						pass
+
+
+					req_x = Get_RequerimentCoordinate_X()
+					if req_x > x:
+						x = req_x
+#					else:
+#						Set_DependenceCoordinate_X()
+#####
+
 					# Set button position
 					print "button",button.allocation
 					self.layout.move(button, x,y)
@@ -303,6 +335,7 @@ class Main(View_Gtk.View_Gtk):
 		self.__levels = self.controller.ShowTree(objective_name)
 		if self.__levels:
 
+			# Level index
 			y = 0
 
 			self.__needRenderGraph = True
@@ -339,7 +372,7 @@ class Main(View_Gtk.View_Gtk):
 							if objective['requeriment'] in level_requeriments[objective['objective_id']]:
 								requeriment_button.set_label(requeriment_button.get_label()+"\n"
 															+self.controller.GetName(objective['alternative']))
-								#continue
+								continue
 
 							# else create a new one
 							else:
@@ -352,13 +385,10 @@ class Main(View_Gtk.View_Gtk):
 																				objective['objective_id'],
 																				self)
 								level_need_alternatives = True
-###
-								level_requeriments[objective['objective_id']].append(objective['requeriment'])
 
-						# Requeriments without alternatives
-						else:
-							level_requeriments[objective['objective_id']].append(objective['requeriment'])
-###
+						# Add requeriment
+						level_requeriments[objective['objective_id']].append(objective['requeriment'])
+
 				# Put remanent requeriment button, if any
 				if requeriment_button:
 					PutButton(requeriment_button)
@@ -412,6 +442,7 @@ class Main(View_Gtk.View_Gtk):
 							PutButton(GraphRenderer.Objective(objective, self,
 															self.controller, color))
 
+				# Increase level index
 				y += 1
 
 
