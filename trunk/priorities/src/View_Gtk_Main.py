@@ -276,18 +276,26 @@ class Main(View_Gtk.View_Gtk):
 						min_x = None
 						max_x = None
 ###
-#						requeriments = button.Get_Requeriments()
-#						if requeriments:
-#							for req in requeriments:
-#								if(min_x == None
-#								or req.allocation.x < min_x):
-#									min_x = req.allocation.x
-#
-#								if(max_x == None
-#								or req.allocation.x+req.allocation.width > max_x):
-#									max_x = req.allocation.x+req.allocation.width
-#
-#							return (min_x+max_x)/2
+						requeriments = button.Get_Requeriments()
+						print "requeriments"
+						print requeriments
+						print
+						if requeriments:
+							for req in requeriments:
+								print "\t",req.get_label(),req.allocation.x
+								if(min_x == None
+								or req.allocation.x < min_x):
+									min_x = req.allocation.x
+
+								if(max_x == None
+								or req.allocation.x+req.allocation.width > max_x):
+									max_x = req.allocation.x+req.allocation.width
+
+							print min_x
+							print max_x
+							print "x =",(min_x+max_x)/2
+
+							return (min_x+max_x)/2
 ###
 						return None
 
@@ -303,9 +311,9 @@ class Main(View_Gtk.View_Gtk):
 #####
 
 					# Set button position
-					print "button",button.allocation
+#					print "button",button.allocation
 					self.layout.move(button, x,y)
-					print "\t",button.allocation
+#					print "\t",button.allocation
 
 					# Set new x coordinate
 					# and layout sizes
@@ -341,7 +349,7 @@ class Main(View_Gtk.View_Gtk):
 			self.__needRenderGraph = True
 			self.__objectives = {}
 
-			checked_objectives = []
+			checked_objectives = {}
 
 			# Niveles
 			for level in self.__levels:
@@ -372,6 +380,7 @@ class Main(View_Gtk.View_Gtk):
 							if objective['requeriment'] in level_requeriments[objective['objective_id']]:
 								requeriment_button.set_label(requeriment_button.get_label()+"\n"
 															+self.controller.GetName(objective['alternative']))
+								requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
 								continue
 
 							# else create a new one
@@ -386,13 +395,18 @@ class Main(View_Gtk.View_Gtk):
 																				self)
 								level_need_alternatives = True
 
+								requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
+
 						# Add requeriment
+#						if requeriment_button:
+#							requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
 						level_requeriments[objective['objective_id']].append(objective['requeriment'])
 
 				# Put remanent requeriment button, if any
 				if requeriment_button:
 					PutButton(requeriment_button)
 
+#				print "level_requeriments",level_requeriments
 
 				# If level has had requeriments,
 				# reset objectives coordinates
@@ -434,13 +448,13 @@ class Main(View_Gtk.View_Gtk):
 						# Check if objective has to be printed and with what color
 						color = GetColor()
 						if(color):
-
-							# Register objective to prevent be printed twice
-							checked_objectives.append(objective['objective_id'])
+							# Create objective button
+							# and register to prevent be printed twice
+							checked_objectives[objective['objective_id']] = GraphRenderer.Objective(objective, self,
+																									self.controller, color)
 
 							# Create objective button
-							PutButton(GraphRenderer.Objective(objective, self,
-															self.controller, color))
+							PutButton(checked_objectives[objective['objective_id']])
 
 				# Increase level index
 				y += 1
