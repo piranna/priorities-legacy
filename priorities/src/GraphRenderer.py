@@ -11,6 +11,25 @@ class Requeriment(gtk.Button):
 #		self.connect('enter_notify_event',parent.__IncreaseLineWidth, objective['objective_id'])
 #		self.connect('leave_notify_event',parent.__IncreaseLineWidth)
 
+		self.__requeriments = []
+
+#	def do_size_allocate(self, allocation):
+#		print allocation
+#		self.allocation = allocation
+
+#		if self.flags() & gtk.REALIZED:
+#			self.window.move_resize(*allocation)
+
+	def Add_Dependency(self, dependency):
+		self.__requeriments.append(dependency)
+
+	def Get_Requeriments(self):
+		return self.__requeriments
+
+
+#import gobject
+#gobject.type_register(Requeriment)
+
 
 class Objective(Requeriment):
 	def __init__(self, objective,parent,
