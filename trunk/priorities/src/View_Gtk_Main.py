@@ -14,7 +14,7 @@ from View_Gtk_Preferences import *
 
 
 class Main(View_Gtk.View_Gtk):
-	margin_x = 50
+	margin_x = 20
 	margin_y = 50
 
 	def __init__(self, input=None):
@@ -27,9 +27,7 @@ class Main(View_Gtk.View_Gtk):
 		self.__objectiveHI_delete = None
 		self.__objectiveHI_zoomin = None
 
-		self.__needRenderGraph = False
-		self.__objectives = None
-		self.__levels = None
+		self.__needRenderGraph = 0
 
 		self.__cursorObjective = None
 
@@ -184,31 +182,29 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def DrawRequerimentsArrows(self, widget,event):
-		if self.__needRenderGraph:
-			self.__needRenderGraph = False
-			self.__RenderGraph()
+		self.__RenderGraph()
 
-		if self.__levels:
+		if self.__objectives:
 			# Graphic Context
 			gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
 
 
-			def DrawHead(arrow):
-				def ArrowPoint(arrow, angle, lenght):
+			def DrawHead(x1,y1, x2,y2):
+				def ArrowPoint(angle, lenght):
 					angle = math.radians(angle)
 
-					cotan = arrow[1][1]-arrow[2][1]
+					cotan = y1-y2
 					if cotan:
-						cotan = math.atan((arrow[1][0]-arrow[2][0])/cotan)+angle
+						cotan = math.atan((x1-x2)/cotan)+angle
 
-					return (arrow[2][0]+math.sin(cotan)*lenght, arrow[2][1]+math.cos(cotan)*lenght)
+					return (x2 + math.sin(cotan)*lenght, y2 + math.cos(cotan)*lenght)
 
-				arrowPoint = ArrowPoint(arrow, 15, 30)
-				self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
+				arrowPoint = ArrowPoint(15, 30)
+				self.layout.bin_window.draw_line(gc, x2,y2,
 													int(arrowPoint[0]),int(arrowPoint[1]))
 
-				arrowPoint = ArrowPoint(arrow, -15, 30)
-				self.layout.bin_window.draw_line(gc, int(arrow[2][0]),int(arrow[2][1]),
+				arrowPoint = ArrowPoint(-15, 30)
+				self.layout.bin_window.draw_line(gc, x2,y2,
 													int(arrowPoint[0]),int(arrowPoint[1]))
 
 
@@ -236,229 +232,274 @@ class Main(View_Gtk.View_Gtk):
 			self.layout.bin_window.draw_line(gc, 0,layout_size[1],
 												layout_size[0],layout_size[1])
 
-#			# Arrows
-#			for arrow in self.__req_arrows:
-#				line_width = 0
-#				if arrow[0]==self.__cursorObjective:
-#					line_width = 2
-#				gc.set_line_attributes(line_width, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
-#
-#				# Arrow line
-#				self.layout.bin_window.draw_line(gc, int(arrow[1][0]),int(arrow[1][1]),
-#													int(arrow[2][0]),int(arrow[2][1]))
-#				# Arrow head
-#				if self.config.Get("showArrowHeads"):
-#					DrawHead(arrow)
+			# Arrows
+			for level in self.__objectives:
+				for button in self.__objectives[level]:
+					line_width = 0
+	#				if arrow[0]==self.__cursorObjective:
+	#					line_width = 2
+					gc.set_line_attributes(line_width, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+
+					for requeriment in button.Get_Requeriments():
+						# Arrow coordinates
+						x1=button.X() + button.allocation.width/2
+						y1=button.Y() + button.allocation.height/2
+						x2=requeriment.X() + requeriment.allocation.width/2
+						y2=requeriment.Y() + requeriment.allocation.height/2
+
+						# Arrow line
+						self.layout.bin_window.draw_line(gc, x1,y1, x2,y2)
+						# Arrow head
+						if self.config.Get("showArrowHeads"):
+							DrawHead(x1,y1, x2,y2)
 
 			gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 
 
 	def __RenderGraph(self):
-		if self.__objectives:
-			biggest_row_width = 0
-			y = self.margin_y/2
+		if self.__needRenderGraph:
+			self.__needRenderGraph -=1
 
-			print "self.__objectives",self.__objectives
+			if self.__objectives:
+				biggest_row_width = 0
+				y = self.margin_y/2
 
-			keys = self.__objectives.keys()
-			keys.sort()
-			for level in keys:
+#				print "self.__objectives",self.__objectives
+#				print
 
-				print level
+				keys = self.__objectives.keys()
+				keys.sort()
+				for level in keys:
 
-				biggest_height = 0
-				x = self.margin_x/2
-				for button in self.__objectives[level]:
+					print level
+
+					biggest_height = 0
+					x = self.margin_x/2
+					for button in self.__objectives[level]:
 
 #####
-					# Get requeriment coordinates
-					def Get_RequerimentCoordinate_X():
-						min_x = None
-						max_x = None
-###
-						requeriments = button.Get_Requeriments()
-						print "requeriments"
-						print requeriments
-						print
-						if requeriments:
-							for req in requeriments:
-								print "\t",req.get_label(),req.allocation.x
-								if(min_x == None
-								or req.allocation.x < min_x):
-									min_x = req.allocation.x
+						def Get_RequerimentCoordinate_X():
+							min_x = None
+							max_x = None
 
-								if(max_x == None
-								or req.allocation.x+req.allocation.width > max_x):
-									max_x = req.allocation.x+req.allocation.width
+							requeriments = button.Get_Requeriments()
+							if requeriments:
+								if len(requeriments) == 1:
 
-							print min_x
-							print max_x
-							print "x =",(min_x+max_x)/2
+									print "\t",requeriments[0].get_label()
+#									button.X(requeriments[0].X())
 
-							return (min_x+max_x)/2
-###
-						return None
+									def Get_DependenceCoordinate_X():
+										min_x = None
+										max_x = None
 
-					def Set_DependenceCoordinate_X():
-						pass
+										dependents = requeriments[0].Get_Dependents()
+
+										print "\t\t",dependents
+
+										if(dependents
+#										and len(dependents) == 1):
+										and len(dependents)>1):
+											for dep in dependents:
+
+												print "\t\t",dep.get_label()
+
+												if(min_x == None
+												or dep.X() < min_x):
+													min_x = dep.X()
+
+												if(max_x == None
+												or dep.X()+dep.allocation.width > max_x):
+													max_x = dep.X()+dep.allocation.width
+
+											return ((min_x+max_x)-requeriments[0].allocation.width)/2
+										return None
 
 
-					req_x = Get_RequerimentCoordinate_X()
-					if req_x > x:
-						x = req_x
-#					else:
-#						Set_DependenceCoordinate_X()
+									dep_x = Get_DependenceCoordinate_X()
+									if(dep_x
+									and dep_x!=requeriments[0].X()):
+
+										print "\t",repr(dep_x),repr(requeriments[0].X())
+
+										requeriments[0].X(dep_x)
+										return None
+#										return requeriments[0].X()
+
+								# Several requeriments
+								for req in requeriments:
+									if(min_x == None
+									or req.X() < min_x):
+										min_x = req.X()
+
+									if(max_x == None
+									or req.X()+req.allocation.width > max_x):
+										max_x = req.X()+req.allocation.width
+
+								return ((min_x+max_x)-button.allocation.width)/2
+							return None
+
+
+						req_x = Get_RequerimentCoordinate_X()
+						if req_x > x:
+							x = req_x
 #####
 
-					# Set button position
-#					print "button",button.allocation
-					self.layout.move(button, x,y)
-#					print "\t",button.allocation
+						# Set button position
+	#					print "button",button.allocation
+						if(x!=button.X()
+						or y!=button.Y()):
+							button.Move(x,y)
+	#					print "\t",button.allocation
 
-					# Set new x coordinate
-					# and layout sizes
-					x += button.allocation.width
-					if x > biggest_row_width:
-						biggest_row_width = x
+						# Set new x coordinate
+						# and layout sizes
+						x += button.allocation.width
+						if x > biggest_row_width:
+							biggest_row_width = x
 
-					x += self.margin_x
+						x += self.margin_x
 
-					if button.allocation.height > biggest_height:
-						biggest_height = button.allocation.height
+						if button.allocation.height > biggest_height:
+							biggest_height = button.allocation.height
 
-				# Set new y coordinate
-				y += biggest_height + self.margin_y
+					# Set new y coordinate
+					y += biggest_height + self.margin_y
 
-			# Set layout size
-			# and show all buttons
-			self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
-			self.layout.show_all()
+				# Set layout size
+				# and show all buttons
+				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
+				self.layout.show_all()
 
 
 	def __CreateGraph(self, objective_name=None):
-		self.__CleanGraph()
+
+		# Clean arrows array
+		self.__objectives = {}
+
+		# Delete old buttons
+		for children in self.layout.get_children():
+			self.layout.remove(children)
+
+		# Re-draw surface of the layout
+		self.layout.queue_draw()
+
 
 		import GraphRenderer
 
-		self.__levels = self.controller.ShowTree(objective_name)
-		if self.__levels:
+		tree = self.controller.ShowTree(objective_name)
+		if tree:
 
 			# Level index
 			y = 0
 
-			self.__needRenderGraph = True
-			self.__objectives = {}
+			self.__needRenderGraph = 2
 
 			checked_objectives = {}
 
 			# Niveles
-			for level in self.__levels:
+			for level in tree:
 				def PutButton(button):
 					self.layout.put(button, 0,0)
 					if not self.__objectives.has_key(y):
 						self.__objectives[y] = []
 					self.__objectives[y].append(button)
 
+				def Requeriments():
+					button = None
+					level_requeriments = {}
 
-				# Requeriments
-				requeriment_button = None
+					for objective in level:
+						# Requeriments
+						if objective['requeriment']:
+							if not level_requeriments.has_key(objective['objective_id']):
+								level_requeriments[objective['objective_id']] = {}
 
-				level_requeriments = {}
-				level_need_alternatives = False
+							# Requeriment with alternatives
+							if objective['priority']:
 
-				for objective in level:
-					# Requeriments
-					if objective['requeriment']:
-						if not level_requeriments.has_key(objective['objective_id']):
-							level_requeriments[objective['objective_id']] = []
+								# If requeriment is registered,
+								# add alternative
+								if objective['requeriment'] in level_requeriments[objective['objective_id']]:
+									button.Add_Dependency(checked_objectives[objective['alternative']])
+									button.set_label(button.get_label()+"\n"
+																+self.controller.GetName(objective['alternative']))
 
-						# Requeriment with alternatives
-						if objective['priority']:
+								# else create a new one
+								else:
+									# Put old requeriment button, if any
+									if button:
+										PutButton(button)
 
-							# If requeriment is registered,
-							# add alternative
-							if objective['requeriment'] in level_requeriments[objective['objective_id']]:
-								requeriment_button.set_label(requeriment_button.get_label()+"\n"
-															+self.controller.GetName(objective['alternative']))
-								requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
-								continue
+									# Create new requeriment button
+									button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
+																		objective['objective_id'],
+																		self)
 
-							# else create a new one
-							else:
-								# Put old requeriment button, if any
-								if requeriment_button:
-									PutButton(requeriment_button)
+									button.Add_Dependency(checked_objectives[objective['alternative']])
 
-								# Create new requeriment button
-								requeriment_button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
-																				objective['objective_id'],
-																				self)
-								level_need_alternatives = True
+									# Add requeriment
+									level_requeriments[objective['objective_id']][objective['requeriment']] = button
 
-								requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
+					print "level_requeriments",level_requeriments
 
-						# Add requeriment
-#						if requeriment_button:
-#							requeriment_button.Add_Dependency(checked_objectives[objective['alternative']])
-						level_requeriments[objective['objective_id']].append(objective['requeriment'])
+					if button:
+						PutButton(button)
+					return level_requeriments
 
-				# Put remanent requeriment button, if any
-				if requeriment_button:
-					PutButton(requeriment_button)
+				def Objectives(level_requeriments):
+					for objective in level:
+						# Objective
+						if objective['objective_id'] not in checked_objectives:
 
-#				print "level_requeriments",level_requeriments
+							# Get color of the requeriment
+							def GetColor():
+								# Blue - Satisfacted
+								if self.controller.IsSatisfacted(objective['objective_id']):
+									show = self.config.Get('showExceededDependencies')
+									if(show):
+										if(show==1					# 1 == Only not expired
+										and objective['expiration']
+										and objective['expiration']<datetime.datetime):
+											return None
+										return gtk.gdk.color_parse(self.config.Get('color_satisfacted'))
+									return None
 
-				# If level has had requeriments,
-				# reset objectives coordinates
-				if(level_need_alternatives):
-#				if(level_requeriments and level_need_alternatives):
+								# Green - Available
+								elif self.controller.IsAvailable(objective['objective_id']):
+									return gtk.gdk.color_parse(self.config.Get('color_available'))
+
+								# Yellow - InProgress
+								elif self.controller.IsInprocess(objective['objective_id']):
+									return gtk.gdk.color_parse(self.config.Get('color_inprocess'))
+
+								# Red - Unabordable
+								return gtk.gdk.color_parse(self.config.Get('color_unabordable'))
+
+
+							# Check if objective has to be printed and with what color
+							color = GetColor()
+							if(color):
+								# Create objective button
+								button = GraphRenderer.Objective(objective, self,
+																self.controller, color)
+								if objective['requeriment']:
+									if objective['priority']:
+										button.Add_Dependency(level_requeriments[objective['objective_id']][objective['requeriment']])
+									else:
+										button.Add_Dependency(checked_objectives[objective['alternative']])
+
+								PutButton(button)
+
+								# Register objective button to prevent be printed twice
+								checked_objectives[objective['objective_id']] = button
+
+
+				level_requeriments = Requeriments()
+				if level_requeriments:
 					y += 1
-
-
-				# Objectives
-				for objective in level:
-					# Objective
-					if objective['objective_id'] not in checked_objectives:
-
-						# Get color of the requeriment
-						def GetColor():
-							# Blue - Satisfacted
-							if self.controller.IsSatisfacted(objective['objective_id']):
-								show = self.config.Get('showExceededDependencies')
-								if(show):
-									if(show==1					# 1 == Only not expired
-									and objective['expiration']
-									and objective['expiration']<datetime.datetime):
-										return None
-									return gtk.gdk.color_parse(self.config.Get('color_satisfacted'))
-								return None
-
-							# Green - Available
-							elif self.controller.IsAvailable(objective['objective_id']):
-								return gtk.gdk.color_parse(self.config.Get('color_available'))
-
-							# Yellow - InProgress
-							elif self.controller.IsInprocess(objective['objective_id']):
-								return gtk.gdk.color_parse(self.config.Get('color_inprocess'))
-
-							# Red - Unabordable
-							return gtk.gdk.color_parse(self.config.Get('color_unabordable'))
-
-
-						# Check if objective has to be printed and with what color
-						color = GetColor()
-						if(color):
-							# Create objective button
-							# and register to prevent be printed twice
-							checked_objectives[objective['objective_id']] = GraphRenderer.Objective(objective, self,
-																									self.controller, color)
-
-							# Create objective button
-							PutButton(checked_objectives[objective['objective_id']])
-
-				# Increase level index
+				Objectives(level_requeriments)
 				y += 1
-
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
@@ -466,9 +507,9 @@ class Main(View_Gtk.View_Gtk):
 
 	def __ExportSaveSensitivity(self):
 		"Set the sensitivity of the export buttons"
-		self.builder.get_object("tbSaveAs").set_sensitive(len(self.__levels))
-		self.mnuSaveAs.set_sensitive(len(self.__levels))
-		self.mnuExport.set_sensitive(len(self.__levels))
+		self.builder.get_object("tbSaveAs").set_sensitive(len(self.__objectives))
+		self.mnuSaveAs.set_sensitive(len(self.__objectives))
+		self.mnuExport.set_sensitive(len(self.__objectives))
 
 
 	def __ShowZoom(self):
@@ -482,19 +523,6 @@ class Main(View_Gtk.View_Gtk):
 		self.mnuZoomOut.set_sensitive(actual>0)
 		self.builder.get_object("tbZoomOut").set_sensitive(actual>0)
 		self.mnuObjective_ZoomOut.set_sensitive(actual>0)
-
-
-	def __CleanGraph(self):
-		# Clean arrows array
-#		self.__req_arrows = []
-		self.__objectives = {}
-
-		# Delete old buttons
-		for children in self.layout.get_children():
-			self.layout.remove(children)
-
-		# Re-draw surface of the layout
-		self.layout.queue_draw()
 
 
 	def About(self, widget):
