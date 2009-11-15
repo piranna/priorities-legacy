@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkWindow" id="Main">
+    <property name="title">Priorities</property>
+    <property name="default_width">640</property>
+    <property name="default_height">480</property>
+    <property name="icon">priorities.svg</property>
+    <signal name="destroy" handler="on_Main_destroy"/>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hadjustment">adjMainH</property>
+        <property name="vadjustment">adjMainV</property>
+        <property name="hscrollbar_policy">automatic</property>
+        <property name="vscrollbar_policy">automatic</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkLayout" id="layout">
+            <property name="visible">True</property>
+            <property name="hadjustment">adjMainH</property>
+            <property name="vadjustment">adjMainV</property>
+            <signal name="button_press_event" handler="ShowLayoutMenu"/>
+            <signal name="expose_event" handler="DrawRequerimentsArrows"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="adjMainH">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjMainV">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="page_size">10</property>
+  </object>
+  <object class="GtkMenu" id="mnuCtxObjective">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_Edit">
+        <property name="label">gtk-edit</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_Delete">
+        <property name="label">gtk-remove</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_ZoomIn">
+        <property name="label">gtk-zoom-in</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuObjective_ZoomOut">
+        <property name="label">gtk-zoom-out</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomOut"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="mnuCtxLayout">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_AddObjective">
+        <property name="label">gtk-add</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="AddObjective"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem2">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_ZoomIn">
+        <property name="label">gtk-zoom-in</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomIn"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="mnuLayout_ZoomOut">
+        <property name="label">gtk-zoom-out</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="ZoomOut"/>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -27,9 +27,9 @@ class Main(View_Gtk.View_Gtk):
 		self.__objectiveHI_delete = None
 		self.__objectiveHI_zoomin = None
 
-		self.__cursorObjective = None
+		self.__needRenderGraph = 0
 
-		self.__needRenderGraph = False
+		self.__cursorObjective = None
 
 		self.layout = self.builder.get_object("layout")
 		self.layout.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
@@ -182,12 +182,9 @@ class Main(View_Gtk.View_Gtk):
 
 
 	def DrawRequerimentsArrows(self, widget,event):
+		self.__RenderGraph()
+
 		if self.__objectives:
-
-
-			self.__RenderGraph()
-
-
 			# Graphic Context
 			gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
 
@@ -261,7 +258,7 @@ class Main(View_Gtk.View_Gtk):
 
 	def __RenderGraph(self):
 		if self.__needRenderGraph:
-			self.__needRenderGraph = False
+			self.__needRenderGraph -=1
 
 			if self.__objectives:
 				biggest_row_width = 0
@@ -272,102 +269,97 @@ class Main(View_Gtk.View_Gtk):
 
 				keys = self.__objectives.keys()
 				keys.sort()
-
-				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
-
 				for level in keys:
 
 					print level
 
 					biggest_height = 0
-#					x = self.margin_x/2
+					x = self.margin_x/2
 					for button in self.__objectives[level]:
 
 #####
-#						def Get_RequerimentCoordinate_X():
-#							min_x = None
-#							max_x = None
-#
-#							requeriments = button.Get_Requeriments()
-#							if requeriments:
-#								if len(requeriments) == 1:
-#
-#									print "\t",requeriments[0].get_label()
+						def Get_RequerimentCoordinate_X():
+							requeriments = button.Get_Requeriments()
+							if requeriments:
+								if len(requeriments) == 1:
+
+									print "\t",requeriments[0].get_label()
 #									button.X(requeriments[0].X())
-#
-#									def Get_DependenceCoordinate_X():
-#										min_x = None
-#										max_x = None
-#
-#										dependents = requeriments[0].Get_Dependents()
-#
-#										print "\t\t",dependents
-#
-#										if(dependents
-#										and len(dependents)>1):
-#											for dep in dependents:
-#
-#												print "\t\t",dep.get_label()
-#
-#												if(min_x == None
-#												or dep.X() < min_x):
-#													min_x = dep.X()
-#
-#												if(max_x == None
-#												or dep.X()+dep.allocation.width > max_x):
-#													max_x = dep.X()+dep.allocation.width
-#
-#											dep_x = ((min_x+max_x)-requeriments[0].allocation.width)/2
-#											if(dep_x
-#											and dep_x!=requeriments[0].X()):
-#												requeriments[0].X(dep_x)
-#												l_next = requeriments[0].next
-#												l_next.X(max_x + self.margin_x)
-#												while l_next.next:
-#													l_next.next.X(l_next.X() + l_next.allocation.width + self.margin_x)
-#													l_next = l_next.next
-#												return True
-#										return False
-#
-#
-#									if Get_DependenceCoordinate_X():
-#										return None
-#
-#								# Several requeriments
-#								for req in requeriments:
-#									if(min_x == None
-#									or req.X() < min_x):
-#										min_x = req.X()
-#
-#									if(max_x == None
-#									or req.X()+req.allocation.width > max_x):
-#										max_x = req.X()+req.allocation.width
-#
-#								return ((min_x+max_x)-button.allocation.width)/2
-#							return None
-#
-#
-#						req_x = Get_RequerimentCoordinate_X()
-#						if req_x > x:
-#							x = req_x
+
+									def Get_DependenceCoordinate_X():
+										min_x = None
+										max_x = None
+
+										dependents = requeriments[0].Get_Dependents()
+
+										print "\t\t",dependents
+
+										if(dependents
+										and len(dependents)>1):
+											for dep in dependents:
+
+												print "\t\t",dep.get_label()
+
+												if(min_x == None
+												or dep.X() < min_x):
+													min_x = dep.X()
+
+												if(max_x == None
+												or dep.X()+dep.allocation.width > max_x):
+													max_x = dep.X()+dep.allocation.width
+
+											dep_x = ((min_x+max_x)-requeriments[0].allocation.width)/2
+											if(dep_x
+											and dep_x!=requeriments[0].X()):
+												requeriments[0].X(dep_x)
+												l_next = requeriments[0].next
+												l_next.X(max_x + self.margin_x)
+												while l_next.next:
+													l_next.next.X(l_next.X() + l_next.allocation.width + self.margin_x)
+													l_next = l_next.next
+												return True
+										return False
+
+
+									if Get_DependenceCoordinate_X():
+										return None
+
+								# Several requeriments
+								min_x = None
+								max_x = None
+
+								for req in requeriments:
+									if(min_x == None
+									or req.X() < min_x):
+										min_x = req.X()
+
+									if(max_x == None
+									or req.X()+req.allocation.width > max_x):
+										max_x = req.X()+req.allocation.width
+
+								return ((min_x+max_x)-button.allocation.width)/2
+							return None
+
+
+						req_x = Get_RequerimentCoordinate_X()
+						if req_x > x:
+							x = req_x
 #####
-#
-#						# Set button position
-#	#					print "button",button.allocation
-#						if(x!=button.X()
-#						or y!=button.Y()):
-#							button.Move(x,y)
-						if y!=button.Y():
-							button.Y(y)
-#	#					print "\t",button.allocation
-#
-#						# Set new x coordinate
-#						# and layout sizes
-#						x += button.allocation.width
-#						if x > biggest_row_width:
-#							biggest_row_width = x
-#
-#						x += self.margin_x
+
+						# Set button position
+	#					print "button",button.allocation
+						if(x!=button.X()
+						or y!=button.Y()):
+							button.Move(x,y)
+	#					print "\t",button.allocation
+
+						# Set new x coordinate
+						# and layout sizes
+						x += button.allocation.width
+						if x > biggest_row_width:
+							biggest_row_width = x
+
+						x += self.margin_x
 
 						if button.allocation.height > biggest_height:
 							biggest_height = button.allocation.height
@@ -399,10 +391,10 @@ class Main(View_Gtk.View_Gtk):
 		tree = self.controller.ShowTree(objective_name)
 		if tree:
 
-			self.__needRenderGraph = True
-
 			# Level index
 			y = 0
+
+			self.__needRenderGraph = 2
 
 			checked_objectives = {}
 
@@ -413,7 +405,7 @@ class Main(View_Gtk.View_Gtk):
 					if not self.__objectives.has_key(y):
 						self.__objectives[y] = []
 					else:
-						self.__objectives[y][-1].Set_Next(button)
+						self.__objectives[y][-1].next = button
 					self.__objectives[y].append(button)
 
 				def Requeriments():
@@ -432,8 +424,9 @@ class Main(View_Gtk.View_Gtk):
 								# If requeriment is registered,
 								# add alternative
 								if objective['requeriment'] in level_requeriments[objective['objective_id']]:
+									button.Add_Dependency(checked_objectives[objective['alternative']])
 									button.set_label(button.get_label()+"\n"
-													+self.controller.GetName(objective['alternative']))
+																+self.controller.GetName(objective['alternative']))
 
 								# else create a new one
 								else:
@@ -446,10 +439,10 @@ class Main(View_Gtk.View_Gtk):
 																		objective['objective_id'],
 																		self)
 
+									button.Add_Dependency(checked_objectives[objective['alternative']])
+
 									# Add requeriment
 									level_requeriments[objective['objective_id']][objective['requeriment']] = button
-
-								button.Add_Dependency(checked_objectives[objective['alternative']])
 
 					print "level_requeriments",level_requeriments
 
