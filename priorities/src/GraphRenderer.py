@@ -34,6 +34,7 @@ class Requeriment(gtk.Button):
 #			self.window.move_resize(*allocation)
 
 	def __X(self, x=None):
+		print self.get_label(),self.__x,x
 		if x:
 			self.__x = x
 			self.__layout.move(self, self.__x,self.__y)
@@ -48,10 +49,10 @@ class Requeriment(gtk.Button):
 			self.__layout.move(self, self.__x,self.__y)
 		return self.__y
 
-	def __Move(self, x,y):
-		self.__x = x
-		self.__y = y
-		self.__layout.move(self, self.__x,self.__y)
+#	def __Move(self, x,y):
+#		self.__x = x
+#		self.__y = y
+#		self.__layout.move(self, self.__x,self.__y)
 
 	def Add_Dependency(self, dependency):
 		self.__requeriments.append(dependency)
@@ -69,12 +70,12 @@ class Requeriment(gtk.Button):
 
 
 	def Adjust_x(self, x):
-#		parent_next_x = None
-
 		if len(self.__requeriments) == 1:
 			if len(self.__requeriments[0].__dependents) == 1:
 				x = (2*self.__requeriments[0].__x+self.__requeriments[0].allocation.width-self.allocation.width)/2
 			else:	# > 1
+				self.__X(x)
+
 				min_x = None
 				max_x = None
 
@@ -87,7 +88,9 @@ class Requeriment(gtk.Button):
 					or dep.__x+dep.allocation.width > max_x):
 						max_x = dep.__x+dep.allocation.width
 
-				self.__requeriments[0].__x = (min_x+max_x-self.allocation.width)/2
+				aux_x = (min_x+max_x-self.__requeriments[0].allocation.width)/2
+#				if self.__requeriments[0].__x < aux_x:
+				self.__requeriments[0].__X(aux_x)
 				print "max_x",max_x
 #				parent_next_x = max_x
 
@@ -107,26 +110,24 @@ class Requeriment(gtk.Button):
 			x = ((min_x+max_x)-self.allocation.width)/2
 
 		self.__X(x)
+		row_width = x
 
 		# Layout
-		layout_sizes = self.__layout.get_size()
-		self.__layout.set_size(self.__x + self.allocation.width, layout_sizes[1])
+#		layout_sizes = self.__layout.get_size()
+#		self.__layout.set_size(self.__x + self.allocation.width, layout_sizes[1])
 
 		# Recursives
-#		next_x = None
-
 		if self.__dependents:
-			next_x = self.__dependents[0].Adjust_x(self.__x)
+			aux_width = self.__dependents[0].Adjust_x(self.__x)
+			if aux_width > row_width:
+				row_width = aux_width
 
 		if self.__next:
-#			if(next_x
-#			and next_x > self.__x + self.allocation.width):
-#				print next_x,"\t",self.get_label(),"\t",self.__next.get_label()
-#				self.__next.Adjust_x(next_x + self.margin_x)
-#			else:
-				self.__next.Adjust_x(self.__x + self.allocation.width + self.margin_x)
+			aux_width = self.__next.Adjust_x(self.__x + self.allocation.width + self.margin_x)
+			if aux_width > row_width:
+				row_width = aux_width
 
-#		return parent_next_x
+		return row_width
 
 #import gobject
 #gobject.type_register(Requeriment)

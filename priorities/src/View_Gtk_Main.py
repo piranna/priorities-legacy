@@ -271,7 +271,7 @@ class Main(View_Gtk.View_Gtk):
 				keys = self.__objectives.keys()
 				keys.sort()
 
-				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
+#				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
 
 				for level in keys:
 					biggest_height = 0
@@ -288,11 +288,12 @@ class Main(View_Gtk.View_Gtk):
 
 				# Set layout size
 				# and show all buttons
-				self.layout.set_size(int(self.layout.get_size()[0] + self.margin_x/2),
-									int(y - self.margin_y/2))
-#				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
 
-#				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
+				biggest_row_width = self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
+
+#				self.layout.set_size(int(self.layout.get_size()[0] + self.margin_x/2),
+#									int(y - self.margin_y/2))
+				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
 
 				self.layout.show_all()
 
