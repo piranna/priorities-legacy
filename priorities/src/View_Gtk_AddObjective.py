@@ -5,6 +5,8 @@ import gtk
 import View_Gtk
 _ = View_Gtk._
 
+from View_Gtk_DeleteCascade import *
+
 
 class AddObjective(View_Gtk.View_Gtk):
 	__destroy = True
@@ -155,7 +157,7 @@ class AddObjective(View_Gtk.View_Gtk):
 		if self.__objective:
 			if(self.config.Get('deleteCascade')
 			and len(self.controller.DirectDependencies(self.__objective))>1):
-				dialog = DeleteCascade(self.controller, self.__objective)
+				dialog = DeleteCascade(self.__objective)
 
 				dialog.window.set_transient_for(self.window)
 				response = dialog.window.run()

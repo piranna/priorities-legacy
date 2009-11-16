@@ -88,7 +88,7 @@ class Requeriment(gtk.Button):
 						max_x = dep.__x+dep.allocation.width
 
 				self.__requeriments[0].__x = (min_x+max_x-self.allocation.width)/2
-#				print "max_x",max_x
+				print "max_x",max_x
 #				parent_next_x = max_x
 
 		elif len(self.__requeriments) > 1:
@@ -107,6 +107,10 @@ class Requeriment(gtk.Button):
 			x = ((min_x+max_x)-self.allocation.width)/2
 
 		self.__X(x)
+
+		# Layout
+		layout_sizes = self.__layout.get_size()
+		self.__layout.set_size(self.__x + self.allocation.width, layout_sizes[1])
 
 		# Recursives
 #		next_x = None

@@ -213,6 +213,7 @@ class Main(View_Gtk.View_Gtk):
 
 			# Background sharp
 			layout_size = self.layout.get_size()
+			print "\t",layout_size
 
 			if(self.config.Get('showSharp')):
 				for x in range(1,layout_size[0]/self.margin_x+1):
@@ -264,11 +265,8 @@ class Main(View_Gtk.View_Gtk):
 			self.__needRenderGraph = False
 
 			if self.__objectives:
-				biggest_row_width = 0
+#				biggest_row_width = 0
 				y = self.margin_y/2
-
-#				print "self.__objectives",self.__objectives
-#				print
 
 				keys = self.__objectives.keys()
 				keys.sort()
@@ -276,98 +274,11 @@ class Main(View_Gtk.View_Gtk):
 				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
 
 				for level in keys:
-
-					print level
-
 					biggest_height = 0
-#					x = self.margin_x/2
-					for button in self.__objectives[level]:
 
-#####
-#						def Get_RequerimentCoordinate_X():
-#							min_x = None
-#							max_x = None
-#
-#							requeriments = button.Get_Requeriments()
-#							if requeriments:
-#								if len(requeriments) == 1:
-#
-#									print "\t",requeriments[0].get_label()
-#									button.X(requeriments[0].X())
-#
-#									def Get_DependenceCoordinate_X():
-#										min_x = None
-#										max_x = None
-#
-#										dependents = requeriments[0].Get_Dependents()
-#
-#										print "\t\t",dependents
-#
-#										if(dependents
-#										and len(dependents)>1):
-#											for dep in dependents:
-#
-#												print "\t\t",dep.get_label()
-#
-#												if(min_x == None
-#												or dep.X() < min_x):
-#													min_x = dep.X()
-#
-#												if(max_x == None
-#												or dep.X()+dep.allocation.width > max_x):
-#													max_x = dep.X()+dep.allocation.width
-#
-#											dep_x = ((min_x+max_x)-requeriments[0].allocation.width)/2
-#											if(dep_x
-#											and dep_x!=requeriments[0].X()):
-#												requeriments[0].X(dep_x)
-#												l_next = requeriments[0].next
-#												l_next.X(max_x + self.margin_x)
-#												while l_next.next:
-#													l_next.next.X(l_next.X() + l_next.allocation.width + self.margin_x)
-#													l_next = l_next.next
-#												return True
-#										return False
-#
-#
-#									if Get_DependenceCoordinate_X():
-#										return None
-#
-#								# Several requeriments
-#								for req in requeriments:
-#									if(min_x == None
-#									or req.X() < min_x):
-#										min_x = req.X()
-#
-#									if(max_x == None
-#									or req.X()+req.allocation.width > max_x):
-#										max_x = req.X()+req.allocation.width
-#
-#								return ((min_x+max_x)-button.allocation.width)/2
-#							return None
-#
-#
-#						req_x = Get_RequerimentCoordinate_X()
-#						if req_x > x:
-#							x = req_x
-#####
-#
-#						# Set button position
-#	#					print "button",button.allocation
-#						if(x!=button.X()
-#						or y!=button.Y()):
-#							button.Move(x,y)
+					for button in self.__objectives[level]:
 						if y!=button.Y():
 							button.Y(y)
-#	#					print "\t",button.allocation
-#
-#						# Set new x coordinate
-#						# and layout sizes
-#						x += button.allocation.width
-#						if x > biggest_row_width:
-#							biggest_row_width = x
-#
-#						x += self.margin_x
 
 						if button.allocation.height > biggest_height:
 							biggest_height = button.allocation.height
@@ -377,7 +288,12 @@ class Main(View_Gtk.View_Gtk):
 
 				# Set layout size
 				# and show all buttons
-				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
+				self.layout.set_size(int(self.layout.get_size()[0] + self.margin_x/2),
+									int(y - self.margin_y/2))
+#				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
+
+#				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
+
 				self.layout.show_all()
 
 
