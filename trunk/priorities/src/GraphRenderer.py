@@ -34,8 +34,9 @@ class Requeriment(gtk.Button):
 #			self.window.move_resize(*allocation)
 
 	def __X(self, x=None):
-		print self.get_label(),self.__x,x
-		if x:
+		if(x
+		and x!=self.__x):
+			print self.get_label(),self.__x,x,self.allocation.width
 			self.__x = x
 			self.__layout.move(self, self.__x,self.__y)
 		return self.__x
@@ -70,6 +71,8 @@ class Requeriment(gtk.Button):
 
 
 	def Adjust_x(self, x):
+		row_width = 0
+
 		if len(self.__requeriments) == 1:
 			if len(self.__requeriments[0].__dependents) == 1:
 				x = (2*self.__requeriments[0].__x+self.__requeriments[0].allocation.width-self.allocation.width)/2
@@ -89,10 +92,9 @@ class Requeriment(gtk.Button):
 						max_x = dep.__x+dep.allocation.width
 
 				aux_x = (min_x+max_x-self.__requeriments[0].allocation.width)/2
-#				if self.__requeriments[0].__x < aux_x:
 				self.__requeriments[0].__X(aux_x)
 				print "max_x",max_x
-#				parent_next_x = max_x
+				row_width = max_x
 
 		elif len(self.__requeriments) > 1:
 			min_x = None
@@ -110,11 +112,8 @@ class Requeriment(gtk.Button):
 			x = ((min_x+max_x)-self.allocation.width)/2
 
 		self.__X(x)
-		row_width = x
-
-		# Layout
-#		layout_sizes = self.__layout.get_size()
-#		self.__layout.set_size(self.__x + self.allocation.width, layout_sizes[1])
+		if x > row_width:
+			row_width = x
 
 		# Recursives
 		if self.__dependents:
@@ -123,7 +122,9 @@ class Requeriment(gtk.Button):
 				row_width = aux_width
 
 		if self.__next:
-			aux_width = self.__next.Adjust_x(self.__x + self.allocation.width + self.margin_x)
+			if self.__x + self.allocation.width > row_width:
+				row_width = self.__x + self.allocation.width
+			aux_width = self.__next.Adjust_x(row_width + self.margin_x)
 			if aux_width > row_width:
 				row_width = aux_width
 
