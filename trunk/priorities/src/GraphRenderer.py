@@ -45,7 +45,8 @@ class Requeriment(gtk.Button):
 		return self.__x
 
 	def Y(self, y=None):
-		if y:
+		if(y
+		and y!=self.__y):
 			self.__y = y
 			self.__layout.move(self, self.__x,self.__y)
 		return self.__y
@@ -58,7 +59,6 @@ class Requeriment(gtk.Button):
 	def Add_Dependency(self, dependency):
 		self.__requeriments.append(dependency)
 		dependency.__Add_Dependent(self)
-#		self.__ReAdjust()
 
 	def __Add_Dependent(self, dependent):
 		self.__dependents.append(dependent)
@@ -71,7 +71,25 @@ class Requeriment(gtk.Button):
 
 
 	def Adjust_x(self, x):
+		def Get_Expansion(buttons):
+			min_x = None
+			max_x = None
+
+			for button in buttons:
+				if(min_x == None
+				or button.__x < min_x):
+					min_x = button.__x
+
+				if(max_x == None
+				or button.__x+button.allocation.width > max_x):
+					max_x = button.__x+button.allocation.width
+
 		row_width = 0
+
+		def Update_RowWidth(value):
+			if row_width < value:
+				row_width = value
+
 
 		if len(self.__requeriments) == 1:
 			if len(self.__requeriments[0].__dependents) == 1:
@@ -79,55 +97,34 @@ class Requeriment(gtk.Button):
 			else:	# > 1
 				self.__X(x)
 
-				min_x = None
-				max_x = None
+				min_x,max_x = Get_Expansion(self.__requeriments[0].__dependents)
 
-				for dep in self.__requeriments[0].__dependents:
-					if(min_x == None
-					or dep.__x < min_x):
-						min_x = dep.__x
+				self.__requeriments[0].__X((min_x+max_x-self.__requeriments[0].allocation.width)/2)
 
-					if(max_x == None
-					or dep.__x+dep.allocation.width > max_x):
-						max_x = dep.__x+dep.allocation.width
-
-				aux_x = (min_x+max_x-self.__requeriments[0].allocation.width)/2
-				self.__requeriments[0].__X(aux_x)
 				print "max_x",max_x
 				row_width = max_x
 
 		elif len(self.__requeriments) > 1:
-			min_x = None
-			max_x = None
-
-			for req in self.__requeriments:
-				if(min_x == None
-				or req.__x < min_x):
-					min_x = req.__x
-
-				if(max_x == None
-				or req.__x+req.allocation.width > max_x):
-					max_x = req.__x+req.allocation.width
+			min_x,max_x = Get_Expansion(self.__requeriments)
 
 			x = ((min_x+max_x)-self.allocation.width)/2
 
 		self.__X(x)
-		if x > row_width:
-			row_width = x
+		Update_RowWidth(x)
 
+		#
 		# Recursives
+
+		# Dependents
 		if self.__dependents:
-			aux_width = self.__dependents[0].Adjust_x(self.__x)
-			if aux_width > row_width:
-				row_width = aux_width
+			Update_RowWidth(self.__dependents[0].Adjust_x(self.__x))
 
+		# Next
 		if self.__next:
-			if self.__x + self.allocation.width > row_width:
-				row_width = self.__x + self.allocation.width
-			aux_width = self.__next.Adjust_x(row_width + self.margin_x)
-			if aux_width > row_width:
-				row_width = aux_width
+			Update_RowWidth(self.__x + self.allocation.width)
+			Update_RowWidth(self.__next.Adjust_x(row_width + self.margin_x))
 
+		# Return value of the current row width
 		return row_width
 
 #import gobject
