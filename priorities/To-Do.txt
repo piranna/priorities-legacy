@@ -2,14 +2,14 @@
 ========
 Nuevo algoritmo de distribucion de objetivos
 	Separar calculo de colocacion final (y flechas)
-		Crear clase GraphRenderer
 		Hacer clase para automatizar las tareas de los objetivos
 	* Colocar todos los niveles sin solaparse vertical y horizontalmente
 		? Obtener ancho y alto efectivos de los botones
 	* Colocar niveles centrados unos con otros
 		Recolocar objetivos de un nivel si el siguiente tiene mas elementos
 
-Redefinir interfaz de AddObjective
+Redefinir interfaz GTK de AddObjective
+	Sustituir campo de texto por lista de requerimientos y alternativas
 	Busqueda de objetivos previamente definidos como requisitos de nuevos
 
 
@@ -21,6 +21,14 @@ Redefinir interfaz de AddObjective
 
 Post 1.0:
 =========
+Mejorar algoritmo de ordenacion
+	Eliminar huecos
+	Obtener coordenadas y tamaño automaticamente
+Probar diferentes algoritmos de ordenacion (expansivo, compacto)
+
+Drag&Drop en lista de requerimientos y alternativas
+Reordenar requerimientos y alternativas
+
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
@@ -109,4 +117,3 @@ Cambiar indices en base de datos a UNSIGNED
 i Cerrar dialog con insert
 Eliminar objetivo desde opcion de menu en Main y toolbar
 Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
-
