@@ -33,6 +33,8 @@ class AddObjective(View_Gtk.View_Gtk):
 		self.txtRequeriments = self.builder.get_object("txtRequirements")
 		txtBuffer = self.txtRequeriments.get_buffer()
 
+#		self.vbRequeriments = self.builder.get_object("vbRequeriments")
+
 		# Set data
 		if objective:
 			objective = self.controller.GetObjective_byId(objective)
@@ -163,8 +165,8 @@ class AddObjective(View_Gtk.View_Gtk):
 				response = dialog.window.run()
 				dialog.window.destroy()
 
-				if response > 0:
-					self.__CreateTree()
+#				if response > 0:
+#					self.__CreateTree()
 
 			else:
 				dialog = gtk.MessageDialog(self.window,
@@ -176,7 +178,7 @@ class AddObjective(View_Gtk.View_Gtk):
 				dialog.destroy()
 				if response == gtk.RESPONSE_YES:
 					self.controller.DeleteObjective(self.__objective)
-					self.__CreateTree()
+#					self.__CreateTree()
 
 		return True
 
