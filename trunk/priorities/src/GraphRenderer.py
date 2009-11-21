@@ -36,7 +36,7 @@ class Requeriment(gtk.Button):
 	def __X(self, x=None):
 		if(x
 		and x!=self.__x):
-			print self.get_label(),self.__x,x,self.allocation.width
+			print self.get_label(),self.__x,"(",x,self.allocation.width,")",x+self.allocation.width
 			self.__x = x
 			self.__layout.move(self, self.__x,self.__y)
 		return self.__x
@@ -84,12 +84,15 @@ class Requeriment(gtk.Button):
 				or button.__x+button.allocation.width > max_x):
 					max_x = button.__x+button.allocation.width
 
-		row_width = 0
+			return min_x,max_x
 
-		def Update_RowWidth(value):
+		def Update_RowWidth(row_width, value):
 			if row_width < value:
 				row_width = value
+			return row_width
 
+
+		row_width = 0
 
 		if len(self.__requeriments) == 1:
 			if len(self.__requeriments[0].__dependents) == 1:
@@ -110,19 +113,19 @@ class Requeriment(gtk.Button):
 			x = ((min_x+max_x)-self.allocation.width)/2
 
 		self.__X(x)
-		Update_RowWidth(x)
+		row_width = Update_RowWidth(row_width, x)
 
 		#
 		# Recursives
 
 		# Dependents
 		if self.__dependents:
-			Update_RowWidth(self.__dependents[0].Adjust_x(self.__x))
+			row_width = Update_RowWidth(row_width, self.__dependents[0].Adjust_x(self.__x))
 
 		# Next
 		if self.__next:
-			Update_RowWidth(self.__x + self.allocation.width)
-			Update_RowWidth(self.__next.Adjust_x(row_width + self.margin_x))
+			row_width = Update_RowWidth(row_width, self.__x + self.allocation.width)
+			row_width = Update_RowWidth(row_width, self.__next.Adjust_x(row_width + self.margin_x))
 
 		# Return value of the current row width
 		return row_width
