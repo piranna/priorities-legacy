@@ -15,23 +15,19 @@ class Requeriment(gtk.Button):
 		self.__y = 0
 
 		self.connect('clicked',parent.AddObjective, objective_id)
-#		self.connect('enter_notify_event',parent.__IncreaseLineWidth, objective['objective_id'])
-#		self.connect('leave_notify_event',parent.__IncreaseLineWidth)
+		self.connect('enter_notify_event',parent.IncreaseLineWidth, self)
+		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 
 		self.__requeriments = []
 		self.__dependents = []
 		self.__next = None
+#		self.__prev = None
 
 	def Set_Next(self, next):
 		self.__next = next
-#		self.__ReAdjust()
 
-#	def do_size_allocate(self, allocation):
-#		print allocation
-#		self.allocation = allocation
-#
-#		if self.flags() & gtk.REALIZED:
-#			self.window.move_resize(*allocation)
+#	def Set_Prev(self, prev):
+#		self.__prev = prev
 
 	def __X(self, x=None):
 		if(x
@@ -51,11 +47,6 @@ class Requeriment(gtk.Button):
 			self.__layout.move(self, self.__x,self.__y)
 		return self.__y
 
-#	def __Move(self, x,y):
-#		self.__x = x
-#		self.__y = y
-#		self.__layout.move(self, self.__x,self.__y)
-
 	def Add_Dependency(self, dependency):
 		self.__requeriments.append(dependency)
 		dependency.__Add_Dependent(self)
@@ -65,9 +56,6 @@ class Requeriment(gtk.Button):
 
 	def Get_Requeriments(self):
 		return self.__requeriments
-
-	def __Get_Dependents(self):
-		return self.__dependents
 
 
 	def Adjust_x(self, x):
@@ -91,6 +79,11 @@ class Requeriment(gtk.Button):
 				row_width = value
 			return row_width
 
+
+#		if self.__prev:
+#			row_width = self.__prev.__x + self.__prev.allocation.width + self.margin_x
+#			if x < row_width:
+#				x = row_width
 
 		row_width = 0
 
@@ -123,8 +116,8 @@ class Requeriment(gtk.Button):
 			row_width = Update_RowWidth(row_width, self.__dependents[0].Adjust_x(self.__x))
 
 		# Next
+		row_width = Update_RowWidth(row_width, self.__x + self.allocation.width)
 		if self.__next:
-			row_width = Update_RowWidth(row_width, self.__x + self.allocation.width)
 			row_width = Update_RowWidth(row_width, self.__next.Adjust_x(row_width + self.margin_x))
 
 		# Return value of the current row width

@@ -6,15 +6,8 @@
 
 Post 1.0:
 =========
-Mejorar algoritmo de ordenacion
-	Eliminar huecos
-		No definir siguiente si no estan relaccionados (definir y comprobar con anterior)
-	Obtener coordenadas y tamaño automaticamente
-Probar diferentes algoritmos de ordenacion (expansivo, compacto)
-
-Drag&Drop en lista de requerimientos y alternativas
-Reordenar requerimientos y alternativas
-
+1.1:
+====
 Limpiar, simplificar y personalizar consultas SQL y funciones
 Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
@@ -22,11 +15,11 @@ Controller
 # [To-Do] It seems it's called twice when has several dependent
 # that are from the same requeriment
 
-1.1:
-====
-Redefinir interfaz GTK de AddObjective
-	Sustituir campo de texto por lista de requerimientos y alternativas
-	Busqueda de objetivos previamente definidos como requisitos de nuevos
+Mejorar algoritmo de ordenacion
+	Eliminar huecos
+		No definir siguiente si no estan relaccionados (definir y comprobar con anterior)
+	Obtener coordenadas y tamaño automaticamente
+Probar diferentes algoritmos de ordenacion (expansivo, compacto)
 
 Ayuda
 
@@ -42,8 +35,8 @@ Resaltar lineas de requisitos recursivamente
 
 Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 
-Buscar con autocompletado
-	Cuadro de busqueda en toolbox
+* Buscar con autocompletado
+	* Cuadro de busqueda en toolbox
 
 ? Cargar/importar archivo de exportacion desde terminal en modo texto y gtk
 ? Hacer version de todas las funciones de GTK en modo texto
@@ -52,6 +45,13 @@ Buscar con autocompletado
 
 1.2:
 ====
+Redefinir interfaz GTK de AddObjective
+	Sustituir campo de texto por lista de requerimientos y alternativas
+	Busqueda de objetivos previamente definidos como requisitos de nuevos
+
+Drag&Drop en lista de requerimientos y alternativas
+Reordenar requerimientos y alternativas
+
 Definir archivo de preferencias como parametro
 	Procesar el archivo antes que el resto de opciones
 
@@ -70,9 +70,6 @@ Dibujar alternativas en modo texto
 Dibujar lineas en modo texto
 
 Mostrar objetivos centrados
-
-Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
-	* Usar indices para acelerar su acceso
 
 
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
@@ -108,3 +105,6 @@ i Cerrar dialog con insert
 Eliminar objetivo desde opcion de menu en Main y toolbar
 Modificar inconsistencia de los ancestros al eliminar en cascada (inconsistencia = se van a mantener algunos de los hijos)
 
+
+Aumentar velocidad en algoritmo de seleccion de eliminacion en cascada
+	* Usar indices para acelerar su acceso

@@ -240,8 +240,8 @@ class Main(View_Gtk.View_Gtk):
 			for level in self.__objectives:
 				for button in self.__objectives[level]:
 					line_width = 0
-	#				if arrow[0]==self.__cursorObjective:
-	#					line_width = 2
+					if button==self.__cursorObjective:
+						line_width = 2
 					gc.set_line_attributes(line_width, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
 
 					for requeriment in button.Get_Requeriments():
@@ -634,7 +634,7 @@ class Main(View_Gtk.View_Gtk):
 		dialog.destroy()
 
 
-	def __IncreaseLineWidth(self, widget,event, objective_id=None):
+	def IncreaseLineWidth(self, widget,event, objective_id=None):
 		self.__cursorObjective = objective_id
 		self.layout.queue_draw()
 

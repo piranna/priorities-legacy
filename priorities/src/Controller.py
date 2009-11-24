@@ -13,12 +13,14 @@ class Controller:
 
 		dependencies = []
 
-		# Get all the requeriments tree of an objective
-		# storing them in dependencies and returning the current top level
 		def PrivateRecursiveDependencies(objective_id,checked=[]):
+			"""
+			Get all the requeriments tree of an objective
+			storing them in dependencies and returning the current top level
+			"""
 
-			# Append data to the indexed array of array
 			def Insert_array_tree_2d(data, index, array, head=False):
+				"Append data to the indexed array of array"
 				while len(array)<=index:
 					array.append([])
 				if head:
@@ -26,9 +28,11 @@ class Controller:
 				else:
 					array[index].append(data)
 
-			# Get the depth of an objective_id inside an array
-			# If not, return -1 as error message
 			def GetDepth(objective_id, array):
+				"""
+				Get the depth of an objective_id inside an array
+				If not, return -1 as error message
+				"""
 				depth = 0
 				for array_level in array:
 					for dependency in array_level:
@@ -113,7 +117,7 @@ class Controller:
 
 
 	def ShowTree(self, objective=None):
-		# Get id of the objective
+		"Get id of the objective"
 		if objective:
 			objective = self.__model.GetId(objective)
 
