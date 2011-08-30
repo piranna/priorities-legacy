@@ -41,7 +41,7 @@ class Config:
 		self.__config['showArrowHeads']				= True
 		self.__config['showLayoutBorders']			= True
 
-		self.__config['showExceededRequeriments']	= 1
+		self.__config['showExceededDependencies']	= 1
 		self.__config['expirationWarning']			= 1
 		self.__config['removeOrphanRequeriments']	= True
 		self.__config['deleteCascade']				= True
@@ -73,17 +73,17 @@ class Config:
 				self.__config[line[0].strip()] = line[1].strip()
 
 			# Re-define boolean config
-			self.__config['useDefaultDB']				= (self.__config['useDefaultDB']=="True")
-			self.__config['showSharp']					= (self.__config['showSharp']=="True")
-			self.__config['showArrowHeads']				= (self.__config['showArrowHeads']=="True")
-			self.__config['showLayoutBorders']			= (self.__config['showLayoutBorders']=="True")
-			self.__config['removeOrphanRequeriments']	= (self.__config['removeOrphanRequeriments']=="True")
-			self.__config['deleteCascade']				= (self.__config['deleteCascade']=="True")
-			self.__config['confirmDeleteCascade']		= (self.__config['confirmDeleteCascade']=="True")
-			self.__config['maximized']					= (self.__config['maximized']=="True")
+			self.__config['useDefaultDB']				= self.__config['useDefaultDB']=="True"
+			self.__config['showSharp']					= self.__config['showSharp']=="True"
+			self.__config['showArrowHeads']				= self.__config['showArrowHeads']=="True"
+			self.__config['showLayoutBorders']			= self.__config['showLayoutBorders']=="True"
+			self.__config['removeOrphanRequeriments']	= self.__config['removeOrphanRequeriments']=="True"
+			self.__config['deleteCascade']				= self.__config['deleteCascade']=="True"
+			self.__config['confirmDeleteCascade']		= self.__config['confirmDeleteCascade']=="True"
+			self.__config['maximized']					= self.__config['maximized']=="True"
 
 			# Re-define integer config
-			self.__config['showExceededRequeriments']	= int(self.__config['showExceededRequeriments'])
+			self.__config['showExceededDependencies']	= int(self.__config['showExceededDependencies'])
 			self.__config['expirationWarning']			= int(self.__config['expirationWarning'])
 
 			file.close()
@@ -103,4 +103,3 @@ class Config:
 
 		finally:
 			file.close()
-
