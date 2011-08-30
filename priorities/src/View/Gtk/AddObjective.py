@@ -2,17 +2,16 @@ import datetime
 
 import gtk
 
-import View.Gtk
-_ = View.Gtk._
+from View.Gtk import _,Gtk
 
-from View_Gtk_DeleteCascade import *
+from View.Gtk.DeleteCascade import *
 
 
-class AddObjective(View.Gtk.View_Gtk):
+class AddObjective(Gtk):
 	__destroy = True
 
 	def __init__(self, objective=None):
-		View.Gtk.View_Gtk.__init__(self, "AddObjective")
+		Gtk.__init__(self, "AddObjective")
 
 		self.__objective = objective
 
@@ -240,10 +239,10 @@ class AddObjective(View.Gtk.View_Gtk):
 		self.__btnDel_Requeriment_Sensitivity()
 
 
-class Alternative(View_Gtk.View_Gtk):
+class Alternative(Gtk):
 
 	def __init__(self):
-		View_Gtk.View_Gtk.__init__(self, "expRequeriment")
+		Gtk.__init__(self, "expRequeriment")
 
 		self.__model = self.builder.get_object("lstAlternatives")
 		self.__model.clear()

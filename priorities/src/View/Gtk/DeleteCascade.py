@@ -1,10 +1,9 @@
-import View_Gtk
-_ = View_Gtk._
+from View.Gtk import _,Gtk
 
 
-class DeleteCascade(View_Gtk.View_Gtk):
+class DeleteCascade(Gtk):
 	def __init__(self, objective):
-		View_Gtk.View_Gtk.__init__(self, "DeleteCascade")
+		Gtk.__init__(self, "DeleteCascade")
 
 		# Model
 		treeview = self.builder.get_object("treeview")

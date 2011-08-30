@@ -2,23 +2,22 @@ import math
 
 import navigationbar
 
-import View_Gtk
-_ = View_Gtk._
+from View.Gtk import Gtk,_
 
-from View_Gtk_About import *
-from View_Gtk_AddObjective import *
-from View_Gtk_DeleteCascade import *
-from View_Gtk_Preferences import *
+from View.Gtk.About import *
+from View.Gtk.AddObjective import *
+from View.Gtk.DeleteCascade import *
+from View.Gtk.Preferences import *
 
-import GraphRenderer
+import View.GraphRenderer
 
 
-class Main(View_Gtk.View_Gtk):
+class Main(Gtk):
 	margin_x = 20
 	margin_y = 50
 
 	def __init__(self, input=None):
-		View_Gtk.View_Gtk.__init__(self, "Main")
+		Gtk.__init__(self, "Main")
 
 		if input and not self.controller.Import(input):
 			print _("Exception importing database")

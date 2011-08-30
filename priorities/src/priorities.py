@@ -88,24 +88,21 @@ if __name__ == "__main__":
 	View.View.controller = controller
 	View.View.config = config
 
-	def TextMode():
-		import View_Text
-		View_Text.Main(options.importFile)
-
-	def Gtk():
-		import View_Gtk_Main
-		View_Gtk_Main.Main(options.importFile)
-
 	try:
+		# Import app class
 		if options.textmode:
-			TextMode()
+			from View.Text import Main
 		else:
 #			try:
-				Gtk()
+				from View.Gtk.Main import Main
 #			except(gtk.GtkWarning,ImportError):
 #				print
 #				print _("An undefined error has ocurred loading GTK interface")
 #				print _("Loading text mode interface")
-#				TextMode()
+#				from View.Text import Main
+
+		# Run app
+		Main(options.importFile)
+
 	except KeyboardInterrupt:
 		pass

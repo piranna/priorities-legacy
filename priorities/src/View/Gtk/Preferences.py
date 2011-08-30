@@ -1,12 +1,11 @@
 import gtk
 
-import View_Gtk
-_ = View_Gtk._
+from View.Gtk import _,Gtk
 
 
-class Preferences(View_Gtk.View_Gtk):
+class Preferences(Gtk):
 	def __init__(self):
-		View_Gtk.View_Gtk.__init__(self, "Preferences")
+		Gtk.__init__(self, "Preferences")
 
 		# [To-Do] Check diferences between stored and loaded config
 
@@ -39,7 +38,7 @@ class Preferences(View_Gtk.View_Gtk):
 		#
 		# Objectives
 
-		self.builder.get_object("cbShowExceededRequeriments").set_active(self.config.Get('showExceededRequeriments'))
+		self.builder.get_object("cbShowExceededDependencies").set_active(self.config.Get('showExceededDependencies'))
 		self.builder.get_object("sbExpirationWarning").set_value(self.config.Get('expirationWarning'))
 		self.builder.get_object("chkRemoveOrphanRequeriments").set_active(self.config.Get('removeOrphanRequeriments'))
 

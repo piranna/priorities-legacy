@@ -129,8 +129,8 @@ class Model:
 	def Requeriments(self, objective=None, requeriment=None, export=False):
 		sql = '''
 			SELECT objectives.name AS name,objectives.quantity AS objective_quantity,objectives.expiration AS expiration,
-					requeriments.requeriment AS requeriment,
-					priority,alternative,requeriments.quantity AS requeriment_quantity
+					requeriments.id AS requeriment,
+					priority,alternative,alternatives.quantity AS alternative_quantity
 			'''
 		if export:
 			sql += ",objectives2.name AS alternative_name"
@@ -139,8 +139,8 @@ class Model:
 				LEFT OUTER JOIN requeriments
 					ON objectives.name = requeriments.objective
 				LEFT OUTER JOIN alternatives
-					ON  requeriments.objective   = alternatives.objective
-					AND requeriments.requeriment = alternatives.requeriment
+					ON  requeriments.objective = alternatives.objective
+					AND requeriments.id        = alternatives.requeriment
 			'''
 		if export:
 			sql += '''
