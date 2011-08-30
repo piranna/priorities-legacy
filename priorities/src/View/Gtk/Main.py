@@ -1,6 +1,4 @@
-import gtk
 import math
-import datetime
 
 import navigationbar
 
@@ -11,6 +9,8 @@ from View_Gtk_About import *
 from View_Gtk_AddObjective import *
 from View_Gtk_DeleteCascade import *
 from View_Gtk_Preferences import *
+
+import GraphRenderer
 
 
 class Main(View_Gtk.View_Gtk):
@@ -75,6 +75,11 @@ class Main(View_Gtk.View_Gtk):
 		self.navBar.add_with_id("gtk-home", self.__NavbarHome, 0)
 		self.navBar.get_button_from_id(0).set_use_stock(True)
 
+		# Maximize
+		if self.config.Get('maximized'):
+			self.window.maximize()
+
+		# Show window and start GTK main loop
 		self.window.show()
 		gtk.main()
 
@@ -183,10 +188,7 @@ class Main(View_Gtk.View_Gtk):
 
 	def DrawRequerimentsArrows(self, widget,event):
 		if self.__objectives:
-
-
 			self.__RenderGraph()
-
 
 			# Graphic Context
 			gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
@@ -223,17 +225,15 @@ class Main(View_Gtk.View_Gtk):
 					self.layout.bin_window.draw_line(gc, 0,y*self.margin_y,
 														layout_size[0],y*self.margin_y)
 
-			# Left
-			self.layout.bin_window.draw_line(gc, 0,0,
+			# Layout borders
+			if(self.config.Get('showLayoutBorders')):
+				self.layout.bin_window.draw_line(gc, 0,0,
 												0,layout_size[1])
-			# Top
-			self.layout.bin_window.draw_line(gc, 0,0,
+				self.layout.bin_window.draw_line(gc, 0,0,
 												layout_size[0],0)
-			# Right
-			self.layout.bin_window.draw_line(gc, layout_size[0],0,
+				self.layout.bin_window.draw_line(gc, layout_size[0],0,
 												layout_size[0],layout_size[1])
-			# Down
-			self.layout.bin_window.draw_line(gc, 0,layout_size[1],
+				self.layout.bin_window.draw_line(gc, 0,layout_size[1],
 												layout_size[0],layout_size[1])
 
 			# Arrows
@@ -253,6 +253,7 @@ class Main(View_Gtk.View_Gtk):
 
 						# Arrow line
 						self.layout.bin_window.draw_line(gc, x1,y1, x2,y2)
+
 						# Arrow head
 						if self.config.Get("showArrowHeads"):
 							DrawHead(x1,y1, x2,y2)
@@ -265,36 +266,42 @@ class Main(View_Gtk.View_Gtk):
 			self.__needRenderGraph = False
 
 			if self.__objectives:
-#				biggest_row_width = 0
 				y = self.margin_y/2
 
-				keys = self.__objectives.keys()
-				keys.sort()
+				biggest_width = self.margin_x/2
 
-#				self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
+				# Get positions
+				positions = {}
+				for level in self.__objectives:
+					for button in self.__objectives[level]:
+						positions[button] = (button.allocation.x, button.allocation.y)
 
-				for level in keys:
+				# Adjust buttons
+				levels = self.__objectives.keys()
+				levels.sort()
+
+				for level in levels:
 					biggest_height = 0
 
 					for button in self.__objectives[level]:
-						if y!=button.Y():
-							button.Y(y)
+						if button.Adjust(positions,y):
+							self.__needRenderGraph = True
 
-						if button.allocation.height > biggest_height:
+						if biggest_width < button.X() + button.allocation.width:
+							biggest_width = button.X() + button.allocation.width
+
+						if biggest_height < button.allocation.height:
 							biggest_height = button.allocation.height
 
 					# Set new y coordinate
 					y += biggest_height + self.margin_y
 
 				# Set layout size
-				# and show all buttons
-
-				biggest_row_width = self.__objectives[keys[0]][0].Adjust_x(self.margin_x/2)
-
 #				self.layout.set_size(int(self.layout.get_size()[0] + self.margin_x/2),
 #									int(y - self.margin_y/2))
-				self.layout.set_size(int(biggest_row_width + self.margin_x/2), int(y - self.margin_y/2))
+				self.layout.set_size(int(biggest_width + self.margin_x/2), int(y - self.margin_y/2))
 
+				# Show all buttons
 				self.layout.show_all()
 
 
@@ -310,10 +317,7 @@ class Main(View_Gtk.View_Gtk):
 		# Re-draw surface of the layout
 		self.layout.queue_draw()
 
-
-		import GraphRenderer
-
-		tree = self.controller.ShowTree(objective_name)
+		tree = self.controller.RecursiveRequeriments(objective_name)
 		if tree:
 
 			self.__needRenderGraph = True
@@ -325,12 +329,14 @@ class Main(View_Gtk.View_Gtk):
 
 			# Niveles
 			for level in tree:
+				print level
+
 				def PutButton(button):
 					self.layout.put(button, 0,0)
 					if not self.__objectives.has_key(y):
 						self.__objectives[y] = []
 					else:
-						self.__objectives[y][-1].Set_Next(button)
+						button.Set_Prev(self.__objectives[y][-1])
 					self.__objectives[y].append(button)
 
 				def Requeriments():
@@ -350,7 +356,7 @@ class Main(View_Gtk.View_Gtk):
 								# add alternative
 								if objective['requeriment'] in level_requeriments[objective['objective_id']]:
 									button.set_label(button.get_label()+"\n"
-													+self.controller.GetName(objective['alternative']))
+													+objective['alternative'])
 
 								# else create a new one
 								else:
@@ -359,16 +365,16 @@ class Main(View_Gtk.View_Gtk):
 										PutButton(button)
 
 									# Create new requeriment button
-									button = GraphRenderer.Requeriment(self.controller.GetName(objective['alternative']),
+									button = GraphRenderer.Requeriment(objective['alternative'],
 																		objective['objective_id'],
 																		self)
 
 									# Add requeriment
 									level_requeriments[objective['objective_id']][objective['requeriment']] = button
 
-								button.Add_Dependency(checked_objectives[objective['alternative']])
+								button.Add_Requeriment(checked_objectives[objective['alternative']])
 
-					print "level_requeriments",level_requeriments
+#					print "level_requeriments",level_requeriments
 
 					if button:
 						PutButton(button)
@@ -383,7 +389,7 @@ class Main(View_Gtk.View_Gtk):
 							def GetColor():
 								# Blue - Satisfacted
 								if self.controller.IsSatisfacted(objective['objective_id']):
-									show = self.config.Get('showExceededDependencies')
+									show = self.config.Get('showExceededRequeriments')
 									if(show):
 										if(show==1					# 1 == Only not expired
 										and objective['expiration']
@@ -412,9 +418,9 @@ class Main(View_Gtk.View_Gtk):
 																self.controller, color)
 								if objective['requeriment']:
 									if objective['priority']:
-										button.Add_Dependency(level_requeriments[objective['objective_id']][objective['requeriment']])
+										button.Add_Requeriment(level_requeriments[objective['objective_id']][objective['requeriment']])
 									else:
-										button.Add_Dependency(checked_objectives[objective['alternative']])
+										button.Add_Requeriment(checked_objectives[objective['alternative']])
 
 								PutButton(button)
 
@@ -471,10 +477,10 @@ class Main(View_Gtk.View_Gtk):
 		addObjective.window.destroy()
 
 
-	def DelObjective(self, menuitem,objective_id):
+	def DelObjective(self, menuitem,name):
 		if(self.config.Get('deleteCascade')
-		and len(self.controller.DirectDependencies(objective_id))>1):
-			dialog = DeleteCascade(objective_id)
+		and len(self.controller.DirectRequeriments(name))>1):
+			dialog = DeleteCascade(name)
 
 			if self.config.Get('confirmDeleteCascade'):
 				dialog.window.set_transient_for(self.window)
@@ -492,9 +498,9 @@ class Main(View_Gtk.View_Gtk):
 										0,
 										gtk.MESSAGE_QUESTION,
 										gtk.BUTTONS_YES_NO,
-										_("Do you want to delete the objetive ")+self.controller.GetName(objective_id)+"?")
+										_("Do you want to delete the objetive ")+name+"?")
 			if dialog.run() == gtk.RESPONSE_YES:
-				self.controller.DeleteObjective(objective_id,
+				self.controller.DeleteObjective(name,
 												self.config.Get('removeOrphanRequeriments'))
 				self.__CreateGraph()
 			dialog.destroy()
@@ -502,7 +508,7 @@ class Main(View_Gtk.View_Gtk):
 
 	def __on_objective_clicked(self, widget,event):
 		if(event.button == 3):	# Secondary button
-			objective_id = self.controller.GetId(widget.get_label())
+			objective_id = widget.get_label()
 
 			if self.__objectiveHI_edit:
 				self.mnuObjective_Edit.disconnect(self.__objectiveHI_edit)
@@ -653,7 +659,7 @@ class Main(View_Gtk.View_Gtk):
 
 		if objective_name:
 			self.navBar.remove_remanents()
-			self.navBar.add_with_id(objective_name, self.__NavbarZoom, self.controller.GetId(objective_name))
+			self.navBar.add_with_id(objective_name, self.__NavbarZoom, objective_name)
 			self.__CreateGraph(objective_name)
 
 		else:
@@ -669,4 +675,9 @@ class Main(View_Gtk.View_Gtk):
 		position = self.navBar.get_active_position()
 		if position:
 			self.navBar.get_children()[position-1].clicked()
+
+
+	def on_Main_window_state_event(self, widget, event):
+		self.config.Set("maximized", bool(event.new_window_state & gtk.gdk.WINDOW_STATE_MAXIMIZED))
+		self.config.Store()
 

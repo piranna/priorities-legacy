@@ -12,18 +12,18 @@ class TextmodeParser(Parser.Parser):
 
 	# Actions
 	def do_ShowTree(self, line):
-		for level in self.__controller.ShowTree(line):
+		for level in self.__controller.RecursiveRequeriments(line):
 			level_objectives = []
 
 			# Alternatives
 			for objective in level:
 				if objective['requeriment']:
 					if objective['priority']:
-						print "\talternative",self.__controller.GetName(objective['alternative'])
+						print "\talternative",objective['alternative']
 
 					else:
 					#	DrawArrow(objective['objective_id'], objective['alternative'])
-						print "\tarrow",self.__controller.GetName(objective['alternative'])
+						print "\tarrow",objective['alternative']
 
 			# Objectives
 			for objective in level:
@@ -35,11 +35,6 @@ class TextmodeParser(Parser.Parser):
 
 
 	def do_DirectDependents(self, line):
-		try:
-			int(line)
-		except:
-			line = self.__controller.GetId(line)
-
 		for dependent in self.__controller.DirectDependents(line):
 			print dependent
 

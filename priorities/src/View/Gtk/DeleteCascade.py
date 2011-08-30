@@ -3,7 +3,7 @@ _ = View_Gtk._
 
 
 class DeleteCascade(View_Gtk.View_Gtk):
-	def __init__(self, objective_id):
+	def __init__(self, objective):
 		View_Gtk.View_Gtk.__init__(self, "DeleteCascade")
 
 		# Model
@@ -14,15 +14,15 @@ class DeleteCascade(View_Gtk.View_Gtk):
 
 		# Fill model
 		def Append(tree, parent=None):
-#			self.__tree.get(objective_id, []).append(path)
-			for objective_id in tree.keys():
-				Append(tree[objective_id],
+#			self.__tree.get(objective, []).append(path)
+			for objective in tree.keys():
+				Append(tree[objective],
 						self.__model.append(parent,
-									(objective_id, self.controller.GetName(objective_id), True,False)))
+									(objective, objective, True,False)))
 
-		Append(self.controller.Get_DeleteObjective_Tree(objective_id),
+		Append(self.controller.Get_DeleteObjective_Tree(objective),
 				self.__model.append(None,
-							(objective_id, self.controller.GetName(objective_id), True,False)))
+							(objective, objective, True,False)))
 
 		# If confirmDeleteCascade,
 		# show window
@@ -42,11 +42,7 @@ class DeleteCascade(View_Gtk.View_Gtk):
 		# If objective is marked,
 		# delete it
 		if self.__model.get_value(iterator,2):
-			if self.__model.get_value(iterator,3):
-				self.controller.DelAlternatives(self.__model.get_value(iterator,0),
-												self.__model.get_value(self.__model.iter_parent(iterator),0))
-
-			else:
+			if not self.__model.get_value(iterator,3):
 				self.controller.DeleteObjective(self.__model.get_value(iterator,0),
 												self.config.Get('removeOrphanRequeriments'))
 

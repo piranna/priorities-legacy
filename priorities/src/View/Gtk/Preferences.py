@@ -26,6 +26,7 @@ class Preferences(View_Gtk.View_Gtk):
 
 		self.builder.get_object("chkShowSharp").set_active(self.config.Get('showSharp'))
 		self.builder.get_object("chkShowArrowHeads").set_active(self.config.Get('showArrowHeads'))
+		self.builder.get_object("chkShowLayoutBorders").set_active(self.config.Get('showLayoutBorders'))
 
 		#
 		# Button colors
@@ -38,7 +39,7 @@ class Preferences(View_Gtk.View_Gtk):
 		#
 		# Objectives
 
-		self.builder.get_object("cbShowExceededDependencies").set_active(self.config.Get('showExceededDependencies'))
+		self.builder.get_object("cbShowExceededRequeriments").set_active(self.config.Get('showExceededRequeriments'))
 		self.builder.get_object("sbExpirationWarning").set_value(self.config.Get('expirationWarning'))
 		self.builder.get_object("chkRemoveOrphanRequeriments").set_active(self.config.Get('removeOrphanRequeriments'))
 
@@ -96,8 +97,15 @@ class Preferences(View_Gtk.View_Gtk):
 
 
 	def on_chkShowArrowHeads_toggled(self, widget):
-		"Set to drwa the arrow heads"
+		"Set to draw the arrow heads"
 		self.config.Set("showArrowHeads", widget.get_active())
+		if self.redraw != "tree":
+			self.redraw = "arrows"
+
+
+	def on_chkShowLayoutBorders_toggled(self, widget):
+		"Set to draw the layout borders"
+		self.config.Set("showLayoutBorders", widget.get_active())
 		if self.redraw != "tree":
 			self.redraw = "arrows"
 
@@ -120,12 +128,12 @@ class Preferences(View_Gtk.View_Gtk):
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 
 
-	def on_cbShowExceededDependencies_changed(self, widget):
+	def on_cbShowExceededRequeriments_changed(self, widget):
 		"""
-		Set if exceeded dependencies should be showed
+		Set if exceeded requeriments should be showed
 		and redraw the full objectives tree
 		"""
-		self.config.Set("showExceededDependencies", widget.get_active())
+		self.config.Set("showExceededRequeriments", widget.get_active())
 		self.redraw = "tree"
 
 

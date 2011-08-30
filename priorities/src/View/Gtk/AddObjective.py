@@ -2,17 +2,17 @@ import datetime
 
 import gtk
 
-import View_Gtk
-_ = View_Gtk._
+import View.Gtk
+_ = View.Gtk._
 
 from View_Gtk_DeleteCascade import *
 
 
-class AddObjective(View_Gtk.View_Gtk):
+class AddObjective(View.Gtk.View_Gtk):
 	__destroy = True
 
 	def __init__(self, objective=None):
-		View_Gtk.View_Gtk.__init__(self, "AddObjective")
+		View.Gtk.View_Gtk.__init__(self, "AddObjective")
 
 		self.__objective = objective
 
@@ -30,14 +30,12 @@ class AddObjective(View_Gtk.View_Gtk):
 		self.sbSecond = self.builder.get_object("sbSecond")
 
 		# Requeriments
-		self.txtRequeriments = self.builder.get_object("txtRequirements")
-		txtBuffer = self.txtRequeriments.get_buffer()
-
-#		self.vbRequeriments = self.builder.get_object("vbRequeriments")
+		self.__vbRequeriments = self.builder.get_object("vbRequeriments")
+		self.__btnDel = self.builder.get_object("btnDel_Requeriment")
 
 		# Set data
 		if objective:
-			objective = self.controller.GetObjective_byId(objective)
+			objective = self.controller.GetObjective(objective)
 
 			btnDelete = self.builder.get_object("btnDelete")
 			btnDelete.show()
@@ -60,25 +58,30 @@ class AddObjective(View_Gtk.View_Gtk):
 					self.sbMinute.set_value(self.expiration.minute)
 					self.sbSecond.set_value(self.expiration.second)
 
-				dependencies = ""
+				# Requeriments
 				last_requeriment = None
-				for dependency in self.controller.DirectDependencies(objective['id']):
-					if(last_requeriment and last_requeriment==dependency['requeriment']):
-						dependencies += ','
-					else:
-						if(last_requeriment):
-							dependencies += '\n'
-						last_requeriment = dependency['requeriment']
-					if(dependency['alternative']):
-						dependencies += self.controller.GetName(dependency['alternative'])
-				txtBuffer.set_text(dependencies)
+				model = None
+
+				for requeriment in self.controller.DirectRequeriments(objective['id']):
+					if(last_requeriment != requeriment['requeriment']):
+						last_requeriment=requeriment['requeriment']
+
+						vbRequeriments = self.builder.get_object("vbRequeriments")
+						vbRequeriments.pack_end(self.builder.get_object("expRequeriment"))
+
+						model = self.builder.get_object("treeview2").get_model()
+
+					if model:
+						model.append((requeriment['alternative'],))
 
 		# Old data
 		self.oldObjective = self.txtObjective.get_text()
 		self.oldQuantity = self.txtQuantity.get_text()
 
-		start,end = txtBuffer.get_bounds()
-		self.oldRequeriments = txtBuffer.get_text(start,end)
+#		start,end = txtBuffer.get_bounds()
+#		self.oldRequeriments = txtBuffer.get_text(start,end)
+
+		self.__btnDel_Requeriment_Sensitivity()
 
 
 
@@ -101,12 +104,9 @@ class AddObjective(View_Gtk.View_Gtk):
 			else:
 				self.expiration = None
 
-			# Requeriments
-			dependencies = None
+			# Requeriments and alternatives
+			orphans = None
 
-			txtBuffer = self.txtRequeriments.get_buffer()
-			start,end = txtBuffer.get_bounds()
-			txtBuffer = txtBuffer.get_text(start,end)
 			if(txtBuffer==self.oldRequeriments):
 				print "\tigual"
 				txtBuffer = None
@@ -116,13 +116,11 @@ class AddObjective(View_Gtk.View_Gtk):
 				print "\t",self.oldRequeriments
 				print "\t",txtBuffer
 
-				objective_id = self.controller.GetId(self.txtObjective.get_text())
+				objective = self.txtObjective.get_text()
 
 				if self.config.Get('removeOrphanRequeriments'):
-					dependencies = self.controller.DirectDependencies(objective_id)
-					print dependencies
-
-				self.controller.DelRequeriments_ById(objective_id)
+					orphans = self.controller.DirectRequeriments(objective)
+					print orphans
 
 				# Requeriments
 				txtBuffer = txtBuffer.splitlines()
@@ -145,12 +143,12 @@ class AddObjective(View_Gtk.View_Gtk):
 						del txtBuffer[i][j]
 
 			# Add objective
-			self.controller.AddObjective(self.txtObjective.get_text(),
-											self.txtQuantity.get_text(),
-											self.expiration,
-											txtBuffer)
+			self.controller.AddObjective(objective,
+										self.txtQuantity.get_text(),
+										self.expiration,
+										requeriments)
 
-			self.controller.DeleteOrphans(dependencies)
+			self.controller.DeleteOrphans(orphans)
 
 		return closeDialog
 
@@ -158,7 +156,7 @@ class AddObjective(View_Gtk.View_Gtk):
 	def __Delete(self):
 		if self.__objective:
 			if(self.config.Get('deleteCascade')
-			and len(self.controller.DirectDependencies(self.__objective))>1):
+			and len(self.controller.DirectRequeriments(self.__objective))>1):
 				dialog = DeleteCascade(self.__objective)
 
 				dialog.window.set_transient_for(self.window)
@@ -173,7 +171,7 @@ class AddObjective(View_Gtk.View_Gtk):
 											0,
 											gtk.MESSAGE_QUESTION,
 											gtk.BUTTONS_YES_NO,
-											_("Do you want to delete the objective ")+self.controller.GetName(self.__objective)+"?")
+											_("Do you want to delete the objective ")+self.__objective+"?")
 				response = dialog.run()
 				dialog.destroy()
 				if response == gtk.RESPONSE_YES:
@@ -226,4 +224,45 @@ class AddObjective(View_Gtk.View_Gtk):
 
 	def on_chkExpiration_toggled(self, widget):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
+
+
+	def __btnDel_Requeriment_Sensitivity(self):
+		self.__btnDel.set_sensitive(len(self.__vbRequeriments.get_children()))
+
+	def on_btnAdd_Requeriment_clicked(self, widget):
+		vbRequeriments = self.builder.get_object("vbRequeriments")
+		vbRequeriments.pack_end(Alternative())
+
+		self.__btnDel_Requeriment_Sensitivity()
+
+	def on_btnDel_Requeriment_clicked(self, widget):
+
+		self.__btnDel_Requeriment_Sensitivity()
+
+
+class Alternative(View_Gtk.View_Gtk):
+
+	def __init__(self):
+		View_Gtk.View_Gtk.__init__(self, "expRequeriment")
+
+		self.__model = self.builder.get_object("lstAlternatives")
+		self.__model.clear()
+		self.__btnDel = self.builder.get_object("btnDel_Alternative")
+
+		# Fill model
+
+
+	def __btnDel_Alternative_Sensitivity(self):
+		pass
+#		self.__btnDel.set_sensitive(len(self.__model.))
+
+
+	def on_btnAdd_Alternative_clicked(self, widget):
+		self.__model.append()
+
+		self.__btnDel_Alternative_Sensitivity()
+
+	def on_btnDel_Alternative_clicked(self, widget):
+
+		self.__btnDel_Alternative_Sensitivity()
 

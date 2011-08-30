@@ -10,125 +10,97 @@ class Requeriment(gtk.Button):
 		gtk.Button.__init__(self, name)
 		self.set_focus_on_click(False)
 
-		self.__layout = parent.layout
-		self.__x = 0
-		self.__y = 0
-
 		self.connect('clicked',parent.AddObjective, objective_id)
 		self.connect('enter_notify_event',parent.IncreaseLineWidth, self)
 		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 
+		self.__prev = None
 		self.__requeriments = []
 		self.__dependents = []
-		self.__next = None
-#		self.__prev = None
 
-	def Set_Next(self, next):
-		self.__next = next
+		self.__parent = parent
 
-#	def Set_Prev(self, prev):
-#		self.__prev = prev
+		self.__x = 0
+		self.__y = 0
 
-	def __X(self, x=None):
-		if(x
-		and x!=self.__x):
-			print self.get_label(),self.__x,"(",x,self.allocation.width,")",x+self.allocation.width
-			self.__x = x
-			self.__layout.move(self, self.__x,self.__y)
-		return self.__x
+	def Set_Prev(self, prev):
+		self.__prev = prev
 
-	def X(self):
-		return self.__x
-
-	def Y(self, y=None):
-		if(y
-		and y!=self.__y):
-			self.__y = y
-			self.__layout.move(self, self.__x,self.__y)
-		return self.__y
-
-	def Add_Dependency(self, dependency):
-		self.__requeriments.append(dependency)
-		dependency.__Add_Dependent(self)
-
-	def __Add_Dependent(self, dependent):
-		self.__dependents.append(dependent)
+	def Add_Requeriment(self, requeriment):
+		self.__requeriments.append(requeriment)
+		requeriment.__dependents.append(self)
 
 	def Get_Requeriments(self):
 		return self.__requeriments
 
+	def Adjust(self, positions, y):
+		def Get_Middle(array):
+			x_min = 0
+			x_max = 0
+			for button in array:
+				if(x_min==0
+				or x_min > positions[button][0]):
+					x_min = positions[button][0]
+				if(x_max==0
+				or x_max < positions[button][0] + button.allocation.width):
+					x_max = positions[button][0] + button.allocation.width
+			return (x_min + x_max)/2
 
-	def Adjust_x(self, x):
-		def Get_Expansion(buttons):
-			min_x = None
-			max_x = None
+		x = 0
+		div = 0
 
-			for button in buttons:
-				if(min_x == None
-				or button.__x < min_x):
-					min_x = button.__x
+		x_req = Get_Middle(self.__requeriments)
+		if x_req:
+			x += x_req
+			div += 1
 
-				if(max_x == None
-				or button.__x+button.allocation.width > max_x):
-					max_x = button.__x+button.allocation.width
+#		x_dep = Get_Middle(self.__dependents)
+#		if x_dep:
+#			x += x_dep
+#			div += 1
 
-			return min_x,max_x
+		if div:
+			x = x/div - self.allocation.width/2
 
-		def Update_RowWidth(row_width, value):
-			if row_width < value:
-				row_width = value
-			return row_width
+		# Prevent overlapping with previous requeriment at the same level
+		if(self.__prev
+		and x < positions[self.__prev][0]+self.__prev.allocation.width):
+			x = positions[self.__prev][0]+self.__prev.allocation.width
 
+			# Increase distance between "groups"
+			if(self.__prev.__requeriments != self.__requeriments
+			or self.__prev.__dependents != self.__dependents):
+				x += 20
 
-#		if self.__prev:
-#			row_width = self.__prev.__x + self.__prev.allocation.width + self.margin_x
-#			if x < row_width:
-#				x = row_width
+		# Ensure all requeriments are showed in layout
+		if x < 0:
+			x = 0
 
-		row_width = 0
+		# Update requeriment position
+		if(self.__x != x
+		or self.__y != y):
+			self.__x = x
+			self.__y = y
 
-		if len(self.__requeriments) == 1:
-			if len(self.__requeriments[0].__dependents) == 1:
-				x = (2*self.__requeriments[0].__x+self.__requeriments[0].allocation.width-self.allocation.width)/2
-			else:	# > 1
-				self.__X(x)
+			self.__parent.layout.move(self, self.__x,self.__y)
 
-				min_x,max_x = Get_Expansion(self.__requeriments[0].__dependents)
+			return True
 
-				self.__requeriments[0].__X((min_x+max_x-self.__requeriments[0].allocation.width)/2)
+		return False
 
-				print "max_x",max_x
-				row_width = max_x
+	def X(self):
+		return self.__x
 
-		elif len(self.__requeriments) > 1:
-			min_x,max_x = Get_Expansion(self.__requeriments)
+	def Y(self):
+		return self.__y
 
-			x = ((min_x+max_x)-self.allocation.width)/2
-
-		self.__X(x)
-		row_width = Update_RowWidth(row_width, x)
-
-		#
-		# Recursives
-
-		# Dependents
-		if self.__dependents:
-			row_width = Update_RowWidth(row_width, self.__dependents[0].Adjust_x(self.__x))
-
-		# Next
-		row_width = Update_RowWidth(row_width, self.__x + self.allocation.width)
-		if self.__next:
-			row_width = Update_RowWidth(row_width, self.__next.Adjust_x(row_width + self.margin_x))
-
-		# Return value of the current row width
-		return row_width
 
 #import gobject
 #gobject.type_register(Requeriment)
 
 
 class Objective(Requeriment):
-	def __init__(self, objective,parent,
+	def __init__(self, objective, parent,
 				controller, color):
 		Requeriment.__init__(self, objective['name'],objective['objective_id'], parent)
 
