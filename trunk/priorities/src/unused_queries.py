@@ -10,11 +10,11 @@
 
 	def ObjectivesWithDependences(self):
 		return self.connection.execute('''
-			SELECT name,quantity,expiration,COUNT(*) AS num_dependencies
+			SELECT name,quantity,expiration,COUNT(*) AS num_requeriments
 				FROM objectives,requeriments
 				WHERE objectives.id==requeriments.objective
 				GROUP BY name
-				ORDER BY num_dependencies
+				ORDER BY num_requeriments
 			''')
 
 

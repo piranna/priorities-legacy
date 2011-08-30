@@ -109,4 +109,3 @@ if __name__ == "__main__":
 #				TextMode()
 	except KeyboardInterrupt:
 		pass
-
