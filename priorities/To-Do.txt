@@ -1,5 +1,30 @@
+Recordar maximizar
+
+
+0.12:
+=====
+*Nuevo modelo de base de datos
+*Añadir requisitos como clase propia en lugar de con Glade
+	Modificar introduccion en base de datos
+	Soporte para alternativas opcionales (definir)
+*Renombrar clases y componentes
+Pythonizar y simplificar codigo
+
+1.0 RC3:
+========
+¿Otra vez no funciona el boton derecho en el grafo?
+¿Problema con los colores (verde en lugar de amarillo)?
+[BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
+[BUG] Crea nueva entrada en lugar de actualizarla
+
+*Modificar diseño de añadir alternativas
+	Rellenar alternativas
+	Generar varias instancias de los requerimientos
+
+
 1.0:
 ====
+Soporte para diversos algoritmos de dibujado
 ? Comentar todo el codigo
 	Limpiar y ordenar codigo
 
@@ -84,9 +109,10 @@ Limpieza de codigo, reorganizacion y optimizacion
 
 Nueva version de la base de datos
 	Usar user-cookie para identificarla (primer byte o incluso menos)
-	Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
-	Modificar clave de objetivos de autonumerado a campo name
-	Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
+	* Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
+	* Modificar clave de objetivos de autonumerado a campo name
+	* Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
+	Usar triggers para eliminar objetivos huerfanos
 
 Version en PyGUI
 

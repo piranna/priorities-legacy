@@ -73,26 +73,26 @@ class Test:
 
 		print ""
 
-		print "DirectDependencies"
-		for objective in self.controller.DirectDependencies():
+		print "DirectRequeriments"
+		for objective in self.controller.DirectRequeriments():
 			print objective
 
 		print ""
 
-		print "DirectDependencies Coche"
-		for objective in self.controller.DirectDependencies(7):
+		print "DirectRequeriments Coche"
+		for objective in self.controller.DirectRequeriments(7):
 			print objective
 
 		print ""
 
-		print "RecursiveDependencies Coche"
-		for objective in self.controller.RecursiveDependencies(7):
+		print "RecursiveRequeriments Coche"
+		for objective in self.controller.RecursiveRequeriments(7):
 			print objective
 
 		print ""
 
-		print "RecursiveDependencies"
-		for objective in self.controller.RecursiveDependencies():
+		print "RecursiveRequeriments"
+		for objective in self.controller.RecursiveRequeriments():
 			print objective
 
 		print ""
@@ -109,7 +109,7 @@ class Test:
 #
 #		print ""
 
-		for level in self.controller.ShowTree():
+		for level in self.controller.RecursiveRequeriments():
 			level_objectives = []
 			for objective in level:
 				if objective['alternative']:

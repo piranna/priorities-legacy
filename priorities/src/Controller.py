@@ -5,22 +5,21 @@ class Controller:
 		self.__model = model
 
 
-	def RecursiveDependencies(self, objective_id=None, export=False):
-		"""
-		Get all the requeriments tree of an objective.
-		If objective_id is not defined return the all-objectives tree
+	def RecursiveRequeriments(self, name=None, export=False):
+		"""Get all the requeriments tree of an objective
+
+		If name is not defined return the full objectives tree
 		"""
 
-		dependencies = []
+		requeriments = []
 
-		def PrivateRecursiveDependencies(objective_id,checked=[]):
-			"""
-			Get all the requeriments tree of an objective
-			storing them in dependencies and returning the current top level
+		def Priv_RecursiveRequeriments(name,checked=None):
+			"""Get all the requeriments tree of an objective storing them inside
+			requeriments and returning the current top level
 			"""
 
 			def Insert_array_tree_2d(data, index, array, head=False):
-				"Append data to the indexed array of array"
+				"Append data to the indexed array of arrays"
 				while len(array)<=index:
 					array.append([])
 				if head:
@@ -28,15 +27,15 @@ class Controller:
 				else:
 					array[index].append(data)
 
-			def GetDepth(objective_id, array):
-				"""
-				Get the depth of an objective_id inside an array
-				If not, return -1 as error message
+			def GetDepth(name, array):
+				"""Get the depth of a name inside an array
+
+				If don't exist, return -1 as error message
 				"""
 				depth = 0
 				for array_level in array:
-					for dependency in array_level:
-						if dependency['objective_id']==objective_id:
+					for requeriment in array_level:
+						if requeriment['name']==name:
 							return depth
 					depth += 1
 				return -1
@@ -47,11 +46,14 @@ class Controller:
 
 			# If objective is not checked
 			# set objective as checked
-			# and get it's dependencies
-			if objective_id not in checked:
-				checked.append(objective_id)
+			# and get it's requeriments
+			if checked == None:
+				checked=[]
 
-				for row in self.__model.DirectDependencies(objective_id, export=export):
+			if name not in checked:
+				checked.append(name)
+
+				for row in self.__model.Requeriments(name, export=export):
 
 					# If objective has an alternative,
 					# get the new depth
@@ -60,108 +62,113 @@ class Controller:
 						# If alternative have been checked,
 						# get its next level
 						if row['alternative'] in checked:
-							depth = GetDepth(row['alternative'], dependencies)+1
+							depth = GetDepth(row['alternative'], requeriments)+1
 
 						# Else check if we have to get it's new level or not
 						else:
-							r_depth = PrivateRecursiveDependencies(row['alternative'])
-							if r_depth >= depth:
+							r_depth = Priv_RecursiveRequeriments(row['alternative'])
+							if  depth < r_depth:
 								depth = r_depth
 
-					g_depth = GetDepth(row['objective_id'],dependencies)
-					if g_depth > depth:
+					g_depth = GetDepth(row['name'],requeriments)
+					if  depth < g_depth:
 						depth = g_depth
-					Insert_array_tree_2d(row, depth, dependencies, row['expiration'])
+					Insert_array_tree_2d(row, depth, requeriments, row['expiration'])
 
 			# Return next top level
 			return depth+1
 
 
-		for row in self.__model.DirectDependencies(objective_id, export=export):
-			PrivateRecursiveDependencies(row['objective_id'])
+		for row in self.__model.Requeriments(name, export=export):
+			Priv_RecursiveRequeriments(row['name'])
 
-		return dependencies
+		return requeriments
 
 
 	def AddObjective(self, name, quantity=None, expiration=None, requeriments=None):
 		"Add an objective and all it's requeriments to the database"
 
 		# Add objective or update it's data
-		objective_id = self.__model.AddObjective(name, quantity, expiration)
+		self.__model.AddObjective(name, quantity, expiration)
 
 		# Objective has requeriments
-		if requeriments:
-			for requeriment in requeriments:
-				# Alternatives
-				requeriment_id = None
-				priority=0
-				for alternative in requeriment:
+		if requeriments == None:
+			requeriments = []
+		for requeriment in requeriments:
+			self.__model.AddRequeriment(name,
+										requeriment,
+										optional=False)
 
-					# Alternative necesary quantity
-					alternative = alternative.split(':')
+			# Alternatives
+			priority=0
+			for alternative in requeriment:
 
-					quantity = 1
-					if len(alternative)>1:
-						quantity = alternative[1]
+				# Alternative necesary quantity
+				alternative = alternative.split(':')
 
-					# Alternative priority
-					if len(requeriment)>1:
-						priority += 1
+				quantity = 1
+				if len(alternative)>1:
+					quantity = alternative[1]
 
-					# Insert alternative
-					requeriment_id = self.__model.AddAlternative(alternative[0],
-																objective_id,
-																requeriment_id,
-																priority,
-																quantity)
+				# Alternative priority
+				if len(requeriment)>1:
+					priority += 1
 
-
-	def ShowTree(self, objective=None):
-		"Get id of the objective"
-		if objective:
-			objective = self.__model.GetId(objective)
-
-			# If objective is not registered,
-			# return none
-			if not objective:
-				return None
-
-		return self.RecursiveDependencies(objective)
+				# Insert alternative
+				self.__model.AddAlternative(alternative[0],
+											name,
+											requeriment,
+											priority,
+											quantity)
 
 
-	def IsSatisfacted(self, objective_id):
-		dependents = self.DirectDependents(objective_id)
-		quantity = self.GetObjective_byId(objective_id)['quantity']
+	def IsSatisfaced(self, name):
+		dependents = self.Dependents(name)
+		quantity = self.GetObjective(name)['quantity']
+
 		if dependents:
-			if quantity<self.DirectDependents_minQuantity(objective_id):
+			if quantity<self.MinQuantity(name):
+				# Quantity is less than the minimum required quantity of all
+				# dependents, check if all dependents are satisfaced by others
 				for dependent in dependents:
-					if not self.IsSatisfacted(dependent['objective']):
+					if not self.IsSatisfaced(dependent['objective']):
 						return False
+
+			# Quantity is greater than the minimun required quantity of at least
+			# one dependent, or all dependents are satisfaced by others
 			return True
+
+		# No dependents
 		return quantity>0
 
-	def IsAvailable(self, objective_id):
+	def IsAvailable(self, name):
 		req_alt = {}
-		for requeriment in self.__model.DirectDependencies(objective_id):
-			if requeriment['alternative']:
-				if requeriment['priority']:
-					if not req_alt.get(requeriment['requeriment'], False):
-						req_alt[requeriment['requeriment']] = self.IsSatisfacted(requeriment['alternative'])
-				elif not self.IsSatisfacted(requeriment['alternative']):
-						return False
-		for key,value in req_alt.iteritems():
+		for requeriment in self.__model.Requeriments(name):
+			alternative = requeriment['alternative']
+
+			if requeriment['priority']:
+				requeriment = requeriment['requeriment']
+				if not req_alt.get(requeriment, False):
+					req_alt[requeriment] = self.IsSatisfaced(alternative)
+
+			elif not self.IsSatisfaced(alternative):
+				return False
+
+		for value in req_alt.itervalues():
 			if not value:
 				return False
+
 		return True
 
-	def IsInprocess(self, objective_id):
-		for requeriment in self.__model.DirectDependencies(objective_id):
-			if self.IsSatisfacted(requeriment['alternative']):
+	def IsInprocess(self, name):
+		"At least one objective requeriment (but NOT all) is satisfaced"
+		for requeriment in self.__model.Requeriments(name):
+			if self.IsSatisfaced(requeriment['alternative']):
 				return True
 		return False
 
 
-	def Get_DeleteObjective_Tree(self, objective_id):
+	def Get_DeleteObjective_Tree(self, name):
 		"Get the tree of the objectives that are going to be deleted"
 
 		# Checked objectives stack
@@ -169,17 +176,17 @@ class Controller:
 
 		def Private_Get_DeleteObjective_Tree(parent):
 			def MergeDependents(dependents):
-				''' Merge the dependencies that has objective_id as an ancestor
+				''' Merge the requeriments that has name as an ancestor
 					removing duplicates
 				'''
 				def IsDescendent(objective):
-					''' Check if objective is a descendent of objective_id
+					''' Check if objective is a descendent of name
 						in the requeriments tree
 					'''
-					if objective==objective_id:
+					if objective==name:
 						return True
-					for dependent in self.__model.DirectDependents(objective):
-						if(dependent['objective'] == objective_id
+					for dependent in self.__model.Dependents(objective):
+						if(dependent['objective'] == name
 						or IsDescendent(dependent['objective'])):
 							return True
 					return False
@@ -204,10 +211,10 @@ class Controller:
 			checked.append(parent)
 			tree = {}
 
-			for requeriment in self.__model.DirectDependencies(parent):
+			for requeriment in self.__model.DirectRequeriments(parent):
 				if(requeriment['alternative']
 				and requeriment['alternative'] not in checked):
-					dependents = self.DirectDependents(requeriment['alternative'])
+					dependents = self.Dependents(requeriment['alternative'])
 
 					# If objective has several dependents
 					# merge the ones that are requeriments of the objetive to delete
@@ -225,7 +232,7 @@ class Controller:
 			return tree
 
 
-		return Private_Get_DeleteObjective_Tree(objective_id)
+		return Private_Get_DeleteObjective_Tree(name)
 
 
 	def Import(self, file):
@@ -238,13 +245,13 @@ class Controller:
 		except:
 			return False
 
-	def Export(self, objective_id=None):
+	def Export(self, name=None):
 		txt = ""
 		obj = None
 		req = None
-		for level in self.RecursiveDependencies(objective_id, True):
+		for level in self.RecursiveRequeriments(name, True):
 			for objective in level:
-				if(obj and obj!=objective['objective_id']):
+				if(obj and obj!=objective['name']):
 					if req:
 						txt += ")"
 						req=None
@@ -279,7 +286,7 @@ class Controller:
 
 					if not req:
 						if objective['priority']:
-							obj = objective['objective_id']
+							obj = objective['name']
 							req = objective['requeriment']
 						else:
 							txt += ",)]\n"
@@ -301,32 +308,20 @@ class Controller:
 	def Get_Connection(self):
 		return self.__model.Get_Connection()
 
-	def DelAlternatives(self, objective_id,parent_id):
-		return self.__model.DeleteAlternatives(objective_id, parent_id)
+	def DelObjective(self, name, delete_orphans = False):
+		self.__model.DelObjective(name, delete_orphans)
 
-	def DelRequeriments_ById(self, objective_id):
-		return self.__model.DelRequeriments_ById(objective_id)
+	def DelOrphans(self, requeriments=None):
+		self.__model.DelOrphans(requeriments)
 
-	def DeleteObjective(self, objective_id, delete_orphans = False):
-		self.__model.DeleteObjective(objective_id, delete_orphans)
+	def Requeriments(self, name):
+		return self.__model.Requeriments(name)
 
-	def DeleteOrphans(self, dependencies=None):
-		self.__model.DeleteOrphans(dependencies)
+	def Dependents(self, name):
+		return self.__model.Dependents(name)
 
-	def DirectDependencies(self, objective_id):
-		return self.__model.DirectDependencies(objective_id)
+	def MinQuantity(self, name):
+		return self.__model.MinQuantity(name)
 
-	def DirectDependents(self, objective_id):
-		return self.__model.DirectDependents(objective_id)
-
-	def DirectDependents_minQuantity(self, objective_id):
-		return self.__model.DirectDependents_minQuantity(objective_id)
-
-	def GetId(self, objective_name):
-		return self.__model.GetId(objective_name)
-
-	def GetName(self, objective_id):
-		return self.__model.GetName(objective_id)
-
-	def GetObjective_byId(self, objective_id):
-		return self.__model.GetObjective(objective_id)
+	def GetObjective(self, name):
+		return self.__model.GetObjective(name)

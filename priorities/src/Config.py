@@ -39,8 +39,9 @@ class Config:
 
 		self.__config['showSharp']					= False
 		self.__config['showArrowHeads']				= True
+		self.__config['showLayoutBorders']			= True
 
-		self.__config['showExceededDependencies']	= 1
+		self.__config['showExceededRequeriments']	= 1
 		self.__config['expirationWarning']			= 1
 		self.__config['removeOrphanRequeriments']	= True
 		self.__config['deleteCascade']				= True
@@ -51,11 +52,13 @@ class Config:
 		self.__config['color_available']			= "#77FF77"
 		self.__config['color_satisfacted']			= "#7777FF"
 
+		self.__config['maximized']					= False
+
 	def __MakeConfigDir(self):
 		try:
 			os.makedirs(self.__config_path)
 
-		except os.error, e:
+		except os.error:
 			pass
 
 
@@ -73,12 +76,14 @@ class Config:
 			self.__config['useDefaultDB']				= (self.__config['useDefaultDB']=="True")
 			self.__config['showSharp']					= (self.__config['showSharp']=="True")
 			self.__config['showArrowHeads']				= (self.__config['showArrowHeads']=="True")
+			self.__config['showLayoutBorders']			= (self.__config['showLayoutBorders']=="True")
 			self.__config['removeOrphanRequeriments']	= (self.__config['removeOrphanRequeriments']=="True")
 			self.__config['deleteCascade']				= (self.__config['deleteCascade']=="True")
 			self.__config['confirmDeleteCascade']		= (self.__config['confirmDeleteCascade']=="True")
+			self.__config['maximized']					= (self.__config['maximized']=="True")
 
 			# Re-define integer config
-			self.__config['showExceededDependencies']	= int(self.__config['showExceededDependencies'])
+			self.__config['showExceededRequeriments']	= int(self.__config['showExceededRequeriments'])
 			self.__config['expirationWarning']			= int(self.__config['expirationWarning'])
 
 			file.close()
