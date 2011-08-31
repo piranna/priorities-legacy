@@ -151,7 +151,7 @@ class Controller:
 				if not req_alt.get(requeriment, False):
 					req_alt[requeriment] = self.IsSatisfaced(alternative)
 
-			elif not self.IsSatisfaced(alternative):
+			elif alternative and not self.IsSatisfaced(alternative):
 				return False
 
 		for value in req_alt.itervalues():

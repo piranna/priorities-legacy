@@ -3,12 +3,12 @@ Recordar maximizar
 
 0.12:
 =====
-*Nuevo modelo de base de datos
-*Añadir requisitos como clase propia en lugar de con Glade
+[2011-08-30] Nuevo modelo de base de datos
+* Añadir requisitos como clase propia en lugar de con Glade
 	Modificar introduccion en base de datos
 	Soporte para alternativas opcionales (definir)
-*Renombrar clases y componentes
-Pythonizar y simplificar codigo
+* Renombrar clases y componentes
+* Pythonizar y simplificar codigo
 
 1.0 RC3:
 ========
@@ -17,14 +17,13 @@ Pythonizar y simplificar codigo
 [BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
 [BUG] Crea nueva entrada en lugar de actualizarla
 
-*Modificar diseño de añadir alternativas
+* Modificar diseño de añadir alternativas
 	Rellenar alternativas
 	Generar varias instancias de los requerimientos
 
 
 1.0:
 ====
-Soporte para diversos algoritmos de dibujado
 ? Comentar todo el codigo
 	Limpiar y ordenar codigo
 
@@ -34,19 +33,22 @@ Post 1.0:
 1.1:
 ====
 Limpiar, simplificar y personalizar consultas SQL y funciones
-Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
+[2011-08-28] Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 Controller
 # [To-Do] It seems it's called twice when has several dependent
 # that are from the same requeriment
 
 Mejorar algoritmo de ordenacion
+	Tener referencias a los dependientes y al siguiente (¿anterior y requisitos?)
 	Eliminar huecos
 		No definir siguiente si no estan relaccionados (definir y comprobar con anterior)
 	Obtener coordenadas y tamaño automaticamente
 Probar diferentes algoritmos de ordenacion (expansivo, compacto)
+Soporte para diversos algoritmos de dibujado
 
-Ayuda
+Ayuda dentro de la aplicacion
+	Tooltips
 
 Eliminar entradas no validas de ficheros de traduccion
 
@@ -70,8 +72,8 @@ Si no se elimina ningun objetivo en cascada, hacer que no se redibuje el arbol
 
 1.2:
 ====
-Redefinir interfaz GTK de AddObjective
-	Sustituir campo de texto por lista de requerimientos y alternativas
+* Redefinir interfaz GTK de AddObjective
+*	Sustituir campo de texto por lista de requerimientos y alternativas
 	Busqueda de objetivos previamente definidos como requisitos de nuevos
 
 Drag&Drop en lista de requerimientos y alternativas
@@ -86,7 +88,7 @@ Definir y/o diferenciar claramente eliminar en cascada y eliminar huerfanos (son
 
 Animacion de zoom in y zoom out
 
-Estudiar campo para diferenciar fines en si mismo de medios
+Estudiar posibilidad de campo para diferenciar fines en si mismo de medios
 
 Opciones de hacer/deshacer
 
@@ -100,6 +102,7 @@ Mostrar objetivos centrados
 Oscar's edition: (http://es.wikipedia.org/wiki/Getting_Things_Done)
 ================
 Localizacion de tareas/cambio de prioridades por proximidad fisica
+	Campo de localizacion
 
 
 2.0:
@@ -109,9 +112,9 @@ Limpieza de codigo, reorganizacion y optimizacion
 
 Nueva version de la base de datos
 	Usar user-cookie para identificarla (primer byte o incluso menos)
-	* Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
-	* Modificar clave de objetivos de autonumerado a campo name
-	* Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
+	[2011-08-28] Usar Foreign Key ahora que SQLite lo soporta (v3.6.19, 2009-10-14)
+	[2011-08-28] Modificar clave de objetivos de autonumerado a campo name
+	[2011-08-28] Volver a estructura de 3 tablas (objetivos, requerimientos y alternativas)
 	Usar triggers para eliminar objetivos huerfanos
 
 Version en PyGUI

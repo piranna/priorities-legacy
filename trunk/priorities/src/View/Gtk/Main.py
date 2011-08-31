@@ -9,7 +9,7 @@ from View.Gtk.AddObjective import *
 from View.Gtk.DeleteCascade import *
 from View.Gtk.Preferences import *
 
-import View.GraphRenderer
+from View.GraphRenderer import Objective,Requeriment
 
 
 class Main(Gtk):
@@ -364,7 +364,7 @@ class Main(Gtk):
 										PutButton(button)
 
 									# Create new requeriment button
-									button = GraphRenderer.Requeriment(objective['alternative'],
+									button = Requeriment(objective['alternative'],
 																		objective['objective_id'],
 																		self)
 
@@ -382,12 +382,12 @@ class Main(Gtk):
 				def Objectives(level_requeriments):
 					for objective in level:
 						# Objective
-						if objective['objective_id'] not in checked_objectives:
+						if objective['name'] not in checked_objectives:
 
 							# Get color of the requeriment
 							def GetColor():
 								# Blue - Satisfacted
-								if self.controller.IsSatisfacted(objective['objective_id']):
+								if self.controller.IsSatisfaced(objective['name']):
 									show = self.config.Get('showExceededRequeriments')
 									if(show):
 										if(show==1					# 1 == Only not expired
@@ -398,11 +398,11 @@ class Main(Gtk):
 									return None
 
 								# Green - Available
-								elif self.controller.IsAvailable(objective['objective_id']):
+								elif self.controller.IsAvailable(objective['name']):
 									return gtk.gdk.color_parse(self.config.Get('color_available'))
 
 								# Yellow - InProgress
-								elif self.controller.IsInprocess(objective['objective_id']):
+								elif self.controller.IsInprocess(objective['name']):
 									return gtk.gdk.color_parse(self.config.Get('color_inprocess'))
 
 								# Red - Unabordable
@@ -413,18 +413,18 @@ class Main(Gtk):
 							color = GetColor()
 							if(color):
 								# Create objective button
-								button = GraphRenderer.Objective(objective, self,
-																self.controller, color)
+								button = Objective(objective, self,
+													self.controller, color)
 								if objective['requeriment']:
 									if objective['priority']:
-										button.Add_Requeriment(level_requeriments[objective['objective_id']][objective['requeriment']])
+										button.Add_Requeriment(level_requeriments[objective['name']][objective['requeriment']])
 									else:
 										button.Add_Requeriment(checked_objectives[objective['alternative']])
 
 								PutButton(button)
 
 								# Register objective button to prevent be printed twice
-								checked_objectives[objective['objective_id']] = button
+								checked_objectives[objective['name']] = button
 
 
 				level_requeriments = Requeriments()
