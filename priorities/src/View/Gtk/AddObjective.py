@@ -61,9 +61,10 @@ class AddObjective(Gtk):
 				last_requeriment = None
 				model = None
 
-				for requeriment in self.controller.DirectRequeriments(objective['id']):
-					if(last_requeriment != requeriment['requeriment']):
-						last_requeriment=requeriment['requeriment']
+				for requeriment in self.controller.Requeriments(objective['name']):
+					req = requeriment['requeriment']
+					if(last_requeriment != req):
+						last_requeriment = req
 
 						vbRequeriments = self.builder.get_object("vbRequeriments")
 						vbRequeriments.pack_end(self.builder.get_object("expRequeriment"))
@@ -87,7 +88,7 @@ class AddObjective(Gtk):
 	def __StoreData(self):
 
 		# [To-Do] Check expiration modification
-		closeDialog = (self.txtObjective.get_text() and self.txtQuantity.get_text())
+		closeDialog = self.txtObjective.get_text() and self.txtQuantity.get_text()
 
 		if closeDialog:
 
@@ -106,48 +107,50 @@ class AddObjective(Gtk):
 			# Requeriments and alternatives
 			orphans = None
 
-			if(txtBuffer==self.oldRequeriments):
-				print "\tigual"
-				txtBuffer = None
-
-			else:
-				print "\tdistintos"
-				print "\t",self.oldRequeriments
-				print "\t",txtBuffer
-
-				objective = self.txtObjective.get_text()
-
-				if self.config.Get('removeOrphanRequeriments'):
-					orphans = self.controller.DirectRequeriments(objective)
-					print orphans
-
-				# Requeriments
-				txtBuffer = txtBuffer.splitlines()
-				for i in range(0,len(txtBuffer)):
-
-					# Alternatives
-					duplicates = []
-
-					txtBuffer[i] = txtBuffer[i].split(',')
-					for j in range(0,len(txtBuffer[i])):
-						txtBuffer[i][j] = txtBuffer[i][j].strip()
-
-						# If alternative is previously defined in this requeriment
-						# ignore it
-						if j>0 and txtBuffer[i][j] in txtBuffer[i][0:(j-1)]:
-							#del txtBuffer[i][j]
-							duplicates.append(j)
-
-					for j in reversed(duplicates):
-						del txtBuffer[i][j]
+#			if(txtBuffer==self.oldRequeriments):
+#				print "\tigual"
+#				txtBuffer = None
+#
+#			else:
+#				print "\tdistintos"
+#				print "\t",self.oldRequeriments
+#				print "\t",txtBuffer
+#
+#				objective = self.txtObjective.get_text()
+#
+#				if self.config.Get('removeOrphanRequeriments'):
+#					orphans = self.controller.DirectRequeriments(objective)
+#					print orphans
+#
+#				# Requeriments
+#				txtBuffer = txtBuffer.splitlines()
+#				for i in range(0,len(txtBuffer)):
+#
+#					# Alternatives
+#					duplicates = []
+#
+#					txtBuffer[i] = txtBuffer[i].split(',')
+#					for j in range(0,len(txtBuffer[i])):
+#						txtBuffer[i][j] = txtBuffer[i][j].strip()
+#
+#						# If alternative is previously defined in this requeriment
+#						# ignore it
+#						if j>0 and txtBuffer[i][j] in txtBuffer[i][0:(j-1)]:
+#							#del txtBuffer[i][j]
+#							duplicates.append(j)
+#
+#					for j in reversed(duplicates):
+#						del txtBuffer[i][j]
 
 			# Add objective
+			objective = self.txtObjective.get_text()
+			requeriments = []
 			self.controller.AddObjective(objective,
 										self.txtQuantity.get_text(),
 										self.expiration,
 										requeriments)
 
-			self.controller.DeleteOrphans(orphans)
+			self.controller.DelOrphans(orphans)
 
 		return closeDialog
 
@@ -264,4 +267,3 @@ class Alternative(Gtk):
 	def on_btnDel_Alternative_clicked(self, widget):
 
 		self.__btnDel_Alternative_Sensitivity()
-

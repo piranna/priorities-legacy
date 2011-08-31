@@ -149,16 +149,18 @@ class Model:
 				'''
 
 		if objective:
-			sql += "WHERE objectives.name=="+objective
+			sql += "WHERE objectives.name==:objective"
 			if requeriment:
-				sql += "AND requeriment=="+str(requeriment)
+				sql += "AND requeriment==:requeriment"
 
 		sql += " ORDER BY "
 		if not export:
 			sql += "expiration DESC,"
 		sql += "name,requeriment,priority ASC"
 
-		return self.__connection.execute(sql).fetchall()
+		return self.__connection.execute(sql,
+										{'objective':objective,
+										 'requeriment':requeriment}).fetchall()
 
 
 	def Dependents(self, objective):

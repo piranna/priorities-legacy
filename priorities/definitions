@@ -1,7 +1,7 @@
 Satisfacted:
 ============
 Si tiene dependientes
-	Su cantidad es mayor que la (la menor|la mayor|la suma) de todas
+	Su cantidad es mayor que la (menor|mayor|suma) de todos los dependientes
 	Todos sus dependientes estan satisfechos
 No tiene dependientes y su cantidad es mayor que 0 (¿cantidad necesaria?)
 
@@ -10,7 +10,7 @@ quantity = self.__controller.GetObjective_byId(objective_id)['quantity']
 if dependents:
 	if quantity<dependents.fetchone()['min_requeriment_quantity']:
 		for dependent in dependents:
-			if not IsSatisfacted(dependent['dependent_id']):
+			if not IsSatisfaced(dependent['dependent_id']):
 				return False
 	return True
 return quantity>0
@@ -18,8 +18,7 @@ return quantity>0
 
 Available:
 ==========
-Todas sus dependencias estan satisfechas
-No tiene dependencias
+Todos sus requisitos estan satisfechos, o no tiene ninguno
 
 req_alt = {}
 for requeriment in self.__controller.DirectDependencies(objective_id):
@@ -37,7 +36,7 @@ return True
 
 In Progress:
 ============
-Al menos una de sus dependencias esta satisfecha
+Al menos uno de sus requisitos esta satisfecho
 
 for requeriment in self.__controller.DirectDependencies(objective_id):
 	if IsSatisfacted(requeriment['alternative']):
@@ -47,4 +46,4 @@ return False
 
 Inabordable:
 ============
-Ninguna de sus dependencias esta satisfecha
+Ninguno de sus requisitos esta satisfecho
