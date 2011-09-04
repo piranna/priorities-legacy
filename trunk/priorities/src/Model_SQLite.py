@@ -125,6 +125,13 @@ class Model:
 			''',
 			(name,)).fetchone()
 
+	def Objectives(self):
+		"Get all the objectives name"
+		return [objective['name'] for objective in self.__connection.execute('''
+													SELECT name FROM objectives
+													ORDER BY name
+													''')]
+
 
 	def Requeriments(self, objective=None, requeriment=None, export=False):
 		sql = '''
@@ -334,3 +341,12 @@ class Model:
 	#			if(self.GetObjective(requeriment['alternative'])
 	#			and not self.Dependents(requeriment['alternative'])):
 	#				self.DelObjective(requeriment['alternative'], True)
+
+
+	def UpdateName(self, old, new):
+		self.__connection.execute('''
+			UPDATE objectives
+			SET   name=:new
+			WHERE name=:old
+			''',
+			{'new':new, 'old':old})

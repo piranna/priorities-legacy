@@ -87,38 +87,22 @@ class Controller:
 
 	def AddObjective(self, name, quantity=None, expiration=None, requeriments=None):
 		"Add an objective and all it's requeriments to the database"
-
+		print requeriments
 		# Add objective or update it's data
-		self.__model.AddObjective(name, quantity, expiration)
+		self.__model.AddObjective(name,
+								  quantity, expiration)
 
 		# Objective has requeriments
 		if requeriments == None:
 			requeriments = []
-		for requeriment in requeriments:
-			self.__model.AddRequeriment(name,
-										requeriment,
+		for requeriment,alternatives in requeriments.items():
+			self.__model.AddRequeriment(name, requeriment,
 										optional=False)
 
 			# Alternatives
-			priority=0
-			for alternative in requeriment:
-
-				# Alternative necesary quantity
-				alternative = alternative.split(':')
-
-				quantity = 1
-				if len(alternative)>1:
-					quantity = alternative[1]
-
-				# Alternative priority
-				if len(requeriment)>1:
-					priority += 1
-
-				# Insert alternative
-				self.__model.AddAlternative(alternative[0],
-											name,
-											requeriment,
-											priority,
+			for priority,(alternative,quantity) in alternatives.items():
+				self.__model.AddAlternative(alternative,
+											name, requeriment, priority,
 											quantity)
 
 
@@ -314,8 +298,25 @@ class Controller:
 	def DelOrphans(self, requeriments=None):
 		self.__model.DelOrphans(requeriments)
 
-	def Requeriments(self, name):
-		return self.__model.Requeriments(name)
+	def GetRequeriments(self, name):
+		result = {}
+
+		last_requeriment = None
+		for requeriment in self.__model.Requeriments(name):
+			req = requeriment['requeriment']
+
+			if req != None:
+				pri = requeriment['priority']
+				alt = requeriment['alternative']
+				qua = requeriment['alternative_quantity']
+
+				if last_requeriment != req:
+					last_requeriment = req
+					result[req] = {}
+
+				result[req][pri] = (alt,qua)
+
+		return result
 
 	def Dependents(self, name):
 		return self.__model.Dependents(name)
@@ -325,3 +326,9 @@ class Controller:
 
 	def GetObjective(self, name):
 		return self.__model.GetObjective(name)
+
+	def Objectives(self):
+		return self.__model.Objectives()
+
+	def UpdateName(self, old, new):
+		return self.__model.UpdateName(old, new)
