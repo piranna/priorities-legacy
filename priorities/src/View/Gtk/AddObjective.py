@@ -1,6 +1,7 @@
 import datetime
 
-import gtk
+from gtk import MessageDialog
+from gtk import BUTTONS_YES_NO,MESSAGE_QUESTION,RESPONSE_YES
 
 from View.Gtk import _,Gtk
 
@@ -14,10 +15,11 @@ class AddObjective(Gtk):
 		Gtk.__init__(self, "AddObjective")
 
 		self.__objective = objective
+		self.oldName = None
 
 		# Objective & quantity
 		self.txtObjective = self.builder.get_object("txtObjective")
-		self.txtQuantity = self.builder.get_object("txtQuantity")
+		self.spnQuantity = self.builder.get_object("spnQuantity")
 
 		# Expiration
 		self.chkExpiration = self.builder.get_object("chkExpiration")
@@ -29,27 +31,35 @@ class AddObjective(Gtk):
 		self.sbSecond = self.builder.get_object("sbSecond")
 
 		# Requeriments
-		self.__vbRequeriments = self.builder.get_object("vbRequeriments")
+		self.requeriments = RequerimentList(self.builder.get_object("vbRequeriments"))
 		self.__btnDel = self.builder.get_object("btnDel_Requeriment")
+
+		self.oldRequeriments = []
 
 		# Set data
 		if objective:
 			objective = self.controller.GetObjective(objective)
 
-			btnDelete = self.builder.get_object("btnDelete")
-			btnDelete.show()
-
 			if objective:
-				self.txtObjective.set_text(objective["name"])
+				# Delete button
+				btnDelete = self.builder.get_object("btnDelete")
+				btnDelete.show()
 
-				self.txtQuantity.set_text(str(objective["quantity"]))
+				# Name
+				self.oldName = objective["name"]
+				self.txtObjective.set_text(self.oldName)
 
+				# Quantity
+				self.spnQuantity.set_value(objective["quantity"])
+
+				# Expiration
 				self.expiration=None
 				if objective["expiration"]:
 					self.chkExpiration.set_active(True)
 					self.chkExpiration.toggled()
 
-					self.expiration = datetime.datetime.strptime(objective["expiration"], "%Y-%m-%d %H:%M:%S")
+					self.expiration = datetime.datetime.strptime(objective["expiration"],
+																 "%Y-%m-%d %H:%M:%S")
 
 					self.calExpiration.select_month(self.expiration.month-1, self.expiration.year)
 					self.calExpiration.select_day(self.expiration.day)
@@ -58,28 +68,15 @@ class AddObjective(Gtk):
 					self.sbSecond.set_value(self.expiration.second)
 
 				# Requeriments
-				last_requeriment = None
-				model = None
+				self.oldRequeriments = self.controller.GetRequeriments(self.oldName)
+				print self.oldRequeriments
 
-				for requeriment in self.controller.Requeriments(objective['name']):
-					req = requeriment['requeriment']
-					if(last_requeriment != req):
-						last_requeriment = req
-
-						vbRequeriments = self.builder.get_object("vbRequeriments")
-						vbRequeriments.pack_end(self.builder.get_object("expRequeriment"))
-
-						model = self.builder.get_object("treeview2").get_model()
-
-					if model:
-						model.append((requeriment['alternative'],))
+				self.requeriments.Fill(self.controller.Objectives(),
+									   self.oldRequeriments)
 
 		# Old data
 		self.oldObjective = self.txtObjective.get_text()
-		self.oldQuantity = self.txtQuantity.get_text()
-
-#		start,end = txtBuffer.get_bounds()
-#		self.oldRequeriments = txtBuffer.get_text(start,end)
+		self.oldQuantity = self.spnQuantity.get_text()
 
 		self.__btnDel_Requeriment_Sensitivity()
 
@@ -87,13 +84,16 @@ class AddObjective(Gtk):
 
 	def __StoreData(self):
 
-		# [To-Do] Check expiration modification
-		closeDialog = self.txtObjective.get_text() and self.txtQuantity.get_text()
+		name = self.txtObjective.get_text()
 
-		if closeDialog:
+		# [To-Do] Also check expiration modification
+		if name:
+			# Name
+			if self.oldName != name:
+				self.controller.UpdateName(self.oldName, name)
 
 			# Expiration
-			if(self.chkExpiration.get_active()):
+			if self.chkExpiration.get_active():
 				self.expiration = self.calExpiration.get_date()
 				self.expiration = datetime.datetime(self.expiration[0],
 													self.expiration[1]+1,
@@ -106,59 +106,28 @@ class AddObjective(Gtk):
 
 			# Requeriments and alternatives
 			orphans = None
+			requeriments = self.requeriments.GetData()
+			print requeriments
 
-#			if(txtBuffer==self.oldRequeriments):
-#				print "\tigual"
-#				txtBuffer = None
-#
-#			else:
-#				print "\tdistintos"
-#				print "\t",self.oldRequeriments
-#				print "\t",txtBuffer
-#
-#				objective = self.txtObjective.get_text()
-#
-#				if self.config.Get('removeOrphanRequeriments'):
-#					orphans = self.controller.DirectRequeriments(objective)
-#					print orphans
-#
-#				# Requeriments
-#				txtBuffer = txtBuffer.splitlines()
-#				for i in range(0,len(txtBuffer)):
-#
-#					# Alternatives
-#					duplicates = []
-#
-#					txtBuffer[i] = txtBuffer[i].split(',')
-#					for j in range(0,len(txtBuffer[i])):
-#						txtBuffer[i][j] = txtBuffer[i][j].strip()
-#
-#						# If alternative is previously defined in this requeriment
-#						# ignore it
-#						if j>0 and txtBuffer[i][j] in txtBuffer[i][0:(j-1)]:
-#							#del txtBuffer[i][j]
-#							duplicates.append(j)
-#
-#					for j in reversed(duplicates):
-#						del txtBuffer[i][j]
+			if requeriments != self.oldRequeriments:
+				if self.config.Get('removeOrphanRequeriments'):
+					orphans = self.controller.GetRequeriments(name)
 
 			# Add objective
-			objective = self.txtObjective.get_text()
-			requeriments = []
-			self.controller.AddObjective(objective,
-										self.txtQuantity.get_text(),
-										self.expiration,
-										requeriments)
+			self.controller.AddObjective(name, self.spnQuantity.get_value(),
+										self.expiration, requeriments)
 
 			self.controller.DelOrphans(orphans)
 
-		return closeDialog
+			return True
 
 
 	def __Delete(self):
 		if self.__objective:
+
+			# Delete in cascade
 			if(self.config.Get('deleteCascade')
-			and len(self.controller.DirectRequeriments(self.__objective))>1):
+			and len(self.controller.GetRequeriments(self.__objective)) > 1):
 				dialog = DeleteCascade(self.__objective)
 
 				dialog.window.set_transient_for(self.window)
@@ -168,15 +137,15 @@ class AddObjective(Gtk):
 #				if response > 0:
 #					self.__CreateTree()
 
+			# Delete only the objective
 			else:
-				dialog = gtk.MessageDialog(self.window,
-											0,
-											gtk.MESSAGE_QUESTION,
-											gtk.BUTTONS_YES_NO,
-											_("Do you want to delete the objective ")+self.__objective+"?")
+				dialog = MessageDialog(self.window, 0,
+									   MESSAGE_QUESTION, BUTTONS_YES_NO,
+									   _("Do you want to delete the objective ")
+									   +self.__objective+"?")
 				response = dialog.run()
 				dialog.destroy()
-				if response == gtk.RESPONSE_YES:
+				if response == RESPONSE_YES:
 					self.controller.DeleteObjective(self.__objective)
 #					self.__CreateTree()
 
@@ -184,18 +153,18 @@ class AddObjective(Gtk):
 
 
 	def __Cancel(self):
-		closeDialog = (self.oldObjective == self.txtObjective.get_text())
+		closeDialog = self.oldObjective == self.txtObjective.get_text()
 
 		if not closeDialog:
-			dialog = gtk.MessageDialog(self.window,
-										0,
-										gtk.MESSAGE_QUESTION,
-										gtk.BUTTONS_YES_NO,
-										_("The objective have been modified"))
+			dialog = MessageDialog(self.window,
+									0,
+									MESSAGE_QUESTION,
+									BUTTONS_YES_NO,
+									_("The objective have been modified"))
 			dialog.format_secondary_text(_("The objective have been modified and the changes will be lost. Are you sure do you want to continue?"))
 			response = dialog.run()
 			dialog.destroy()
-			if response == gtk.RESPONSE_YES:
+			if response == RESPONSE_YES:
 				return True
 
 		return closeDialog
@@ -229,11 +198,14 @@ class AddObjective(Gtk):
 
 
 	def __btnDel_Requeriment_Sensitivity(self):
-		self.__btnDel.set_sensitive(len(self.__vbRequeriments.get_children()))
+		self.__btnDel.set_sensitive(len(self.requeriments.elem.get_children()))
 
 	def on_btnAdd_Requeriment_clicked(self, widget):
-		vbRequeriments = self.builder.get_object("vbRequeriments")
-		vbRequeriments.pack_end(Alternative())
+		objectives = self.controller.Objectives()
+
+		requeriment = Requeriment(objectives)
+		requeriment.id = self.requeriments.GetMaxID() + 1
+		self.requeriments.elem.pack_start(requeriment, False)
 
 		self.__btnDel_Requeriment_Sensitivity()
 
@@ -242,16 +214,142 @@ class AddObjective(Gtk):
 		self.__btnDel_Requeriment_Sensitivity()
 
 
-class Alternative(Gtk):
+class RequerimentList:
+	def __init__(self, elem):
+		self.elem = elem
 
-	def __init__(self):
-		Gtk.__init__(self, "expRequeriment")
+	def GetData(self):
+		result = {}
 
-		self.__model = self.builder.get_object("lstAlternatives")
-		self.__model.clear()
-		self.__btnDel = self.builder.get_object("btnDel_Alternative")
+		def ForEach(requeriment):
+			data = requeriment.GetData()
+			print repr(data)
+			if data:
+				result[requeriment.id] = data
 
-		# Fill model
+		self.elem.foreach(ForEach)
+
+		return result
+
+	def Fill(self, objectives, requeriments):
+		print requeriments
+		for id,requeriment in requeriments.items():
+			req = Requeriment(objectives, id)
+			self.elem.pack_end(req)
+
+			for pri,(alt,val) in requeriment.items():
+				req.model.append((pri,alt,val))
+
+	def GetMaxID(self):
+		"""Get the bigger requeriment ID inside the requeriment list
+		
+		If requeriment list is empty, return -1
+		"""
+		result = -1
+
+		def ForEach(requeriment):
+			if  result < requeriment.id:
+				result = requeriment.id
+
+		self.elem.foreach(ForEach)
+
+		return result
+
+
+from gtk import Adjustment,Button, CellRendererCombo, CellRendererSpin, Expander
+from gtk import HButtonBox, ListStore, ScrolledWindow, TreeView, TreeViewColumn
+from gtk import VBox
+
+class Requeriment(Expander):
+
+	def __init__(self, objectives, id=None):
+		Expander.__init__(self)
+
+		self.id = id
+
+		vBox = VBox()
+		self.add(vBox)
+
+		# Data model
+		self.model = ListStore(int,str,float)
+
+		# Alternatives
+		scrolledWindow = ScrolledWindow()
+		vBox.pack_start(scrolledWindow)
+
+		treeView = TreeView(self.model)
+#		treeView.set_headers_visible(False)
+		scrolledWindow.add(treeView)
+
+		listStore_objectives = ListStore(str)
+		for name in objectives:
+			listStore_objectives.append((name,))
+
+		def combo_changed(_, path, text, model):
+			model[path][1] = text
+
+		cellRenderer = CellRendererCombo()
+		cellRenderer.connect("edited", combo_changed, self.model)
+		cellRenderer.set_property("text-column", 0)
+		cellRenderer.set_property("editable", True)
+		cellRenderer.set_property("has-entry", True)
+		cellRenderer.set_property("model", listStore_objectives)
+
+		treeViewColumn = TreeViewColumn("Alternative",cellRenderer,text=1)
+#		treeViewColumn = TreeViewColumn(None,cellRenderer,text=0)
+		treeView.append_column(treeViewColumn)
+
+		def spin_changed(_, path, value, model):
+			model[path][2] = float(value.replace(",","."))
+
+		cellRenderer = CellRendererSpin()
+		cellRenderer.connect("edited", spin_changed, self.model)
+		cellRenderer.set_property("adjustment", Adjustment(1, 0, 100, 1, 10, 0))
+		cellRenderer.set_property("editable", True)
+		cellRenderer.set_property("digits", 2)
+
+		treeViewColumn = TreeViewColumn(None,cellRenderer,text=2)
+		treeView.append_column(treeViewColumn)
+
+		# Add/remove alternative button box
+		hButtonBox = HButtonBox()
+		vBox.pack_start(hButtonBox, False)
+
+		# Add alternative button
+		button = Button("gtk-add")
+		button.connect("clicked",self.on_btnAdd_Alternative_clicked)
+		button.set_use_stock(True)
+		hButtonBox.pack_start(button)
+
+		# Remove alternative button
+		button = Button("gtk-remove")
+		button.connect("clicked",self.on_btnDel_Alternative_clicked)
+		button.set_use_stock(True)
+		hButtonBox.pack_start(button)
+
+		# Expand the requeriment and add an alternative if it's new
+		if id==None:
+			self.set_expanded(True)
+			self.model.append((0,None,1.0))
+
+		# Show requeriment
+		self.show_all()
+
+
+	def GetData(self):
+		result = {}
+
+		iter = self.model.get_iter_first()
+		while iter:
+			alt = self.model.get_value(iter,1)
+			print self.model.get_value(iter,0),alt,self.model.get_value(iter,2)
+			if alt:
+				key = self.model.get_value(iter,0)
+				result[key] = (alt, self.model.get_value(iter,2))
+
+			iter = self.model.iter_next(iter)
+
+		return result
 
 
 	def __btnDel_Alternative_Sensitivity(self):
@@ -260,7 +358,7 @@ class Alternative(Gtk):
 
 
 	def on_btnAdd_Alternative_clicked(self, widget):
-		self.__model.append()
+		self.model.append()
 
 		self.__btnDel_Alternative_Sensitivity()
 
