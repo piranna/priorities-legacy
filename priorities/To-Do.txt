@@ -9,6 +9,7 @@ Recordar maximizar
 	Soporte para alternativas opcionales (definir)
 * Renombrar clases y componentes
 * Pythonizar y simplificar codigo
+Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
 
 1.0 RC3:
 ========
@@ -24,6 +25,7 @@ Recordar maximizar
 
 1.0:
 ====
+Unittest y BDDs
 ? Comentar todo el codigo
 	Limpiar y ordenar codigo
 
