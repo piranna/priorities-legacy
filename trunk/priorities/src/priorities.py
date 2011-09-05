@@ -8,6 +8,10 @@ import gettext
 gettext.textdomain("priorities")
 _ = gettext.gettext
 
+import sqlite3
+
+from DB import DB
+
 
 def ParseArguments(config):
 	# Parser
@@ -75,13 +79,15 @@ if __name__ == "__main__":
 	# Parse arguments
 	options, remainder = ParseArguments(config)
 
-	# Load model
-	import Model_SQLite
-	model = Model_SQLite.Model(options.database)
+	# Create database
+	connection = sqlite3.connect(options.database)
+	connection.row_factory = sqlite3.Row
+
+	db = DB(connection)
 
 	# Load controller
 	import Controller
-	controller = Controller.Controller(model)
+	controller = Controller.Controller(db)
 
 	# Load view
 	import View

@@ -1,31 +1,20 @@
-import sqlite3
-
-
-class Model:
+class DB:
 	# Contructor & destructor
-	def __init__(self, db_path):
-		self.__connection = None
+	def __init__(self, connection):
+		self.__connection = connection
+		self.__connection.isolation_level = None
 
-		if db_path:
-			self.Connect(db_path)
-
+		self.create()
 
 	def __del__(self):
-		self.__Unconnect()
+		self.__connection.close()
 
 
-	def Connect(self, db_path):
+	def create(self):
 		"""
 		Make a connection to the database
 		or create a new one if it's doesn't exists
 		"""
-		self.__Unconnect()
-
-		self.__connection = sqlite3.connect(db_path)
-
-		self.__connection.row_factory = sqlite3.Row
-		self.__connection.isolation_level = None
-
 		self.__connection.executescript('''
 			PRAGMA foreign_keys = ON;
 
@@ -70,12 +59,6 @@ class Model:
 				PRIMARY KEY(objective,requeriment,priority)
 			);
 			''')
-
-
-	def __Unconnect(self):
-		if self.__connection:
-			self.__connection.close()
-			self.__connection = None
 
 
 	def Get_Connection(self):
