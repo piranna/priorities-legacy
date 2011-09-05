@@ -250,7 +250,8 @@ class Model:
 				''',
 				{'objective':objective, 'id':id, 'optional':optional})
 
-	def AddAlternative(self, alternative, objective, requeriment=None, priority=0, quantity=1):
+	def AddAlternative(self, objective, requeriment, priority,
+							 alternative, quantity=1):
 		# Create alternative (if needed)
 		self.AddObjective(alternative)
 
@@ -328,19 +329,26 @@ class Model:
 			self.DelOrphans(requeriments)
 
 
-	def DelOrphans(self, requeriments=None):
+	def DelRequeriments(self, objective):
+		self.__connection.execute('''
+			DELETE FROM requeriments
+			WHERE objective==?
+			''',
+			(objective,))
+
+
+	def DelOrphans(self, requeriments):
 		"""Delete the objectives without dependents
 		defined in the `requeriments` list
 		"""
-		if requeriments:
-			for requeriment in requeriments:
-				# If requeriment doesn't have a dependent,
-				# delete the orphan
-				if not self.Dependents(requeriment['alternative']):
-					self.DelObjective(requeriment['alternative'], True)
-	#			if(self.GetObjective(requeriment['alternative'])
-	#			and not self.Dependents(requeriment['alternative'])):
-	#				self.DelObjective(requeriment['alternative'], True)
+		for requeriment in requeriments:
+			# If requeriment doesn't have a dependent,
+			# delete the orphan
+			if not self.Dependents(requeriment):
+				self.DelObjective(requeriment, True)
+#			if(self.GetObjective(requeriment['alternative'])
+#			and not self.Dependents(requeriment['alternative'])):
+#				self.DelObjective(requeriment['alternative'], True)
 
 
 	def UpdateName(self, old, new):

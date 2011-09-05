@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class Controller:
 
 	# Constructor
@@ -8,18 +11,20 @@ class Controller:
 	def RecursiveRequeriments(self, name=None, export=False):
 		"""Get all the requeriments tree of an objective
 
-		If name is not defined return the full objectives tree
+		If name is None defined return the full objectives tree
 		"""
 
 		requeriments = []
+		checked = []
 
-		def Priv_RecursiveRequeriments(name,checked=None):
+		def Priv_RecursiveRequeriments(name):
 			"""Get all the requeriments tree of an objective storing them inside
 			requeriments and returning the current top level
 			"""
 
 			def Insert_array_tree_2d(data, index, array, head=False):
-				"Append data to the indexed array of arrays"
+				"Insert data to the indexed array of arrays"
+				print data
 				while len(array)<=index:
 					array.append([])
 				if head:
@@ -47,9 +52,6 @@ class Controller:
 			# If objective is not checked
 			# set objective as checked
 			# and get it's requeriments
-			if checked == None:
-				checked=[]
-
 			if name not in checked:
 				checked.append(name)
 
@@ -57,19 +59,21 @@ class Controller:
 
 					# If objective has an alternative,
 					# get the new depth
-					if row['alternative']:
+					alternative = row['alternative']
+					if alternative:
 
 						# If alternative have been checked,
 						# get its next level
-						if row['alternative'] in checked:
-							depth = GetDepth(row['alternative'], requeriments)+1
+						if alternative in checked:
+							depth = GetDepth(alternative, requeriments)+1
 
 						# Else check if we have to get it's new level or not
 						else:
-							r_depth = Priv_RecursiveRequeriments(row['alternative'])
+							r_depth = Priv_RecursiveRequeriments(alternative)
 							if  depth < r_depth:
 								depth = r_depth
 
+					# Insert requeriment at the calc level
 					g_depth = GetDepth(row['name'],requeriments)
 					if  depth < g_depth:
 						depth = g_depth
@@ -85,25 +89,26 @@ class Controller:
 		return requeriments
 
 
-	def AddObjective(self, name, quantity=None, expiration=None, requeriments=None):
-		"Add an objective and all it's requeriments to the database"
-		print requeriments
+	def AddObjective(self, name, quantity=None, expiration=None):
+		"Add/update an objective to the database"
 		# Add objective or update it's data
-		self.__model.AddObjective(name,
-								  quantity, expiration)
+		self.__model.AddObjective(name, quantity, expiration)
 
-		# Objective has requeriments
-		if requeriments == None:
-			requeriments = []
-		for requeriment,alternatives in requeriments.items():
-			self.__model.AddRequeriment(name, requeriment,
+
+	def SetRequeriments(self, objective, requeriments):
+		"Set an objective requeriments in the database"
+		# Delete old requeriments
+		self.__model.DelRequeriments(objective)
+
+		# Add new requeriments
+		for requeriment,alternatives in enumerate(requeriments):
+			self.__model.AddRequeriment(objective, requeriment,
 										optional=False)
 
 			# Alternatives
-			for priority,(alternative,quantity) in alternatives.items():
-				self.__model.AddAlternative(alternative,
-											name, requeriment, priority,
-											quantity)
+			for priority,(alternative,quantity) in enumerate(alternatives.items()):
+				self.__model.AddAlternative(objective, requeriment, priority,
+											alternative, quantity)
 
 
 	def IsSatisfaced(self, name):
@@ -295,26 +300,25 @@ class Controller:
 	def DelObjective(self, name, delete_orphans = False):
 		self.__model.DelObjective(name, delete_orphans)
 
-	def DelOrphans(self, requeriments=None):
+	def DelOrphans(self, requeriments):
 		self.__model.DelOrphans(requeriments)
 
 	def GetRequeriments(self, name):
-		result = {}
+		result = []
 
 		last_requeriment = None
 		for requeriment in self.__model.Requeriments(name):
 			req = requeriment['requeriment']
 
 			if req != None:
-				pri = requeriment['priority']
 				alt = requeriment['alternative']
 				qua = requeriment['alternative_quantity']
 
 				if last_requeriment != req:
 					last_requeriment = req
-					result[req] = {}
+					result.append(OrderedDict())
 
-				result[req][pri] = (alt,qua)
+				result[-1][alt] = qua
 
 		return result
 
