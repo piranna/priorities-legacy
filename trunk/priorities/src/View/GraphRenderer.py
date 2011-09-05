@@ -1,6 +1,7 @@
 import glib
 import gtk
-import datetime
+
+from datetime import datetime,timedelta
 
 
 class Requeriment(gtk.Button):
@@ -14,8 +15,8 @@ class Requeriment(gtk.Button):
 		self.connect('enter_notify_event',parent.IncreaseLineWidth, self)
 		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 
-		self.__prev = None
-		self.__requeriments = []
+		self.prev = None
+		self.requeriments = []
 		self.__dependents = []
 
 		self.__parent = parent
@@ -23,15 +24,9 @@ class Requeriment(gtk.Button):
 		self.__x = 0
 		self.__y = 0
 
-	def Set_Prev(self, prev):
-		self.__prev = prev
-
 	def Add_Requeriment(self, requeriment):
-		self.__requeriments.append(requeriment)
+		self.requeriments.append(requeriment)
 		requeriment.__dependents.append(self)
-
-	def Get_Requeriments(self):
-		return self.__requeriments
 
 	def Adjust(self, positions, y):
 		def Get_Middle(array):
@@ -49,7 +44,7 @@ class Requeriment(gtk.Button):
 		x = 0
 		div = 0
 
-		x_req = Get_Middle(self.__requeriments)
+		x_req = Get_Middle(self.requeriments)
 		if x_req:
 			x += x_req
 			div += 1
@@ -63,17 +58,17 @@ class Requeriment(gtk.Button):
 			x = x/div - self.allocation.width/2
 
 		# Prevent overlapping with previous requeriment at the same level
-		if(self.__prev
-		and x < positions[self.__prev][0]+self.__prev.allocation.width):
-			x = positions[self.__prev][0]+self.__prev.allocation.width
+		if(self.prev
+		and x < positions[self.prev][0]+self.prev.allocation.width):
+			x = positions[self.prev][0]+self.prev.allocation.width
 
 			# Increase distance between "groups"
-			if(self.__prev.__requeriments != self.__requeriments
-			or self.__prev.__dependents != self.__dependents):
+			if(self.prev.requeriments != self.requeriments
+			or self.prev.__dependents != self.__dependents):
 				x += 20
 
 		# Ensure all requeriments are showed in layout
-		if x < 0:
+		if  x < 0:
 			x = 0
 
 		# Update requeriment position
@@ -100,8 +95,7 @@ class Requeriment(gtk.Button):
 
 
 class Objective(Requeriment):
-	def __init__(self, objective, parent,
-				controller, color):
+	def __init__(self, objective, parent, controller, color):
 		Requeriment.__init__(self, objective['name'], parent)
 
 #		self.connect('button-press-event',parent.__on_objective_clicked)
@@ -118,19 +112,21 @@ class Objective(Requeriment):
 
 
 	def __SetExpirationColor(self, objective, controller,color):
+		expiration = objective["expiration"]
+
 		# Expired and not satisfacted - Show warning
-		if(objective["expiration"]
+		if(expiration
 		and not controller.IsSatisfaced(objective['objective_id'])):
 
 			# Expired - Set inverted color
-			if datetime.datetime.strptime(objective["expiration"],"%Y-%m-%d %H:%M:%S") < datetime.datetime.now():
+			if datetime.strptime(expiration,"%Y-%m-%d %H:%M:%S") < datetime.now():
 				self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
 				self.child.modify_fg(gtk.STATE_NORMAL, color)
 				return
 
 			# Next to expire - Set color animation
-			elif(datetime.datetime.strptime(objective["expiration"],"%Y-%m-%d %H:%M:%S")
-			< datetime.datetime.now()+datetime.timedelta(self.config.Get('expirationWarning'))):
+			elif(datetime.strptime(expiration,"%Y-%m-%d %H:%M:%S")
+			   < datetime.now()+timedelta(self.config.Get('expirationWarning'))):
 
 				def expires_inverted(color):
 					self.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0,0,0))
@@ -151,4 +147,3 @@ class Objective(Requeriment):
 
 		# Non expired - Set background color
 		self.modify_bg(gtk.STATE_NORMAL, color)
-

@@ -1,4 +1,5 @@
-import datetime
+from collections import OrderedDict
+from datetime import datetime
 
 from gtk import MessageDialog
 from gtk import BUTTONS_YES_NO,MESSAGE_QUESTION,RESPONSE_YES
@@ -58,8 +59,8 @@ class AddObjective(Gtk):
 					self.chkExpiration.set_active(True)
 					self.chkExpiration.toggled()
 
-					self.expiration = datetime.datetime.strptime(objective["expiration"],
-																 "%Y-%m-%d %H:%M:%S")
+					self.expiration = datetime.strptime(objective["expiration"],
+														"%Y-%m-%d %H:%M:%S")
 
 					self.calExpiration.select_month(self.expiration.month-1, self.expiration.year)
 					self.calExpiration.select_day(self.expiration.day)
@@ -69,7 +70,6 @@ class AddObjective(Gtk):
 
 				# Requeriments
 				self.oldRequeriments = self.controller.GetRequeriments(self.oldName)
-				print self.oldRequeriments
 
 				self.requeriments.Fill(self.controller.Objectives(),
 									   self.oldRequeriments)
@@ -95,29 +95,29 @@ class AddObjective(Gtk):
 			# Expiration
 			if self.chkExpiration.get_active():
 				self.expiration = self.calExpiration.get_date()
-				self.expiration = datetime.datetime(self.expiration[0],
-													self.expiration[1]+1,
-													self.expiration[2],
-													self.sbHour.get_value_as_int(),
-													self.sbMinute.get_value_as_int(),
-													self.sbSecond.get_value_as_int())
+				self.expiration = datetime(self.expiration[0],
+											self.expiration[1]+1,
+											self.expiration[2],
+											self.sbHour.get_value_as_int(),
+											self.sbMinute.get_value_as_int(),
+											self.sbSecond.get_value_as_int())
 			else:
 				self.expiration = None
 
+			self.controller.AddObjective(name, self.spnQuantity.get_value(),
+										self.expiration)
+
 			# Requeriments and alternatives
-			orphans = None
 			requeriments = self.requeriments.GetData()
-			print requeriments
 
 			if requeriments != self.oldRequeriments:
+				orphans = None
+
 				if self.config.Get('removeOrphanRequeriments'):
 					orphans = self.controller.GetRequeriments(name)
 
-			# Add objective
-			self.controller.AddObjective(name, self.spnQuantity.get_value(),
-										self.expiration, requeriments)
-
-			self.controller.DelOrphans(orphans)
+				self.controller.SetRequeriments(name, requeriments)
+				self.controller.DelOrphans(orphans)
 
 			return True
 
@@ -203,7 +203,7 @@ class AddObjective(Gtk):
 	def on_btnAdd_Requeriment_clicked(self, widget):
 		objectives = self.controller.Objectives()
 
-		requeriment = Requeriment(objectives)
+		requeriment = Requeriment(objectives, True)
 		requeriment.id = self.requeriments.GetMaxID() + 1
 		self.requeriments.elem.pack_start(requeriment, False)
 
@@ -219,26 +219,24 @@ class RequerimentList:
 		self.elem = elem
 
 	def GetData(self):
-		result = {}
+		result = []
 
 		def ForEach(requeriment):
 			data = requeriment.GetData()
-			print repr(data)
 			if data:
-				result[requeriment.id] = data
+				result.append(data)
 
 		self.elem.foreach(ForEach)
 
 		return result
 
 	def Fill(self, objectives, requeriments):
-		print requeriments
-		for id,requeriment in requeriments.items():
-			req = Requeriment(objectives, id)
-			self.elem.pack_end(req)
+		for requeriment in requeriments:
+			req = Requeriment(objectives, False)
+			self.elem.pack_start(req, False)
 
-			for pri,(alt,val) in requeriment.items():
-				req.model.append((pri,alt,val))
+			for alternative in requeriment.items():
+				req.Add(alternative)
 
 	def GetMaxID(self):
 		"""Get the bigger requeriment ID inside the requeriment list
@@ -257,36 +255,30 @@ class RequerimentList:
 
 
 from gtk import Adjustment,Button, CellRendererCombo, CellRendererSpin, Expander
-from gtk import HButtonBox, ListStore, ScrolledWindow, TreeView, TreeViewColumn
-from gtk import VBox
+from gtk import HButtonBox, ListStore, TreeView, TreeViewColumn, VBox
 
 class Requeriment(Expander):
 
-	def __init__(self, objectives, id=None):
+	def __init__(self, objectives, new):
 		Expander.__init__(self)
-
-		self.id = id
 
 		vBox = VBox()
 		self.add(vBox)
 
 		# Data model
-		self.model = ListStore(int,str,float)
+		self.model = ListStore(str,float)
 
 		# Alternatives
-		scrolledWindow = ScrolledWindow()
-		vBox.pack_start(scrolledWindow)
-
 		treeView = TreeView(self.model)
 #		treeView.set_headers_visible(False)
-		scrolledWindow.add(treeView)
+		vBox.pack_start(treeView)
 
 		listStore_objectives = ListStore(str)
 		for name in objectives:
 			listStore_objectives.append((name,))
 
 		def combo_changed(_, path, text, model):
-			model[path][1] = text
+			model[path][0] = text
 
 		cellRenderer = CellRendererCombo()
 		cellRenderer.connect("edited", combo_changed, self.model)
@@ -295,12 +287,12 @@ class Requeriment(Expander):
 		cellRenderer.set_property("has-entry", True)
 		cellRenderer.set_property("model", listStore_objectives)
 
-		treeViewColumn = TreeViewColumn("Alternative",cellRenderer,text=1)
+		treeViewColumn = TreeViewColumn("Alternative",cellRenderer,text=0)
 #		treeViewColumn = TreeViewColumn(None,cellRenderer,text=0)
 		treeView.append_column(treeViewColumn)
 
 		def spin_changed(_, path, value, model):
-			model[path][2] = float(value.replace(",","."))
+			model[path][1] = float(value.replace(",","."))
 
 		cellRenderer = CellRendererSpin()
 		cellRenderer.connect("edited", spin_changed, self.model)
@@ -308,7 +300,7 @@ class Requeriment(Expander):
 		cellRenderer.set_property("editable", True)
 		cellRenderer.set_property("digits", 2)
 
-		treeViewColumn = TreeViewColumn(None,cellRenderer,text=2)
+		treeViewColumn = TreeViewColumn(None,cellRenderer,text=1)
 		treeView.append_column(treeViewColumn)
 
 		# Add/remove alternative button box
@@ -328,24 +320,37 @@ class Requeriment(Expander):
 		hButtonBox.pack_start(button)
 
 		# Expand the requeriment and add an alternative if it's new
-		if id==None:
+		if new:
 			self.set_expanded(True)
-			self.model.append((0,None,1.0))
+			self.model.append((None,1.0))
 
 		# Show requeriment
 		self.show_all()
 
 
+	def Add(self, alternative):
+		self.model.append(alternative)
+
+		names = []
+		iter = self.model.get_iter_first()
+		while iter:
+			alt = self.model.get_value(iter,0)
+			if alt:
+				names.append(alt)
+
+			iter = self.model.iter_next(iter)
+
+		self.set_label(','.join(names))
+
+
 	def GetData(self):
-		result = {}
+		result = OrderedDict()
 
 		iter = self.model.get_iter_first()
 		while iter:
-			alt = self.model.get_value(iter,1)
-			print self.model.get_value(iter,0),alt,self.model.get_value(iter,2)
+			alt = self.model.get_value(iter,0)
 			if alt:
-				key = self.model.get_value(iter,0)
-				result[key] = (alt, self.model.get_value(iter,2))
+				result[alt] = self.model.get_value(iter,1)
 
 			iter = self.model.iter_next(iter)
 

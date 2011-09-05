@@ -1,15 +1,13 @@
-Recordar maximizar
-
-
 0.12:
 =====
+Recordar maximizar
 [2011-08-30] Nuevo modelo de base de datos
-* Añadir requisitos como clase propia en lugar de con Glade
-	Modificar introduccion en base de datos
+[2011-09-04] Añadir requisitos como clase propia en lugar de con Glade
 	Soporte para alternativas opcionales (definir)
 * Renombrar clases y componentes
 * Pythonizar y simplificar codigo
 Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
+[2011-09-04] Usar enumerators para los requisitos y las prioridades
 
 1.0 RC3:
 ========
@@ -17,10 +15,6 @@ Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
 ¿Problema con los colores (verde en lugar de amarillo)?
 [BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
 [BUG] Crea nueva entrada en lugar de actualizarla
-
-* Modificar diseño de añadir alternativas
-	Rellenar alternativas
-	Generar varias instancias de los requerimientos
 
 
 1.0:

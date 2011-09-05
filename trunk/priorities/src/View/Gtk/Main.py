@@ -1,12 +1,19 @@
 import math
 
+from datetime import datetime
+
+from gtk import STATE_NORMAL
+from gtk import FileChooserDialog
+from gtk.gdk import CAP_BUTT,JOIN_MITER,LINE_SOLID
+from gtk.gdk import color_parse
+
 import navigationbar
 
 from View.Gtk import Gtk,_
 
-from View.Gtk.About import *
-from View.Gtk.AddObjective import *
-from View.Gtk.DeleteCascade import *
+from View.Gtk.About import About
+from View.Gtk.AddObjective import AddObjective
+from View.Gtk.DeleteCascade import DeleteCascade
 from View.Gtk.Preferences import *
 
 from View.GraphRenderer import Objective,Requeriment
@@ -31,7 +38,7 @@ class Main(Gtk):
 		self.__needRenderGraph = False
 
 		self.layout = self.builder.get_object("layout")
-		self.layout.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('white'))
+		self.layout.modify_bg(STATE_NORMAL, color_parse('white'))
 
 		# Navigation Bar
 		self.navBar = navigationbar.NavigationBar()
@@ -84,11 +91,11 @@ class Main(Gtk):
 
 
 	def __OpenDB_dialog(self):
-		dialog = gtk.FileChooserDialog(_("Select the database to use"),
-										None,
-										gtk.FILE_CHOOSER_ACTION_OPEN,
-										(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-										gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+		dialog = FileChooserDialog(_("Select the database to use"),
+									None,
+									gtk.FILE_CHOOSER_ACTION_OPEN,
+									(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+									gtk.STOCK_OPEN,gtk.RESPONSE_OK))
 		dialog.set_default_response(gtk.RESPONSE_OK)
 
 		# sqlite files
@@ -189,61 +196,39 @@ class Main(Gtk):
 		if self.__objectives:
 			self.__RenderGraph()
 
-			# Graphic Context
+			# Get graphic Context
 			gc = self.layout.get_style().fg_gc[gtk.STATE_NORMAL]
-
-
-			def DrawHead(x1,y1, x2,y2):
-				def ArrowPoint(angle, lenght):
-					angle = math.radians(angle)
-
-					cotan = y1-y2
-					if cotan:
-						cotan = math.atan((x1-x2)/cotan)+angle
-
-					return (x2 + math.sin(cotan)*lenght, y2 + math.cos(cotan)*lenght)
-
-				arrowPoint = ArrowPoint(15, 30)
-				self.layout.bin_window.draw_line(gc, x2,y2,
-													int(arrowPoint[0]),int(arrowPoint[1]))
-
-				arrowPoint = ArrowPoint(-15, 30)
-				self.layout.bin_window.draw_line(gc, x2,y2,
-													int(arrowPoint[0]),int(arrowPoint[1]))
-
 
 			# Background sharp
 			layout_size = self.layout.get_size()
 			print "\t",layout_size
 
+			bin_window = self.layout.bin_window
+
 			if(self.config.Get('showSharp')):
-				for x in range(1,layout_size[0]/self.margin_x+1):
-					self.layout.bin_window.draw_line(gc, x*self.margin_x,0,
-														x*self.margin_x,layout_size[1])
-				for y in range(1,layout_size[1]/self.margin_y+1):
-					self.layout.bin_window.draw_line(gc, 0,y*self.margin_y,
-														layout_size[0],y*self.margin_y)
+				for x in range(1, layout_size[0]-1, self.margin_x):
+					bin_window.draw_line(gc, x,0, x,layout_size[1])
+
+				for y in range(1, layout_size[1]-1, self.margin_y):
+					bin_window.draw_line(gc, 0,y, layout_size[0],y)
 
 			# Layout borders
 			if(self.config.Get('showLayoutBorders')):
-				self.layout.bin_window.draw_line(gc, 0,0,
-												0,layout_size[1])
-				self.layout.bin_window.draw_line(gc, 0,0,
-												layout_size[0],0)
-				self.layout.bin_window.draw_line(gc, layout_size[0],0,
-												layout_size[0],layout_size[1])
-				self.layout.bin_window.draw_line(gc, 0,layout_size[1],
-												layout_size[0],layout_size[1])
+				bin_window.draw_line(gc, 0,0,              0,layout_size[1])
+				bin_window.draw_line(gc, 0,0,              layout_size[0],0)
+				bin_window.draw_line(gc, layout_size[0],0, layout_size[0],layout_size[1])
+				bin_window.draw_line(gc, 0,layout_size[1], layout_size[0],layout_size[1])
 
 			# Arrows
-			for level in self.__objectives:
-				for button in self.__objectives[level]:
-					line_width = 0
-					if button==self.__cursorObjective:
-						line_width = 2
-					gc.set_line_attributes(line_width, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+			for level in self.__objectives.values():
+				for button in level:
+					gc.set_line_attributes(2 if button==self.__cursorObjective else 0,
+											LINE_SOLID,CAP_BUTT,JOIN_MITER)
 
-					for requeriment in button.Get_Requeriments():
+					for requeriment in button.requeriments:
+						print button.requeriments
+						print "\t",requeriment
+
 						# Arrow coordinates
 						x1=button.X() + button.allocation.width/2
 						y1=button.Y() + button.allocation.height/2
@@ -251,13 +236,31 @@ class Main(Gtk):
 						y2=requeriment.Y() + requeriment.allocation.height/2
 
 						# Arrow line
-						self.layout.bin_window.draw_line(gc, x1,y1, x2,y2)
+						print "line",x1,y1, x2,y2
+						bin_window.draw_line(gc, x1,y1, x2,y2)
 
 						# Arrow head
 						if self.config.Get("showArrowHeads"):
+							def DrawHead(x1,y1, x2,y2):
+								def ArrowPoint(angle, lenght):
+									angle = math.radians(angle)
+
+									cotan = y1-y2
+									if cotan:
+										cotan = math.atan((x1-x2)/cotan)+angle
+
+									return (x2 + math.sin(cotan)*lenght,
+											y2 + math.cos(cotan)*lenght)
+
+								arrowPoint = ArrowPoint(15, 30)
+								bin_window.draw_line(gc, x2,y2, int(arrowPoint[0]),int(arrowPoint[1]))
+
+								arrowPoint = ArrowPoint(-15, 30)
+								bin_window.draw_line(gc, x2,y2, int(arrowPoint[0]),int(arrowPoint[1]))
+
 							DrawHead(x1,y1, x2,y2)
 
-			gc.set_line_attributes(0, gtk.gdk.LINE_SOLID,gtk.gdk.CAP_BUTT,gtk.gdk.JOIN_MITER)
+			gc.set_line_attributes(0, LINE_SOLID,CAP_BUTT,JOIN_MITER)
 
 
 	def __RenderGraph(self):
@@ -304,7 +307,7 @@ class Main(Gtk):
 				self.layout.show_all()
 
 
-	def __CreateGraph(self, objective_name=None):
+	def __CreateGraph(self, objective=None):
 
 		# Clean arrows array
 		self.__objectives = {}
@@ -316,9 +319,8 @@ class Main(Gtk):
 		# Re-draw surface of the layout
 		self.layout.queue_draw()
 
-		tree = self.controller.RecursiveRequeriments(objective_name)
+		tree = self.controller.RecursiveRequeriments(objective)
 		if tree:
-
 			self.__needRenderGraph = True
 
 			# Level index
@@ -326,36 +328,38 @@ class Main(Gtk):
 
 			checked_objectives = {}
 
-			# Niveles
+			# Levels
 			for level in tree:
-				print level
 
 				def PutButton(button):
 					self.layout.put(button, 0,0)
-					if not self.__objectives.has_key(y):
-						self.__objectives[y] = []
+					if self.__objectives.has_key(y):
+						button.prev = self.__objectives[y][-1]
 					else:
-						button.Set_Prev(self.__objectives[y][-1])
+						self.__objectives[y] = []
 					self.__objectives[y].append(button)
 
-				def Requeriments():
+				def Alternatives():
 					button = None
 					level_requeriments = {}
 
 					for objective in level:
 						# Requeriments
-						if objective['requeriment']:
-							if not level_requeriments.has_key(objective['objective_id']):
-								level_requeriments[objective['objective_id']] = {}
+						requeriment = objective['requeriment']
+						if requeriment:
+							objective_id = objective['objective_id']
+							if not level_requeriments.has_key(objective_id):
+								level_requeriments[objective_id] = {}
 
 							# Requeriment with alternatives
 							if objective['priority']:
 
 								# If requeriment is registered,
 								# add alternative
-								if objective['requeriment'] in level_requeriments[objective['objective_id']]:
+								alternative = objective['alternative']
+								if requeriment in level_requeriments[objective_id]:
 									button.set_label(button.get_label()+"\n"
-													+objective['alternative'])
+													+alternative)
 
 								# else create a new one
 								else:
@@ -364,14 +368,14 @@ class Main(Gtk):
 										PutButton(button)
 
 									# Create new requeriment button
-									button = Requeriment(objective['alternative'],
-																		objective['objective_id'],
-																		self)
+									button = Requeriment(alternative,
+														 objective_id,
+														 self)
 
 									# Add requeriment
-									level_requeriments[objective['objective_id']][objective['requeriment']] = button
+									level_requeriments[objective_id][requeriment] = button
 
-								button.Add_Requeriment(checked_objectives[objective['alternative']])
+								button.Add_Requeriment(checked_objectives[alternative])
 
 #					print "level_requeriments",level_requeriments
 
@@ -381,55 +385,68 @@ class Main(Gtk):
 
 				def Objectives(level_requeriments):
 					for objective in level:
+						name = objective['name']
+
 						# Objective
-						if objective['name'] not in checked_objectives:
+						if name not in checked_objectives:
 
 							# Get color of the requeriment
 							def GetColor():
 								# Blue - Satisfacted
-								if self.controller.IsSatisfaced(objective['name']):
+								if self.controller.IsSatisfaced(name):
 									show = self.config.Get('showExceededRequeriments')
 									if(show):
-										if(show==1					# 1 == Only not expired
-										and objective['expiration']
-										and objective['expiration']<datetime.datetime):
+										expiration = objective['expiration']
+										if(show == 1	# 1 == Only not expired
+										and expiration
+										and expiration<datetime.now()):
 											return None
-										return gtk.gdk.color_parse(self.config.Get('color_satisfacted'))
+										return color_parse(self.config.Get('color_satisfacted'))
 									return None
 
 								# Green - Available
-								elif self.controller.IsAvailable(objective['name']):
-									return gtk.gdk.color_parse(self.config.Get('color_available'))
+								elif self.controller.IsAvailable(name):
+									return color_parse(self.config.Get('color_available'))
 
 								# Yellow - InProgress
-								elif self.controller.IsInprocess(objective['name']):
-									return gtk.gdk.color_parse(self.config.Get('color_inprocess'))
+								elif self.controller.IsInprocess(name):
+									return color_parse(self.config.Get('color_inprocess'))
 
 								# Red - Unabordable
-								return gtk.gdk.color_parse(self.config.Get('color_unabordable'))
+								return color_parse(self.config.Get('color_unabordable'))
 
 
 							# Check if objective has to be printed and with what color
 							color = GetColor()
-							if(color):
+							if color:
 								# Create objective button
 								button = Objective(objective, self,
 													self.controller, color)
-								if objective['requeriment']:
+
+								requeriment = objective['requeriment']
+
+								if requeriment != None:
+									alternative = objective['alternative']
+
 									if objective['priority']:
-										button.Add_Requeriment(level_requeriments[objective['name']][objective['requeriment']])
-									else:
-										button.Add_Requeriment(checked_objectives[objective['alternative']])
+										requeriment = level_requeriments[name][requeriment]
+										button.Add_Requeriment(requeriment)
+
+									elif alternative in checked_objectives:
+										requeriment = checked_objectives[alternative]
+										button.Add_Requeriment(requeriment)
 
 								PutButton(button)
 
 								# Register objective button to prevent be printed twice
-								checked_objectives[objective['name']] = button
+								checked_objectives[name] = button
 
-
-				level_requeriments = Requeriments()
+				# Create level alternatives
+				level_requeriments = Alternatives()
 				if level_requeriments:
 					y += 1
+
+				# Create level objectives
 				Objectives(level_requeriments)
 				y += 1
 
