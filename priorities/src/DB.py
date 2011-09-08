@@ -325,13 +325,14 @@ class DB:
 		defined in the `requeriments` list
 		"""
 		for requeriment in requeriments:
-			# If requeriment doesn't have a dependent,
-			# delete the orphan
-			if not self.Dependents(requeriment):
-				self.DelObjective(requeriment, True)
-#			if(self.GetObjective(requeriment['alternative'])
-#			and not self.Dependents(requeriment['alternative'])):
-#				self.DelObjective(requeriment['alternative'], True)
+			for alternative in requeriment:
+				# If requeriment doesn't have a dependent,
+				# delete the orphan
+				if not self.Dependents(alternative):
+					self.DelObjective(alternative, True)
+	#			if(self.GetObjective(requeriment['alternative'])
+	#			and not self.Dependents(requeriment['alternative'])):
+	#				self.DelObjective(requeriment['alternative'], True)
 
 
 	def UpdateName(self, old, new):

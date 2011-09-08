@@ -95,20 +95,25 @@ class Requeriment(gtk.Button):
 
 
 class Objective(Requeriment):
-	def __init__(self, objective, parent, controller, color):
-		Requeriment.__init__(self, objective['name'], parent)
+	def __init__(self, name, parent, objective, color):
+		Requeriment.__init__(self, name, parent)
 
 #		self.connect('button-press-event',parent.__on_objective_clicked)
 
 		# Tooltip
-		self.set_tooltip_text("Cantidad: "+str(objective['objective_quantity']))
-		if(objective["expiration"]):
-			self.set_tooltip_text(button.get_tooltip_text()+"\nExpiracion: "+objective['expiration'])
-		dependents = parent.controller.Dependents(objective['name'])
-		if(dependents):
-			self.set_tooltip_text(self.get_tooltip_text()+"\nDependents: "+str(len(dependents)))
+		tooltip = "Cantidad: "+str(objective['quantity'])
 
-		self.__SetExpirationColor(objective, controller,color)
+		expiration = objective["expiration"]
+		if(expiration):
+			tooltip += "\nExpiracion: "+expiration
+
+		dependents = parent.controller.Dependents(name)
+		if(dependents):
+			tooltip += "\nDependents: "+str(len(dependents))
+
+		self.set_tooltip_text(tooltip)
+
+		self.__SetExpirationColor(objective, parent.controller,color)
 
 
 	def __SetExpirationColor(self, objective, controller,color):
@@ -116,7 +121,7 @@ class Objective(Requeriment):
 
 		# Expired and not satisfacted - Show warning
 		if(expiration
-		and not controller.IsSatisfaced(objective['objective_id'])):
+		and not controller.IsSatisfaced(self.get_label())):
 
 			# Expired - Set inverted color
 			if datetime.strptime(expiration,"%Y-%m-%d %H:%M:%S") < datetime.now():
