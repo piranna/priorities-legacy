@@ -24,7 +24,6 @@ class Controller:
 
 			def Insert_array_tree_2d(data, index, array, head=False):
 				"Insert data to the indexed array of arrays"
-				print data
 				while len(array)<=index:
 					array.append([])
 				if head:
@@ -87,6 +86,39 @@ class Controller:
 			Priv_RecursiveRequeriments(row['name'])
 
 		return requeriments
+
+
+	def GenTree(self, objective=None):
+		"""Generate the `objective` requeriments tree
+
+		If `objective` is None then it generates the full objectives
+		requeriments tree
+
+		@return: generator of levels
+		"""
+		for level in self.RecursiveRequeriments(objective):
+			objectives = OrderedDict()
+
+			for objective in level:
+				name = objective['name']
+
+				# Objective
+				if name not in objectives:
+					objectives[name] = {'quantity': objective['objective_quantity'],
+										'expiration': objective['expiration'],
+										'requeriments': []}
+				obj = objectives[name]
+
+				# Requeriments and requeriments alternatives
+				requeriment = objective['requeriment']
+				if requeriment != None:
+					reqs = obj['requeriments']
+					while len(reqs) <= requeriment:
+						reqs.append(OrderedDict())
+
+					reqs[requeriment][objective['alternative']] = objective['alternative_quantity']
+
+			yield objectives
 
 
 	def AddObjective(self, name, quantity=None, expiration=None):

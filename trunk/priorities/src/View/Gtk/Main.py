@@ -201,7 +201,6 @@ class Main(Gtk):
 
 			# Background sharp
 			layout_size = self.layout.get_size()
-			print "\t",layout_size
 
 			bin_window = self.layout.bin_window
 
@@ -226,8 +225,6 @@ class Main(Gtk):
 											LINE_SOLID,CAP_BUTT,JOIN_MITER)
 
 					for requeriment in button.requeriments:
-						print button.requeriments
-						print "\t",requeriment
 
 						# Arrow coordinates
 						x1=button.X() + button.allocation.width/2
@@ -236,7 +233,6 @@ class Main(Gtk):
 						y2=requeriment.Y() + requeriment.allocation.height/2
 
 						# Arrow line
-						print "line",x1,y1, x2,y2
 						bin_window.draw_line(gc, x1,y1, x2,y2)
 
 						# Arrow head
@@ -319,136 +315,202 @@ class Main(Gtk):
 		# Re-draw surface of the layout
 		self.layout.queue_draw()
 
-		tree = self.controller.RecursiveRequeriments(objective)
-		if tree:
+		# Level index
+		y = 0
+
+		checked_objectives = {}
+
+		for level in self.controller.GenTree(objective):
+
 			self.__needRenderGraph = True
 
-			# Level index
-			y = 0
+			level_objectives = []
+			level_requeriments = []
 
-			checked_objectives = {}
+			for name,objective in level.items():
+
+				# Get color of the requeriment
+				def GetColor():
+					# Blue - Satisfacted
+					if self.controller.IsSatisfaced(name):
+						show = self.config.Get('showExceededDependencies')
+						if show:
+							expiration = objective['expiration']
+
+							if(show == 1	# 1 == Only not expired
+							and(expiration == None
+							or expiration < datetime.now())):
+								return color_parse(self.config.Get('color_satisfacted'))
+
+						return None
+
+					# Green - Available
+					elif self.controller.IsAvailable(name):
+						return color_parse(self.config.Get('color_available'))
+
+					# Yellow - InProgress
+					elif self.controller.IsInprocess(name):
+						return color_parse(self.config.Get('color_inprocess'))
+
+					# Red - Unabordable
+					return color_parse(self.config.Get('color_unabordable'))
+
+				# Check if objective has to be printed and with what color
+				color = GetColor()
+				if color:
+
+					# Objective
+					btnObj = Objective(name, self, objective, color)
+					level_objectives.append(btnObj)
+
+					# Requeriments
+					for alternatives in objective['requeriments']:
+						if not alternatives:
+							pass
+
+						elif len(alternatives) == 1:
+							btnObj.Add_Requeriment(checked_objectives[alternatives.keys()[0]])
+
+						else:
+							btnReq = Requeriment("\n".join(alternatives),
+												self)
+
+							for alternative in alternatives:
+								btnReq.Add_Requeriment(checked_objectives[alternative])
+
+							level_requeriments.append(btnReq)
+
+							btnObj.Add_Requeriment(btnReq)
+
+					# Register objective button to prevent be printed twice
+					checked_objectives[name] = btnObj
+
+			def PutButton(button):
+				self.layout.put(button, 0,0)
+				if self.__objectives.has_key(y):
+					button.prev = self.__objectives[y][-1]
+				else:
+					self.__objectives[y] = []
+				self.__objectives[y].append(button)
+
+			# Create level alternatives
+			if level_requeriments:
+				for requeriment in level_requeriments:
+					PutButton(requeriment)
+				y += 1
+
+			# Create level objectives
+			for objective in level_objectives:
+				PutButton(objective)
+			y += 1
+
 
 			# Levels
-			for level in tree:
+#			for level in tree:
+#				print "level",level
+#
+#
+#				def Alternatives():
+#					button = None
+#					level_requeriments = {}
+#
+#					for name,objective in level.items():
+#						print "\t",name,objective
+#
+#						# Requeriments
+#						for requeriment in objective['requeriments']:
+#							for alternative in requeriment:
+#								pass
+#
+##							objective_id = objective['objective_id']
+##							if not level_requeriments.has_key(objective_id):
+##								level_requeriments[objective_id] = {}
+##
+##							# Requeriment with alternatives
+##							if objective['priority']:
+##
+##								# If requeriment is registered,
+##								# add alternative
+##								alternative = objective['alternative']
+##								if requeriment in level_requeriments[objective_id]:
+##									button.set_label(button.get_label()+"\n"
+##													+alternative)
+##
+##								# else create a new one
+##								else:
+##									# Put old requeriment button, if any
+##									if button:
+##										PutButton(button)
+##
+##									# Create new requeriment button
+##									button = Requeriment(alternative,
+##														 objective_id,
+##														 self)
+##
+##									# Add requeriment
+##									level_requeriments[objective_id][requeriment] = button
+##
+##								button.Add_Requeriment(checked_objectives[alternative])
+##
+###					print "level_requeriments",level_requeriments
+##
+##					if button:
+##						PutButton(button)
+##					return level_requeriments
+#				def Objectives(level_requeriments):
+#						if name not in checked_objectives:
+#
+#							# Get color of the requeriment
+#							def GetColor():
+#								# Blue - Satisfacted
+#								if self.controller.IsSatisfaced(name):
+#									show = self.config.Get('showExceededRequeriments')
+#									if(show):
+#										expiration = objective['expiration']
+#										if(show == 1	# 1 == Only not expired
+#										and expiration
+#										and expiration<datetime.now()):
+#											return None
+#										return color_parse(self.config.Get('color_satisfacted'))
+#									return None
+#
+#								# Green - Available
+#								elif self.controller.IsAvailable(name):
+#									return color_parse(self.config.Get('color_available'))
+#
+#								# Yellow - InProgress
+#								elif self.controller.IsInprocess(name):
+#									return color_parse(self.config.Get('color_inprocess'))
+#
+#								# Red - Unabordable
+#								return color_parse(self.config.Get('color_unabordable'))
+#
+#
+#							# Check if objective has to be printed and with what color
+#							color = GetColor()
+#							if color:
+#								# Create objective button
+#								button = Objective(objective, self,
+#													self.controller, color)
+#
+#								requeriment = objective['requeriment']
+#
+#								if requeriment != None:
+#									alternative = objective['alternative']
+#
+#									if objective['priority']:
+#										requeriment = level_requeriments[name][requeriment]
+#										button.Add_Requeriment(requeriment)
+#
+#									elif alternative in checked_objectives:
+#										requeriment = checked_objectives[alternative]
+#										button.Add_Requeriment(requeriment)
+#
+#								PutButton(button)
+#
+#								# Register objective button to prevent be printed twice
+#								checked_objectives[name] = button
 
-				def PutButton(button):
-					self.layout.put(button, 0,0)
-					if self.__objectives.has_key(y):
-						button.prev = self.__objectives[y][-1]
-					else:
-						self.__objectives[y] = []
-					self.__objectives[y].append(button)
-
-				def Alternatives():
-					button = None
-					level_requeriments = {}
-
-					for objective in level:
-						# Requeriments
-						requeriment = objective['requeriment']
-						if requeriment:
-							objective_id = objective['objective_id']
-							if not level_requeriments.has_key(objective_id):
-								level_requeriments[objective_id] = {}
-
-							# Requeriment with alternatives
-							if objective['priority']:
-
-								# If requeriment is registered,
-								# add alternative
-								alternative = objective['alternative']
-								if requeriment in level_requeriments[objective_id]:
-									button.set_label(button.get_label()+"\n"
-													+alternative)
-
-								# else create a new one
-								else:
-									# Put old requeriment button, if any
-									if button:
-										PutButton(button)
-
-									# Create new requeriment button
-									button = Requeriment(alternative,
-														 objective_id,
-														 self)
-
-									# Add requeriment
-									level_requeriments[objective_id][requeriment] = button
-
-								button.Add_Requeriment(checked_objectives[alternative])
-
-#					print "level_requeriments",level_requeriments
-
-					if button:
-						PutButton(button)
-					return level_requeriments
-
-				def Objectives(level_requeriments):
-					for objective in level:
-						name = objective['name']
-
-						# Objective
-						if name not in checked_objectives:
-
-							# Get color of the requeriment
-							def GetColor():
-								# Blue - Satisfacted
-								if self.controller.IsSatisfaced(name):
-									show = self.config.Get('showExceededRequeriments')
-									if(show):
-										expiration = objective['expiration']
-										if(show == 1	# 1 == Only not expired
-										and expiration
-										and expiration<datetime.now()):
-											return None
-										return color_parse(self.config.Get('color_satisfacted'))
-									return None
-
-								# Green - Available
-								elif self.controller.IsAvailable(name):
-									return color_parse(self.config.Get('color_available'))
-
-								# Yellow - InProgress
-								elif self.controller.IsInprocess(name):
-									return color_parse(self.config.Get('color_inprocess'))
-
-								# Red - Unabordable
-								return color_parse(self.config.Get('color_unabordable'))
-
-
-							# Check if objective has to be printed and with what color
-							color = GetColor()
-							if color:
-								# Create objective button
-								button = Objective(objective, self,
-													self.controller, color)
-
-								requeriment = objective['requeriment']
-
-								if requeriment != None:
-									alternative = objective['alternative']
-
-									if objective['priority']:
-										requeriment = level_requeriments[name][requeriment]
-										button.Add_Requeriment(requeriment)
-
-									elif alternative in checked_objectives:
-										requeriment = checked_objectives[alternative]
-										button.Add_Requeriment(requeriment)
-
-								PutButton(button)
-
-								# Register objective button to prevent be printed twice
-								checked_objectives[name] = button
-
-				# Create level alternatives
-				level_requeriments = Alternatives()
-				if level_requeriments:
-					y += 1
-
-				# Create level objectives
-				Objectives(level_requeriments)
-				y += 1
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
@@ -543,9 +605,7 @@ class Main(Gtk):
 
 
 	def ShowLayoutMenu(self, widget,event):
-		print "ShowLayoutMenu"
 		if(event.button == 3):		# Secondary button
-			print "\tsecondary button"
 			self.builder.get_object("mnuCtxLayout").popup(None,None,None, event.button,event.time)
 
 
