@@ -7,11 +7,11 @@ from datetime import datetime,timedelta
 class Requeriment(gtk.Button):
 	margin_x = 20
 
-	def __init__(self, name, parent):
-		gtk.Button.__init__(self, name)
+	def __init__(self, objective, parent):
+		gtk.Button.__init__(self, objective)
 		self.set_focus_on_click(False)
 
-		self.connect('clicked',parent.AddObjective, name)
+		self.connect('clicked',parent.AddObjective, objective)
 		self.connect('enter_notify_event',parent.IncreaseLineWidth, self)
 		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 

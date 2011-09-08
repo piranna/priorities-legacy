@@ -372,8 +372,8 @@ class Main(Gtk):
 							btnObj.Add_Requeriment(checked_objectives[alternatives.keys()[0]])
 
 						else:
-							btnReq = Requeriment("\n".join(alternatives),
-												self)
+							btnReq = Requeriment(name, self)
+							btnReq.set_label("\n".join(alternatives))
 
 							for alternative in alternatives:
 								btnReq.Add_Requeriment(checked_objectives[alternative])
@@ -545,8 +545,8 @@ class Main(Gtk):
 		about.window.destroy()
 
 
-	def AddObjective(self, widget, objective_id=None):
-		addObjective = AddObjective(objective_id)
+	def AddObjective(self, widget, objective=None):
+		addObjective = AddObjective(objective)
 		addObjective.window.set_transient_for(self.window)
 
 		if addObjective.window.run() > 0:

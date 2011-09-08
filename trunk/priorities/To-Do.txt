@@ -6,8 +6,10 @@ Recordar maximizar
 	Soporte para alternativas opcionales (definir)
 * Renombrar clases y componentes
 * Pythonizar y simplificar codigo
-Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
+* Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
+	Eliminar "RecursiveRequeriments" e integrar en "GetTree"
 [2011-09-04] Usar enumerators para los requisitos y las prioridades
+Eliminar requerimientos y alternativas
 
 1.0 RC3:
 ========
@@ -15,13 +17,16 @@ Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
 ¿Problema con los colores (verde en lugar de amarillo)?
 [BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
 [BUG] Crea nueva entrada en lugar de actualizarla
+[BUG] Lineas no se redibujan automaticamente (marcar sucio)
+[BUG] Alternativas y sus valores no se modifican hasta que pierden el foco
+[2011-09-08] [BUG] Al seleccionar un requerimiento se abre una ventana vacia en lugar de la de su objetivo
 
 
 1.0:
 ====
 Unittest y BDDs
 ? Comentar todo el codigo
-	Limpiar y ordenar codigo
+*	Limpiar y ordenar codigo
 
 
 Post 1.0:
