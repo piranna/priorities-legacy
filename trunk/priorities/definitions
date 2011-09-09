@@ -18,7 +18,7 @@ return quantity>0
 
 Available:
 ==========
-Todos sus requisitos estan satisfechos, o no tiene ninguno
+Todos sus requisitos estan satisfechos o no tiene ninguno
 
 req_alt = {}
 for requeriment in self.__controller.DirectDependencies(objective_id):

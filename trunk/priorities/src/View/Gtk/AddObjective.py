@@ -240,16 +240,14 @@ class RequerimentList:
 
 	def GetMaxID(self):
 		"""Get the bigger requeriment ID inside the requeriment list
-		
+
 		If requeriment list is empty, return -1
 		"""
 		result = -1
 
-		def ForEach(requeriment):
+		for requeriment in self.elem.get_children():
 			if  result < requeriment.id:
 				result = requeriment.id
-
-		self.elem.foreach(ForEach)
 
 		return result
 

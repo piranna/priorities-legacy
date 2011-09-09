@@ -319,6 +319,7 @@ class Main(Gtk):
 		y = 0
 
 		checked_objectives = {}
+		pending_requeriments = {}
 
 		for level in self.controller.GenTree(objective):
 
@@ -365,18 +366,40 @@ class Main(Gtk):
 
 					# Requeriments
 					for alternatives in objective['requeriments']:
+						def AddAlternative(button, alternative):
+							"""Try to add an alternative to an objective
+
+							If the alternative is not checked previously (for
+							example because circular references) it's stored as
+							pending to be re-tried later
+							"""
+							try:
+								requeriment = checked_objectives[alternative]
+
+							except KeyError:
+								if button not in pending_requeriments:
+									pending_requeriments[button] = []
+								pending_requeriments[button].append(alternative)
+
+							else:
+								button.Add_Requeriment(requeriment)
+
+						# Requeriment don't have alternative (shouldn't happen)
 						if not alternatives:
 							pass
 
+						# Requeriment has only one alternative, link it directly
 						elif len(alternatives) == 1:
-							btnObj.Add_Requeriment(checked_objectives[alternatives.keys()[0]])
+							AddAlternative(btnObj, alternatives.keys()[0])
 
+						# Requeriment has several alternatives, create it and
+						# link the alternatives
 						else:
 							btnReq = Requeriment(name, self)
 							btnReq.set_label("\n".join(alternatives))
 
 							for alternative in alternatives:
-								btnReq.Add_Requeriment(checked_objectives[alternative])
+								AddAlternative(btnReq, alternative)
 
 							level_requeriments.append(btnReq)
 
@@ -403,6 +426,17 @@ class Main(Gtk):
 			for objective in level_objectives:
 				PutButton(objective)
 			y += 1
+
+		for button,alternatives in pending_requeriments.items():
+			for alternative in alternatives:
+				try:
+					requeriment = checked_objectives[alternative]
+
+				except KeyError:	# Definitively, alternative was not on the
+					pass			# tree, I should raise error
+
+				else:
+					button.Add_Requeriment(requeriment)
 
 
 			# Levels
