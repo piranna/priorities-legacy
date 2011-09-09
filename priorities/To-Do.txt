@@ -1,29 +1,41 @@
 0.12:
 =====
-Recordar maximizar
+[2009-xx-xx] Recordar maximizar
 [2011-08-30] Nuevo modelo de base de datos
 [2011-09-04] Añadir requisitos como clase propia en lugar de con Glade
-	Soporte para alternativas opcionales (definir)
 * Renombrar clases y componentes
 * Pythonizar y simplificar codigo
 * Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
 	Eliminar "RecursiveRequeriments" e integrar en "GetTree"
 [2011-09-04] Usar enumerators para los requisitos y las prioridades
-Eliminar requerimientos y alternativas
+Eliminar requerimientos y alternativas en AddObjective
+	Cambiar diseño de interfaz
+[2011-09-08] [BUG] Cuando hay dependencias mutuas la aplicacion se colapsa (no tiene referencias)
+[BUG] Cuando hay referencias circulares no se muestran todas las flechas
+[BUG] Cuando hay referencias circulares se produce un bucle infinito al calcular si es satisfecho
+[BUG] Añadir nuevo requisito
+[BUG] Al añadir alternativa el valor por defecto es 0 (deberia ser 1)
+[BUG] Objetivos duplicados
 
 1.0 RC3:
 ========
-¿Otra vez no funciona el boton derecho en el grafo?
+[BUG] No sale menu contextual en el layout
+No mostrar el propio objetivo en la combobox de requerimientos
+Busqueda de requerimientos en combobox
 ¿Problema con los colores (verde en lugar de amarillo)?
+Usar bases de datos definidas por el usuario, no solo la oculta del usuario
+	Opcion para abrir una base de datos por defecto y/o la ultima abierta
+¿Usar funcion de backup de SQLite?
+
+
+1.0:
+====
+Soporte para alternativas opcionales en interfaz y base de datos (definir)
 [BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
 [BUG] Crea nueva entrada en lugar de actualizarla
 [BUG] Lineas no se redibujan automaticamente (marcar sucio)
 [BUG] Alternativas y sus valores no se modifican hasta que pierden el foco
 [2011-09-08] [BUG] Al seleccionar un requerimiento se abre una ventana vacia en lugar de la de su objetivo
-
-
-1.0:
-====
 Unittest y BDDs
 ? Comentar todo el codigo
 *	Limpiar y ordenar codigo
@@ -33,7 +45,8 @@ Post 1.0:
 =========
 1.1:
 ====
-Limpiar, simplificar y personalizar consultas SQL y funciones
+Opcion para dar mas prioridad a objetivos con mas dependencias (mas alternativas posteriormente)
+Limpiar, simplificar y customizar consultas SQL y funciones
 [2011-08-28] Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 Controller
@@ -52,8 +65,6 @@ Ayuda dentro de la aplicacion
 	Tooltips
 
 Eliminar entradas no validas de ficheros de traduccion
-
-[BUG] No sale menu contextual en el layout
 
 Crear objeto en Glade para navigation bar
 
@@ -109,7 +120,7 @@ Localizacion de tareas/cambio de prioridades por proximidad fisica
 2.0:
 ====
 Limpieza de codigo, reorganizacion y optimizacion
-	Cambiar Insert_array_tree_2d a un diccionario ordenado
+	Cambiar Insert_array_tree_2d a un diccionario ordenado por indice
 
 Nueva version de la base de datos
 	Usar user-cookie para identificarla (primer byte o incluso menos)

@@ -144,49 +144,27 @@ class Controller:
 
 
 	def IsSatisfaced(self, name):
-		dependents = self.Dependents(name)
 		quantity = self.GetObjective(name)['quantity']
 
-		if dependents:
-			if quantity<self.MinQuantity(name):
-				# Quantity is less than the minimum required quantity of all
-				# dependents, check if all dependents are satisfaced by others
-				for dependent in dependents:
-					if not self.IsSatisfaced(dependent['objective']):
-						return False
+		return self.IsAvailable(name) and quantity>0
 
-			# Quantity is greater than the minimun required quantity of at least
-			# one dependent, or all dependents are satisfaced by others
-			return True
-
-		# No dependents
-		return quantity>0
 
 	def IsAvailable(self, name):
-		req_alt = {}
-		for requeriment in self.__model.Requeriments(name):
-			alternative = requeriment['alternative']
-
-			if requeriment['priority']:
-				requeriment = requeriment['requeriment']
-				if not req_alt.get(requeriment, False):
-					req_alt[requeriment] = self.IsSatisfaced(alternative)
-
-			elif alternative and not self.IsSatisfaced(alternative):
-				return False
-
-		for value in req_alt.itervalues():
-			if not value:
-				return False
+		"All it's requeriments are satisfacted or doesn't have any one"
+		for alternatives in self.GetRequeriments(name):
+			for alternative,quantity in alternatives.items():
+				if self.GetObjective(alternative)['quantity'] < quantity:
+					return False
 
 		return True
 
 	def IsInprocess(self, name):
 		"At least one objective requeriment (but NOT all) is satisfaced"
-		for requeriment in self.__model.Requeriments(name):
-			if self.IsSatisfaced(requeriment['alternative']):
-				return True
-		return False
+		for alternatives in self.GetRequeriments(name):
+			for alternative,quantity in alternatives.items():
+#				if self.IsSatisfaced(requeriment['alternative']):
+				if self.GetObjective(alternative)['quantity'] >= quantity:
+					return True
 
 
 	def Get_DeleteObjective_Tree(self, name):
