@@ -285,8 +285,9 @@ class Main(Gtk):
 						if button.Adjust(positions,y):
 							self.__needRenderGraph = True
 
-						if biggest_width < button.X() + button.allocation.width:
-							biggest_width = button.X() + button.allocation.width
+						width = button.X() + button.allocation.width
+						if biggest_width < width:
+							biggest_width = width
 
 						if biggest_height < button.allocation.height:
 							biggest_height = button.allocation.height
@@ -297,7 +298,8 @@ class Main(Gtk):
 				# Set layout size
 #				self.layout.set_size(int(self.layout.get_size()[0] + self.margin_x/2),
 #									int(y - self.margin_y/2))
-				self.layout.set_size(int(biggest_width + self.margin_x/2), int(y - self.margin_y/2))
+				self.layout.set_size(int(biggest_width + self.margin_x/2),
+									int(y - self.margin_y/2))
 
 				# Show all buttons
 				self.layout.show_all()

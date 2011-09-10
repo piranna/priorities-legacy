@@ -108,7 +108,7 @@ class DB:
 			''',
 			(name,)).fetchone()
 
-	def Objectives(self):
+	def ObjectivesNames(self):
 		"Get all the objectives name"
 		return [objective['name'] for objective in self.__connection.execute('''
 													SELECT name FROM objectives
@@ -144,9 +144,16 @@ class DB:
 				sql += "AND requeriment==:requeriment"
 
 		sql += " ORDER BY "
-		if not export:
-			sql += "expiration DESC,"
-		sql += "name,requeriment,priority ASC"
+#		if not export:
+#			sql += """
+#				expiration ASC,
+#				(SELECT COUNT(*) FROM alternatives WHERE objective==name) ASC,		-- Requeriments
+#				(SELECT COUNT(*) FROM alternatives WHERE alternative==name) DESC,	-- Dependencies
+#				alternative_quantity ASC,
+#				"""
+		sql += "name,requeriment,priority"
+
+#		print sql
 
 		return self.__connection.execute(sql,
 										{'objective':objective,
