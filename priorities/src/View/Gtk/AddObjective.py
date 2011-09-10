@@ -69,9 +69,9 @@ class AddObjective(Gtk):
 					self.sbSecond.set_value(self.expiration.second)
 
 				# Requeriments
-				self.oldRequeriments = self.controller.GetRequeriments(self.oldName)
+				self.oldRequeriments = self.controller.Requeriments(self.oldName)
 
-				self.requeriments.Fill(self.controller.Objectives(),
+				self.requeriments.Fill(self.controller.ObjectivesNames(),
 									   self.oldRequeriments)
 
 		# Old data
@@ -114,7 +114,7 @@ class AddObjective(Gtk):
 				orphans = None
 
 				if self.config.Get('removeOrphanRequeriments'):
-					orphans = self.controller.GetRequeriments(name)
+					orphans = self.controller.Requeriments(name)
 
 				self.controller.SetRequeriments(name, requeriments)
 				self.controller.DelOrphans(orphans)
@@ -127,7 +127,7 @@ class AddObjective(Gtk):
 
 			# Delete in cascade
 			if(self.config.Get('deleteCascade')
-			and len(self.controller.GetRequeriments(self.__objective)) > 1):
+			and len(self.controller.Requeriments(self.__objective)) > 1):
 				dialog = DeleteCascade(self.__objective)
 
 				dialog.window.set_transient_for(self.window)
@@ -201,10 +201,10 @@ class AddObjective(Gtk):
 		self.__btnDel.set_sensitive(len(self.requeriments.elem.get_children()))
 
 	def on_btnAdd_Requeriment_clicked(self, widget):
-		objectives = self.controller.Objectives()
+		objectives = self.controller.ObjectivesNames()
 
 		requeriment = Requeriment(objectives, True)
-		requeriment.id = self.requeriments.GetMaxID() + 1
+#		requeriment.id = self.requeriments.GetMaxID() + 1
 		self.requeriments.elem.pack_start(requeriment, False)
 
 		self.__btnDel_Requeriment_Sensitivity()
@@ -238,18 +238,18 @@ class RequerimentList:
 			for alternative in requeriment.items():
 				req.Add(alternative)
 
-	def GetMaxID(self):
-		"""Get the bigger requeriment ID inside the requeriment list
-
-		If requeriment list is empty, return -1
-		"""
-		result = -1
-
-		for requeriment in self.elem.get_children():
-			if  result < requeriment.id:
-				result = requeriment.id
-
-		return result
+#	def GetMaxID(self):
+#		"""Get the bigger requeriment ID inside the requeriment list
+#
+#		If requeriment list is empty, return -1
+#		"""
+#		result = -1
+#
+#		for requeriment in self.elem.get_children():
+#			if  result < requeriment.id:
+#				result = requeriment.id
+#
+#		return result
 
 
 from gtk import Adjustment,Button, CellRendererCombo, CellRendererSpin, Expander

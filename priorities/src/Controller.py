@@ -31,18 +31,6 @@ class Controller:
 				else:
 					array[index].append(data)
 
-			def GetDepth(name, array):
-				"""Get the depth of a name inside an array
-
-				If don't exist, return -1 as error message
-				"""
-				depth = 0
-				for array_level in array:
-					for requeriment in array_level:
-						if requeriment['name']==name:
-							return depth
-					depth += 1
-				return -1
 
 
 			# Init top level
@@ -53,8 +41,10 @@ class Controller:
 			# and get it's requeriments
 			if name not in checked:
 				checked.append(name)
+				print name
 
 				for row in self.__model.Requeriments(name, export=export):
+					print "\t",row
 
 					# If objective has an alternative,
 					# get the new depth
@@ -65,12 +55,6 @@ class Controller:
 						# get its next level
 						if alternative in checked:
 							depth = GetDepth(alternative, requeriments)+1
-
-						# Else check if we have to get it's new level or not
-						else:
-							r_depth = Priv_RecursiveRequeriments(alternative)
-							if  depth < r_depth:
-								depth = r_depth
 
 					# Insert requeriment at the calc level
 					g_depth = GetDepth(row['name'],requeriments)
@@ -83,8 +67,12 @@ class Controller:
 
 
 		for row in self.__model.Requeriments(name, export=export):
+			print name,row
 			Priv_RecursiveRequeriments(row['name'])
 
+		print
+		for level in requeriments:
+			print level
 		return requeriments
 
 
@@ -96,29 +84,146 @@ class Controller:
 
 		@return: generator of levels
 		"""
-		for level in self.RecursiveRequeriments(objective):
-			objectives = OrderedDict()
+		levels = []
+		pendings = {}
 
-			for objective in level:
-				name = objective['name']
+		for name,objective in self.Objectives(objective).items():
+			def IsRequeriment(requeriment,objective):
+				for alternatives in objective['requeriments']:
+					if requeriment in alternatives:
+						return True
 
-				# Objective
-				if name not in objectives:
-					objectives[name] = {'quantity': objective['objective_quantity'],
-										'expiration': objective['expiration'],
-										'requeriments': []}
-				obj = objectives[name]
+			level = 0
+			dependents = []
 
-				# Requeriments and requeriments alternatives
-				requeriment = objective['requeriment']
-				if requeriment != None:
-					reqs = obj['requeriments']
-					while len(reqs) <= requeriment:
-						reqs.append(OrderedDict())
+			# Calc objective level from it's requeriments and alternatives
+			requeriments = objective['requeriments']
+			for alternatives in requeriments:
+				for alternative in alternatives:
+					def GetDepth(name, levels):
+						"""Get the depth of a name inside an array
 
-					reqs[requeriment][objective['alternative']] = objective['alternative_quantity']
+						If don't exist, return -1 as error message
+						"""
+						depth = 0
+						for level in levels:
+							if name in level:
+								return depth
+							depth += 1
+						return -1
 
-			yield objectives
+					# Alternative was registered previously,
+					# check if it's a mutual requeriment
+					# and calc the level of the objective
+					depth = GetDepth(alternative, levels)
+					if depth >= 0:
+#					if depth >= level:
+
+						# Objective is a requeriment of alternative and also
+						# it has more requeriments that the alternative, change
+						# alternative level and put objective in it's place
+						alt = self.Objective(alternative)
+						if(IsRequeriment(name,alt)
+						and len(alt['requeriments']) < len(requeriments)):
+							dependents.append(alternative)
+
+						# Put objective one level below
+						else:
+							depth += 1
+
+						# Get highest alternatives level
+						if level < depth:
+							level = depth
+
+					# Alternative was not registered previously,
+					# add it to the pending ones
+					else:
+						if alternative not in pendings:
+							pendings[alternative] = []
+						pendings[alternative].append(name)
+
+			def MoveDown(objective, level):
+				# Add new levels if necessary
+				while len(levels) <= level+1:
+					levels.append(OrderedDict())
+
+				# Move down objective one level
+				levels[level+1][objective] = levels[level].pop(objective)
+
+				# Recursive
+				for dep in levels[level+1].keys():
+					if IsRequeriment(objective,self.Objective(dep)):
+						MoveDown(dep,level+1)
+
+			# If objective has dependencies,
+			# move them down and set level to the lower one
+			if dependents:
+				for l,objectives in enumerate(levels):
+					for obj in objectives:
+						if obj in dependents:
+							MoveDown(obj, l)
+							dependents.remove(obj)
+
+							if level > l:
+								level = l
+
+			# Objective was pending, move down it's dependencies
+			if name in pendings:
+				dependents = pendings[name]
+
+				for l,objectives in enumerate(levels):
+					for obj in objectives:
+						if obj in dependents:
+							MoveDown(obj, l)
+							dependents.remove(obj)
+
+				del pendings[name]
+
+			# Put objective at it's level
+			while len(levels) <= level:
+				levels.append(OrderedDict())
+			levels[level][name] = objective
+
+		# Sort objectives in every level accord to configuration
+		def compare(a,b):
+			"""Function to sort the objectives inside a same level"""
+			# Expirationobj
+#			def Expiration(a,b):
+#				if a == None:
+#					if b == None:	return 0
+#					else:			return b
+#				elif b == None:		return a
+#				return a - b
+#			c = Expiration(a[1]['expiration'],b[1]['expiration'])
+			c = cmp(a[1]['expiration'],b[1]['expiration'])
+			if c: return c
+
+			# Number of requeriments
+			def NumRequeriments(objective):
+				result = []
+				for alternatives in objective['requeriments']:
+					for alternative in alternatives:
+						if alternative not in result:
+							result.append(alternative)
+				return len(result)
+			c = NumRequeriments(a[1]) - NumRequeriments(b[1])
+			if c: return c
+
+			# Number of dependencies
+			def NumDependencies(objective):
+				return len(self.__model.Dependents(objective))
+			c = NumDependencies(b[0]) - NumDependencies(a[0])
+			if c: return c
+
+			# Alternative quantity
+			c = cmp(a[1]['requeriments'],b[1]['requeriments'])
+			if c: return c
+
+			# Objectives has the same priority on that level
+			return 0
+
+		for level in levels:
+			yield OrderedDict(sorted(level.iteritems(), cmp=compare))
 
 
 	def AddObjective(self, name, quantity=None, expiration=None):
@@ -151,7 +256,7 @@ class Controller:
 
 	def IsAvailable(self, name):
 		"All it's requeriments are satisfacted or doesn't have any one"
-		for alternatives in self.GetRequeriments(name):
+		for alternatives in self.Requeriments(name):
 			for alternative,quantity in alternatives.items():
 				if self.GetObjective(alternative)['quantity'] < quantity:
 					return False
@@ -160,7 +265,7 @@ class Controller:
 
 	def IsInprocess(self, name):
 		"At least one objective requeriment (but NOT all) is satisfaced"
-		for alternatives in self.GetRequeriments(name):
+		for alternatives in self.Requeriments(name):
 			for alternative,quantity in alternatives.items():
 #				if self.IsSatisfaced(requeriment['alternative']):
 				if self.GetObjective(alternative)['quantity'] >= quantity:
@@ -307,42 +412,83 @@ class Controller:
 	def Get_Connection(self):
 		return self.__model.Get_Connection()
 
-	def DelObjective(self, name, delete_orphans = False):
-		self.__model.DelObjective(name, delete_orphans)
+	def DelObjective(self, objective, delete_orphans = False):
+		self.__model.DelObjective(objective, delete_orphans)
 
 	def DelOrphans(self, requeriments):
 		self.__model.DelOrphans(requeriments)
 
-	def GetRequeriments(self, name):
-		result = []
-
+	def Objective(self, objective):
+		result = None
 		last_requeriment = None
-		for requeriment in self.__model.Requeriments(name):
-			req = requeriment['requeriment']
 
-			if req != None:
-				alt = requeriment['alternative']
-				qua = requeriment['alternative_quantity']
+		for requeriment in self.__model.Requeriments(objective):
+			# Objective
+			if result == None:
+				result = {'quantity':     requeriment['objective_quantity'],
+						  'expiration':   requeriment['expiration'],
+						  'requeriments': []}
+
+			# Requeriments and alternatives
+			req = requeriment['requeriment']
+			alt = requeriment['alternative']
+			qua = requeriment['alternative_quantity']
+
+			if req != None and alt != None:
+				reqs = result['requeriments']
 
 				if last_requeriment != req:
 					last_requeriment = req
-					result.append(OrderedDict())
+					reqs.append(OrderedDict())
 
-				result[-1][alt] = qua
+				reqs[-1][alt] = qua
 
 		return result
 
-	def Dependents(self, name):
-		return self.__model.Dependents(name)
+	def Objectives(self, objective=None):
+		result = OrderedDict()
+		last_requeriment = None
 
-	def MinQuantity(self, name):
-		return self.__model.MinQuantity(name)
+		for requeriment in self.__model.Requeriments(objective):
+			# Objective
+			name = requeriment['name']
 
-	def GetObjective(self, name):
-		return self.__model.GetObjective(name)
+			if name not in result:
+				result[name] = {'quantity':     requeriment['objective_quantity'],
+								'expiration':   requeriment['expiration'],
+								'requeriments': []}
+				last_requeriment = None
 
-	def Objectives(self):
-		return self.__model.Objectives()
+			# Requeriments and alternatives
+			req = requeriment['requeriment']
+			alt = requeriment['alternative']
+			qua = requeriment['alternative_quantity']
+
+			if req != None and alt != None:
+				reqs = result[name]['requeriments']
+
+				if last_requeriment != req:
+					last_requeriment = req
+					reqs.append(OrderedDict())
+
+				reqs[-1][alt] = qua
+
+		return result
+
+	def Requeriments(self, objective):
+		return self.Objective(objective)['requeriments']
+
+	def Dependents(self, objective):
+		return self.__model.Dependents(objective)
+
+	def MinQuantity(self, objective):
+		return self.__model.MinQuantity(objective)
+
+	def GetObjective(self, objective):
+		return self.__model.GetObjective(objective)
+
+	def ObjectivesNames(self):
+		return self.__model.ObjectivesNames()
 
 	def UpdateName(self, old, new):
 		return self.__model.UpdateName(old, new)
