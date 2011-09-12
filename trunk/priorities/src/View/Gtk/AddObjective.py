@@ -78,8 +78,6 @@ class AddObjective(Gtk):
 		self.oldObjective = self.txtObjective.get_text()
 		self.oldQuantity = self.spnQuantity.get_text()
 
-		self.__btnDel_Requeriment_Sensitivity()
-
 
 
 	def __StoreData(self):
@@ -197,21 +195,12 @@ class AddObjective(Gtk):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
 
 
-	def __btnDel_Requeriment_Sensitivity(self):
-		self.__btnDel.set_sensitive(len(self.requeriments.elem.get_children()))
-
 	def on_btnAdd_Requeriment_clicked(self, widget):
 		objectives = self.controller.ObjectivesNames()
 
 		requeriment = Requeriment(objectives, True)
 #		requeriment.id = self.requeriments.GetMaxID() + 1
 		self.requeriments.elem.pack_start(requeriment, False)
-
-		self.__btnDel_Requeriment_Sensitivity()
-
-	def on_btnDel_Requeriment_clicked(self, widget):
-
-		self.__btnDel_Requeriment_Sensitivity()
 
 
 class RequerimentList:
@@ -252,19 +241,31 @@ class RequerimentList:
 #		return result
 
 
-from gtk import Adjustment,Button, CellRendererCombo, CellRendererSpin, Expander
-from gtk import HButtonBox, ListStore, TreeView, TreeViewColumn, VBox
+from gtk import ICON_SIZE_MENU
+from gtk import Adjustment, Button, CellRendererCombo, CellRendererSpin
+from gtk import Expander, HBox, HButtonBox, Image, Label, ListStore, TreeView
+from gtk import TreeViewColumn, VBox
 
 class Requeriment(Expander):
 
 	def __init__(self, objectives, new):
 		Expander.__init__(self)
 
+		self.connect("enter-notify-event",self.onEnterNotifyEvent)
+		self.connect("leave-notify-event",self.onLeaveNotifyEvent)
+
 		vBox = VBox()
 		self.add(vBox)
 
 		# Data model
 		self.model = ListStore(str,float)
+
+		# Title bar
+		hBox = HBox()
+		self.set_property("label-widget", hBox)
+
+		self.title = Label()
+		hBox.pack_start(self.title)
 
 		# Alternatives
 		treeView = TreeView(self.model)
@@ -302,20 +303,21 @@ class Requeriment(Expander):
 		treeView.append_column(treeViewColumn)
 
 		# Add/remove alternative button box
-		hButtonBox = HButtonBox()
-		vBox.pack_start(hButtonBox, False)
+#		hButtonBox = HButtonBox()
+#		vBox.pack_start(hButtonBox, False)
 
-		# Add alternative button
+		# Add alternative
 		button = Button("gtk-add")
 		button.connect("clicked",self.on_btnAdd_Alternative_clicked)
 		button.set_use_stock(True)
-		hButtonBox.pack_start(button)
+#		hButtonBox.pack_start(button)
+		vBox.pack_start(button, False)
 
-		# Remove alternative button
-		button = Button("gtk-remove")
-		button.connect("clicked",self.on_btnDel_Alternative_clicked)
-		button.set_use_stock(True)
-		hButtonBox.pack_start(button)
+#		# Remove alternative
+#		button = Button("gtk-remove")
+#		button.connect("clicked",self.on_btnDel_Alternative_clicked)
+#		button.set_use_stock(True)
+#		hButtonBox.pack_start(button)
 
 		# Expand the requeriment and add an alternative if it's new
 		if new:
@@ -324,6 +326,12 @@ class Requeriment(Expander):
 
 		# Show requeriment
 		self.show_all()
+
+		# Delete requeriment button (default is hidden)
+		self.imgRemove = Image()
+		self.imgRemove.connect("button-press-event",self.onDelRequeriment)
+		self.imgRemove.set_from_stock("gtk-cancel", ICON_SIZE_MENU)
+		hBox.pack_start(self.imgRemove)
 
 
 	def Add(self, alternative):
@@ -338,7 +346,7 @@ class Requeriment(Expander):
 
 			iter = self.model.iter_next(iter)
 
-		self.set_label(','.join(names))
+		self.title.set_text(','.join(names))
 
 
 	def GetData(self):
@@ -355,13 +363,24 @@ class Requeriment(Expander):
 		return result
 
 
+	def onDelRequeriment(self, widget):
+		self.get_parent().remove(self)
+
+
+	def onEnterNotifyEvent(self, widget,event):
+		self.imgRemove.show()
+
+	def onLeaveNotifyEvent(self, widget,event):
+		self.imgRemove.hide()
+
+
 	def __btnDel_Alternative_Sensitivity(self):
 		pass
 #		self.__btnDel.set_sensitive(len(self.__model.))
 
 
 	def on_btnAdd_Alternative_clicked(self, widget):
-		self.model.append()
+		self.model.append((None,1.0))
 
 		self.__btnDel_Alternative_Sensitivity()
 

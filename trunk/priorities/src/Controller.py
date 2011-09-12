@@ -31,8 +31,6 @@ class Controller:
 				else:
 					array[index].append(data)
 
-
-
 			# Init top level
 			depth=0
 
@@ -98,7 +96,13 @@ class Controller:
 
 			# Calc objective level from it's requeriments and alternatives
 			requeriments = objective['requeriments']
-			for alternatives in requeriments:
+			for requeriment,alternatives in enumerate(requeriments):
+
+				if len(alternatives) > 1:
+					print name,alternatives
+					print "\t",name+":"+str(requeriment)
+					print "\t",{'requeriments': alternatives}
+
 				for alternative in alternatives:
 					def GetDepth(name, levels):
 						"""Get the depth of a name inside an array
@@ -199,14 +203,15 @@ class Controller:
 			if c: return c
 
 			# Number of requeriments
-			def NumRequeriments(objective):
-				result = []
-				for alternatives in objective['requeriments']:
-					for alternative in alternatives:
-						if alternative not in result:
-							result.append(alternative)
-				return len(result)
-			c = NumRequeriments(a[1]) - NumRequeriments(b[1])
+			# Lower number of requeriments, or higher number of alternatives
+			def NumRequeriments(a,b):
+				c = len(a) - len(b)
+				if c: return c
+				for index in range(len(a)):
+					c = len(b[index]) - len(a[index])
+					if c: return c
+				return 0
+			c = NumRequeriments(a[1]['requeriments'],b[1]['requeriments'])
 			if c: return c
 
 			# Number of dependencies

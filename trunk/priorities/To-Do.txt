@@ -3,26 +3,27 @@
 [2009-xx-xx] Recordar maximizar
 [2011-08-30] Nuevo modelo de base de datos
 [2011-09-04] Añadir requisitos como clase propia en lugar de con Glade
+[2011-09-04] Usar enumerators para los requisitos y las prioridades
+[2011-09-08] [BUG] Cuando hay dependencias mutuas la aplicacion se colapsa (no tiene referencias)
+[2011-09-10] [BUG] Objetivos duplicados
+[2011-09-10] [BUG] Añadir nuevo requisito
+[2011-09-11] [BUG] Al añadir alternativa el valor por defecto es 0 (deberia ser 1)
+* Eliminar requerimientos y alternativas en AddObjective
+	* Cambiar diseño de interfaz
 * Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
 	* Eliminar "RecursiveRequeriments" e integrar en "GetTree"
-[2011-09-04] Usar enumerators para los requisitos y las prioridades
-Eliminar requerimientos y alternativas en AddObjective
-	Cambiar diseño de interfaz
-[2011-09-08] [BUG] Cuando hay dependencias mutuas la aplicacion se colapsa (no tiene referencias)
-[BUG] Cuando hay referencias circulares no se muestran todas las flechas
-[BUG] Cuando hay referencias circulares se produce un bucle infinito al calcular si es satisfecho
-[BUG] Añadir nuevo requisito
-[BUG] Al añadir alternativa el valor por defecto es 0 (deberia ser 1)
-[BUG] Objetivos duplicados
 
 1.0 RC3:
 ========
-[BUG] Ciclos destrozan grafo
+[2010-09-09] ¿Problema con los colores (verde en lugar de amarillo)?
+[BUG] Ciclos
+	[BUG] Ciclos destrozan grafo
+	[BUG] No se muestran todas las flechas
+	[2011-09-10] [BUG] Se produce un bucle infinito al calcular si es satisfecho
 * Renombrar clases y componentes
 [BUG] No sale menu contextual en el layout
 No mostrar el propio objetivo en la combobox de requerimientos
 Busqueda de requerimientos en combobox
-[2010-09-09] ¿Problema con los colores (verde en lugar de amarillo)?
 Usar bases de datos definidas por el usuario, no solo la oculta del usuario
 	Opcion para abrir una base de datos por defecto y/o la ultima abierta
 ¿Usar funcion de backup de SQLite?
@@ -30,34 +31,36 @@ Usar bases de datos definidas por el usuario, no solo la oculta del usuario
 
 1.0:
 ====
+[2011-09-08] [BUG] Al seleccionar un requerimiento se abre una ventana vacia en lugar de la de su objetivo
 Soporte para alternativas opcionales en interfaz y base de datos (definir)
 [BUG] Cabeza de flecha esta mal dibujada en requerimientos mutuos
 [BUG] Cuando se mezclan alternativas con varios requerimientos se quedan desconectados
 [BUG] Crea nueva entrada en lugar de actualizarla
 [BUG] Lineas no se redibujan automaticamente (marcar sucio)
-[BUG] Lineas no se remarcan correctamente al pasar por encima de los requerimientos
+[2011-09-12] [BUG] Lineas no se remarcan correctamente al pasar por encima de los requerimientos
 [BUG] Alternativas y sus valores no se modifican hasta que pierden el foco
-[2011-09-08] [BUG] Al seleccionar un requerimiento se abre una ventana vacia en lugar de la de su objetivo
 Unittest y BDDs
 * Pythonizar y simplificar codigo
 	? Comentar todo el codigo
 	* Limpiar y ordenar codigo
+Reordenar requerimientos y alternativas por drag&drop
 
 
 Post 1.0:
 =========
 1.1:
 ====
+Opcion para remarcar solo lineas de alternativas, del requerimiento o todas
+Linea punteada para requerimientos opcionales
 [2011-09-10] Dar mas prioridad a objetivos con mas dependientes
 [2011-09-10] Dar mas prioridad a requisitos con mas alternativas
+[2011-08-28] Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 Usar nivel de alternativas mas alto disponible en vez de crear uno nuevo (diagrama mas compacto)
 Seleccionar modificadores de prioridad (expiracion, numero de dependientes, cantidad de los dependientes)
 Limpiar, simplificar y customizar consultas SQL y funciones
-[2011-08-28] Cambiar diseño de "añadir y comprobar" a "comprobar y si no añadir"
 
 Controller
-# [To-Do] It seems it's called twice when has several dependent
-# that are from the same requeriment
+# [To-Do] It seems it's called twice when has several dependent that are from the same requeriment
 
 Mejorar algoritmo de ordenacion
 	Tener referencias a los dependientes y al siguiente (¿anterior y requisitos?)

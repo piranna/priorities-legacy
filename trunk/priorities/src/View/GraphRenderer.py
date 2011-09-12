@@ -11,8 +11,10 @@ class Requeriment(gtk.Button):
 		gtk.Button.__init__(self, objective)
 		self.set_focus_on_click(False)
 
+		self.objective = objective
+
 		self.connect('clicked',parent.AddObjective, objective)
-		self.connect('enter_notify_event',parent.IncreaseLineWidth, self)
+		self.connect('enter_notify_event',parent.IncreaseLineWidth, objective)
 		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 
 		self.prev = None
@@ -29,25 +31,28 @@ class Requeriment(gtk.Button):
 		requeriment.__dependents.append(self)
 
 	def Adjust(self, positions, y):
-		def Get_Middle(array):
-			x_min = 0
-			x_max = 0
-			for button in array:
-				if(x_min==0
-				or x_min > positions[button][0]):
-					x_min = positions[button][0]
-				if(x_max==0
-				or x_max < positions[button][0] + button.allocation.width):
-					x_max = positions[button][0] + button.allocation.width
-			return (x_min + x_max)/2
+#		def Get_Middle(array):
+#			x_min = 0
+#			x_max = 0
+#
+#			for button in array:
+#				x = positions[button][0]
+#				if  x_min==0 or x_min > x:
+#					x_min = x
+#
+#				x = positions[button][0] + button.allocation.width
+#				if  x_max < x:
+#					x_max = x
+#
+#			return (x_min + x_max)/2
 
 		x = 0
 		div = 0
 
-		x_req = Get_Middle(self.requeriments)
-		if x_req:
-			x += x_req
-			div += 1
+#		x_req = Get_Middle(self.requeriments)
+#		if x_req:
+#			x += x_req
+#			div += 1
 
 #		x_dep = Get_Middle(self.__dependents)
 #		if x_dep:
@@ -72,8 +77,7 @@ class Requeriment(gtk.Button):
 			x = 0
 
 		# Update requeriment position
-		if(self.__x != x
-		or self.__y != y):
+		if self.__x != x or self.__y != y:
 			self.__x = x
 			self.__y = y
 
@@ -81,7 +85,6 @@ class Requeriment(gtk.Button):
 
 			return True
 
-		return False
 
 	def X(self):
 		return self.__x
@@ -108,7 +111,7 @@ class Objective(Requeriment):
 			tooltip += "\nExpiracion: "+expiration
 
 		dependents = parent.controller.Dependents(name)
-		if(dependents):
+		if dependents:
 			tooltip += "\nDependents: "+str(len(dependents))
 
 		self.set_tooltip_text(tooltip)
