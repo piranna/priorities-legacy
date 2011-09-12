@@ -221,7 +221,7 @@ class Main(Gtk):
 			# Arrows
 			for level in self.__objectives.values():
 				for button in level:
-					gc.set_line_attributes(2 if button==self.__cursorObjective else 0,
+					gc.set_line_attributes(2 if button.objective==self.__cursorObjective else 0,
 											LINE_SOLID,CAP_BUTT,JOIN_MITER)
 
 					for requeriment in button.requeriments:
@@ -286,10 +286,10 @@ class Main(Gtk):
 							self.__needRenderGraph = True
 
 						width = button.X() + button.allocation.width
-						if biggest_width < width:
+						if  biggest_width < width:
 							biggest_width = width
 
-						if biggest_height < button.allocation.height:
+						if  biggest_height < button.allocation.height:
 							biggest_height = button.allocation.height
 
 					# Set new y coordinate
@@ -439,114 +439,6 @@ class Main(Gtk):
 
 				else:
 					button.Add_Requeriment(requeriment)
-
-
-			# Levels
-#			for level in tree:
-#				print "level",level
-#
-#
-#				def Alternatives():
-#					button = None
-#					level_requeriments = {}
-#
-#					for name,objective in level.items():
-#						print "\t",name,objective
-#
-#						# Requeriments
-#						for requeriment in objective['requeriments']:
-#							for alternative in requeriment:
-#								pass
-#
-##							objective_id = objective['objective_id']
-##							if not level_requeriments.has_key(objective_id):
-##								level_requeriments[objective_id] = {}
-##
-##							# Requeriment with alternatives
-##							if objective['priority']:
-##
-##								# If requeriment is registered,
-##								# add alternative
-##								alternative = objective['alternative']
-##								if requeriment in level_requeriments[objective_id]:
-##									button.set_label(button.get_label()+"\n"
-##													+alternative)
-##
-##								# else create a new one
-##								else:
-##									# Put old requeriment button, if any
-##									if button:
-##										PutButton(button)
-##
-##									# Create new requeriment button
-##									button = Requeriment(alternative,
-##														 objective_id,
-##														 self)
-##
-##									# Add requeriment
-##									level_requeriments[objective_id][requeriment] = button
-##
-##								button.Add_Requeriment(checked_objectives[alternative])
-##
-###					print "level_requeriments",level_requeriments
-##
-##					if button:
-##						PutButton(button)
-##					return level_requeriments
-#				def Objectives(level_requeriments):
-#						if name not in checked_objectives:
-#
-#							# Get color of the requeriment
-#							def GetColor():
-#								# Blue - Satisfacted
-#								if self.controller.IsSatisfaced(name):
-#									show = self.config.Get('showExceededRequeriments')
-#									if(show):
-#										expiration = objective['expiration']
-#										if(show == 1	# 1 == Only not expired
-#										and expiration
-#										and expiration<datetime.now()):
-#											return None
-#										return color_parse(self.config.Get('color_satisfacted'))
-#									return None
-#
-#								# Green - Available
-#								elif self.controller.IsAvailable(name):
-#									return color_parse(self.config.Get('color_available'))
-#
-#								# Yellow - InProgress
-#								elif self.controller.IsInprocess(name):
-#									return color_parse(self.config.Get('color_inprocess'))
-#
-#								# Red - Unabordable
-#								return color_parse(self.config.Get('color_unabordable'))
-#
-#
-#							# Check if objective has to be printed and with what color
-#							color = GetColor()
-#							if color:
-#								# Create objective button
-#								button = Objective(objective, self,
-#													self.controller, color)
-#
-#								requeriment = objective['requeriment']
-#
-#								if requeriment != None:
-#									alternative = objective['alternative']
-#
-#									if objective['priority']:
-#										requeriment = level_requeriments[name][requeriment]
-#										button.Add_Requeriment(requeriment)
-#
-#									elif alternative in checked_objectives:
-#										requeriment = checked_objectives[alternative]
-#										button.Add_Requeriment(requeriment)
-#
-#								PutButton(button)
-#
-#								# Register objective button to prevent be printed twice
-#								checked_objectives[name] = button
-
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
@@ -752,8 +644,8 @@ class Main(Gtk):
 		dialog.destroy()
 
 
-	def IncreaseLineWidth(self, widget,event, objective_id=None):
-		self.__cursorObjective = objective_id
+	def IncreaseLineWidth(self, widget,event, objective=None):
+		self.__cursorObjective = objective
 		self.layout.queue_draw()
 
 
@@ -792,4 +684,3 @@ class Main(Gtk):
 	def on_Main_window_state_event(self, widget, event):
 		self.config.Set("maximized", bool(event.new_window_state & gtk.gdk.WINDOW_STATE_MAXIMIZED))
 		self.config.Store()
-
