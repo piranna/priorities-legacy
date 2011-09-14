@@ -8,10 +8,9 @@
 [2011-09-10] [BUG] Objetivos duplicados
 [2011-09-10] [BUG] Añadir nuevo requisito
 [2011-09-11] [BUG] Al añadir alternativa el valor por defecto es 0 (deberia ser 1)
-* Eliminar requerimientos y alternativas en AddObjective
-	* Cambiar diseño de interfaz
-* Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
-	* Eliminar "RecursiveRequeriments" e integrar en "GetTree"
+* Cambiar diseño de interfaz
+	* Eliminar requerimientos en AddObjective
+	* Eliminar alternativas en AddObjective
 
 1.0 RC3:
 ========
@@ -24,9 +23,16 @@
 [BUG] No sale menu contextual en el layout
 No mostrar el propio objetivo en la combobox de requerimientos
 Busqueda de requerimientos en combobox
+
 Usar bases de datos definidas por el usuario, no solo la oculta del usuario
 	Opcion para abrir una base de datos por defecto y/o la ultima abierta
-¿Usar funcion de backup de SQLite?
+	Cambiar extension de BBDD de .sqlite a .pri
+Distintos tipos de exportacion/importacion
+	Script (.sh.pri)
+		* Abstraer requerimientos al obtener de la base de datos (lista de alternativas)
+			* Eliminar "RecursiveRequeriments" e integrar en "GetTree"
+	SQL (.sql.pri)
+		¿Usar funcion de backup de SQLite?
 
 
 1.0:
