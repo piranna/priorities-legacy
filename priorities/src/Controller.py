@@ -360,13 +360,13 @@ class Controller:
 		req = None
 		for level in self.RecursiveRequeriments(name, True):
 			for objective in level:
-				if(obj and obj!=objective['name']):
+				if obj and obj!=objective['name']:
 					if req:
 						txt += ")"
 						req=None
 					txt += "]\n"
 					obj=None
-				if(req and req!=objective['requeriment']):
+				if req and req!=objective['requeriment']:
 					txt += ")"
 					req=None
 
