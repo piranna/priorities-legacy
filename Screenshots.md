@@ -1,0 +1,15 @@
+Priorities support to add an expiration date to an objective, and the appear in the first positions in its requeriment level.
+
+
+**With expiration (Yes, c1 is video inverted since is expired ;-) )...**
+
+![http://lh4.ggpht.com/_jgtvDGkZEkU/SrjZqAHHzuI/AAAAAAAAAMw/lWmoYhIY3gA/Priorities-expiration.png](http://lh4.ggpht.com/_jgtvDGkZEkU/SrjZqAHHzuI/AAAAAAAAAMw/lWmoYhIY3gA/Priorities-expiration.png)
+
+
+**...and without expiration**
+
+![http://lh5.ggpht.com/_jgtvDGkZEkU/SrjZqcZ7wTI/AAAAAAAAAM0/QS1Uopc--4A/s800/Pantallazo-No_expiration.png](http://lh5.ggpht.com/_jgtvDGkZEkU/SrjZqcZ7wTI/AAAAAAAAAM0/QS1Uopc--4A/s800/Pantallazo-No_expiration.png)
+
+
+
+---
