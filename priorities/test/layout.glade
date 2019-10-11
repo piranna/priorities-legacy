@@ -23,7 +23,7 @@
             <property name="hadjustment">adjMainH</property>
             <property name="vadjustment">adjMainV</property>
             <signal name="button_press_event" handler="ShowLayoutMenu"/>
-            <signal name="expose_event" handler="DrawRequerimentsArrows"/>
+            <signal name="expose_event" handler="DrawRequirementsArrows"/>
           </object>
         </child>
       </object>

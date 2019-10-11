@@ -16,7 +16,7 @@ from View.Gtk.AddObjective import AddObjective
 from View.Gtk.DeleteCascade import DeleteCascade
 from View.Gtk.Preferences import *
 
-from View.GraphRenderer import Objective,Requeriment
+from View.GraphRenderer import Objective,Requirement
 
 
 class Main(Gtk):
@@ -192,7 +192,7 @@ class Main(Gtk):
 		dialog.destroy()
 
 
-	def DrawRequerimentsArrows(self, widget,event):
+	def DrawRequirementsArrows(self, widget,event):
 		if self.__objectives:
 			self.__RenderGraph()
 
@@ -224,13 +224,13 @@ class Main(Gtk):
 					gc.set_line_attributes(2 if button.objective==self.__cursorObjective else 0,
 											LINE_SOLID,CAP_BUTT,JOIN_MITER)
 
-					for requeriment in button.requeriments:
+					for requirement in button.requirements:
 
 						# Arrow coordinates
 						x1=button.X() + button.allocation.width/2
 						y1=button.Y() + button.allocation.height/2
-						x2=requeriment.X() + requeriment.allocation.width/2
-						y2=requeriment.Y() + requeriment.allocation.height/2
+						x2=requirement.X() + requirement.allocation.width/2
+						y2=requirement.Y() + requirement.allocation.height/2
 
 						# Arrow line
 						bin_window.draw_line(gc, x1,y1, x2,y2)
@@ -321,18 +321,18 @@ class Main(Gtk):
 		y = 0
 
 		checked_objectives = {}
-		pending_requeriments = {}
+		pending_requirements = {}
 
 		for level in self.controller.GenTree(objective):
 
 			self.__needRenderGraph = True
 
 			level_objectives = []
-			level_requeriments = []
+			level_requirements = []
 
 			for name,objective in level.items():
 
-				# Get color of the requeriment
+				# Get color of the requirement
 				def GetColor():
 					# Blue - Satisfacted
 					if self.controller.IsSatisfaced(name):
@@ -366,8 +366,8 @@ class Main(Gtk):
 					btnObj = Objective(name, self, objective, color)
 					level_objectives.append(btnObj)
 
-					# Requeriments
-					for alternatives in objective['requeriments']:
+					# Requirements
+					for alternatives in objective['requirements']:
 						def AddAlternative(button, alternative):
 							"""Try to add an alternative to an objective
 
@@ -376,36 +376,36 @@ class Main(Gtk):
 							pending to be re-tried later
 							"""
 							try:
-								requeriment = checked_objectives[alternative]
+								requirement = checked_objectives[alternative]
 
 							except KeyError:
-								if button not in pending_requeriments:
-									pending_requeriments[button] = []
-								pending_requeriments[button].append(alternative)
+								if button not in pending_requirements:
+									pending_requirements[button] = []
+								pending_requirements[button].append(alternative)
 
 							else:
-								button.Add_Requeriment(requeriment)
+								button.Add_Requirement(requirement)
 
-						# Requeriment don't have alternative (shouldn't happen)
+						# Requirement don't have alternative (shouldn't happen)
 						if not alternatives:
 							pass
 
-						# Requeriment has only one alternative, link it directly
+						# Requirement has only one alternative, link it directly
 						elif len(alternatives) == 1:
 							AddAlternative(btnObj, alternatives.keys()[0])
 
-						# Requeriment has several alternatives, create it and
+						# Requirement has several alternatives, create it and
 						# link the alternatives
 						else:
-							btnReq = Requeriment(name, self)
+							btnReq = Requirement(name, self)
 							btnReq.set_label("\n".join(alternatives))
 
 							for alternative in alternatives:
 								AddAlternative(btnReq, alternative)
 
-							level_requeriments.append(btnReq)
+							level_requirements.append(btnReq)
 
-							btnObj.Add_Requeriment(btnReq)
+							btnObj.Add_Requirement(btnReq)
 
 					# Register objective button to prevent be printed twice
 					checked_objectives[name] = btnObj
@@ -419,9 +419,9 @@ class Main(Gtk):
 				self.__objectives[y].append(button)
 
 			# Create level alternatives
-			if level_requeriments:
-				for requeriment in level_requeriments:
-					PutButton(requeriment)
+			if level_requirements:
+				for requirement in level_requirements:
+					PutButton(requirement)
 				y += 1
 
 			# Create level objectives
@@ -429,16 +429,16 @@ class Main(Gtk):
 				PutButton(objective)
 			y += 1
 
-		for button,alternatives in pending_requeriments.items():
+		for button,alternatives in pending_requirements.items():
 			for alternative in alternatives:
 				try:
-					requeriment = checked_objectives[alternative]
+					requirement = checked_objectives[alternative]
 
 				except KeyError:	# Definitively, alternative was not on the
 					pass			# tree, I should raise error
 
 				else:
-					button.Add_Requeriment(requeriment)
+					button.Add_Requirement(requirement)
 
 		self.__ExportSaveSensitivity()
 		self.__ShowZoom()
@@ -485,7 +485,7 @@ class Main(Gtk):
 
 	def DelObjective(self, menuitem,name):
 		if(self.config.Get('deleteCascade')
-		and len(self.controller.DirectRequeriments(name))>1):
+		and len(self.controller.DirectRequirements(name))>1):
 			dialog = DeleteCascade(name)
 
 			if self.config.Get('confirmDeleteCascade'):
@@ -507,7 +507,7 @@ class Main(Gtk):
 										_("Do you want to delete the objetive ")+name+"?")
 			if dialog.run() == gtk.RESPONSE_YES:
 				self.controller.DeleteObjective(name,
-												self.config.Get('removeOrphanRequeriments'))
+												self.config.Get('removeOrphanRequirements'))
 				self.__CreateGraph()
 			dialog.destroy()
 

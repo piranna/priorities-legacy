@@ -3,28 +3,28 @@
 			SELECT name,quantity,expiration FROM objectives
 				WHERE objectives.id NOT IN
 				(
-					SELECT DISTINCT objective FROM requeriments
+					SELECT DISTINCT objective FROM requirements
 				)
 			''')
 
 
 	def ObjectivesWithDependences(self):
 		return self.connection.execute('''
-			SELECT name,quantity,expiration,COUNT(*) AS num_requeriments
-				FROM objectives,requeriments
-				WHERE objectives.id==requeriments.objective
+			SELECT name,quantity,expiration,COUNT(*) AS num_requirements
+				FROM objectives,requirements
+				WHERE objectives.id==requirements.objective
 				GROUP BY name
-				ORDER BY num_requeriments
+				ORDER BY num_requirements
 			''')
 
 
 	def ObjectivesWithDependencesNoSatisfacted(self):
 		return self.connection.execute('''
-			SELECT name FROM objectives,requeriments
-				WHERE objectives.id==requeriments.objective
+			SELECT name FROM objectives,requirements
+				WHERE objectives.id==requirements.objective
 				AND COUNT(
-					SELECT * FROM objectives,requeriments
-						WHERE objectives.id==requeriments.alternative
+					SELECT * FROM objectives,requirements
+						WHERE objectives.id==requirements.alternative
 				)==0
 			''')
 
@@ -33,15 +33,15 @@
 		return self.connection.execute('''
 			SELECT objectives.id AS objective_id,name,objectives.quantity,expiration
 			FROM objectives
-				LEFT OUTER JOIN requeriments
-					ON objectives.id=requeriments.objective
+				LEFT OUTER JOIN requirements
+					ON objectives.id=requirements.objective
 				LEFT OUTER JOIN
 				(
 					SELECT id,quantity FROM objectives
 				) AS objectives2
-					ON requeriments.alternative==objectives2.id
-			WHERE requeriments.quantity<=objectives2.quantity
-				OR requeriments.quantity IS NULL
+					ON requirements.alternative==objectives2.id
+			WHERE requirements.quantity<=objectives2.quantity
+				OR requirements.quantity IS NULL
 			GROUP BY objective_id
 			ORDER BY expiration,COUNT(*)DESC,objectives.quantity
 			''')
@@ -51,14 +51,14 @@
 		return self.connection.execute('''
 			SELECT objectives.id AS objective_id,name,objectives.quantity,expiration
 			FROM objectives
-				LEFT OUTER JOIN requeriments
-					ON objectives.id=requeriments.objective
+				LEFT OUTER JOIN requirements
+					ON objectives.id=requirements.objective
 				LEFT OUTER JOIN
 				(
 					SELECT id,quantity FROM objectives
 				) AS objectives2
-					ON requeriments.alternative==objectives2.id
-			WHERE requeriments.quantity>objectives2.quantity
+					ON requirements.alternative==objectives2.id
+			WHERE requirements.quantity>objectives2.quantity
 			GROUP BY objective_id
 			ORDER BY expiration,COUNT(*)DESC
 			''')

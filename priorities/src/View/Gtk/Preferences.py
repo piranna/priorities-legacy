@@ -40,7 +40,7 @@ class Preferences(Gtk):
 
 		self.builder.get_object("cbShowExceededDependencies").set_active(self.config.Get('showExceededDependencies'))
 		self.builder.get_object("sbExpirationWarning").set_value(self.config.Get('expirationWarning'))
-		self.builder.get_object("chkRemoveOrphanRequeriments").set_active(self.config.Get('removeOrphanRequeriments'))
+		self.builder.get_object("chkRemoveOrphanRequirements").set_active(self.config.Get('removeOrphanRequirements'))
 
 		self.chkConfirmDeleteCascade = self.builder.get_object("chkConfirmDeleteCascade")
 		self.chkConfirmDeleteCascade.set_active(self.config.Get('confirmDeleteCascade'))
@@ -111,9 +111,9 @@ class Preferences(Gtk):
 
 	# Objectives
 
-	def on_chkRemoveOrphanRequeriments_toggled(self, widget):
+	def on_chkRemoveOrphanRequirements_toggled(self, widget):
 		"Set to remove orphans"
-		self.config.Set("removeOrphanRequeriments", widget.get_active())
+		self.config.Set("removeOrphanRequirements", widget.get_active())
 
 
 	def on_chkDeleteCascade_toggled(self, widget):
@@ -127,12 +127,12 @@ class Preferences(Gtk):
 		self.config.Set("confirmDeleteCascade", widget.get_active())
 
 
-	def on_cbShowExceededRequeriments_changed(self, widget):
+	def on_cbShowExceededRequirements_changed(self, widget):
 		"""
-		Set if exceeded requeriments should be showed
+		Set if exceeded requirements should be showed
 		and redraw the full objectives tree
 		"""
-		self.config.Set("showExceededRequeriments", widget.get_active())
+		self.config.Set("showExceededRequirements", widget.get_active())
 		self.redraw = "tree"
 
 

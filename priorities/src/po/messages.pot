@@ -191,7 +191,7 @@ msgid "Delete in cascade"
 msgstr ""
 
 #: View_Gtk.glade.h:14
-msgid "Delete orphan requeriments"
+msgid "Delete orphan requirements"
 msgstr ""
 
 #: View_Gtk.glade.h:15
@@ -247,7 +247,7 @@ msgid "Remove"
 msgstr ""
 
 #: View_Gtk.glade.h:28
-msgid "Requeriments"
+msgid "Requirements"
 msgstr ""
 
 #: View_Gtk.glade.h:29
@@ -263,7 +263,7 @@ msgid "Show arrow heads"
 msgstr ""
 
 #: View_Gtk.glade.h:32
-msgid "Show satisfacted requeriments"
+msgid "Show satisfacted requirements"
 msgstr ""
 
 #: View_Gtk.glade.h:33

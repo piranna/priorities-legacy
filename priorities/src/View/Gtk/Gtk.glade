@@ -298,7 +298,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Requeriments</property>
+                    <property name="label" translatable="yes">Requirements</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -310,18 +310,18 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hadjustment">adjRequerimentH</property>
-                    <property name="vadjustment">adjRequerimentV</property>
+                    <property name="hadjustment">adjRequirementH</property>
+                    <property name="vadjustment">adjRequirementV</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <child>
                       <object class="GtkViewport" id="viewport1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="resize_mode">queue</property>
-                        <property name="hadjustment">adjRequerimentH</property>
-                        <property name="vadjustment">adjRequerimentV</property>
+                        <property name="hadjustment">adjRequirementH</property>
+                        <property name="vadjustment">adjRequirementV</property>
                         <child>
-                          <object class="GtkVBox" id="vbRequeriments">
+                          <object class="GtkVBox" id="vbRequirements">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
@@ -339,14 +339,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnAdd_Requeriment">
+                  <object class="GtkButton" id="btnAdd_Requirement">
                     <property name="label">gtk-add</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_btnAdd_Requeriment_clicked" swapped="no"/>
+                    <signal name="clicked" handler="on_btnAdd_Requirement_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -878,7 +878,7 @@
                 <property name="hadjustment">adjMainH</property>
                 <property name="vadjustment">adjMainV</property>
                 <signal name="button-press-event" handler="ShowLayoutMenu" swapped="no"/>
-                <signal name="expose-event" handler="DrawRequerimentsArrows" swapped="no"/>
+                <signal name="expose-event" handler="DrawRequirementsArrows" swapped="no"/>
               </object>
             </child>
           </object>
@@ -1246,7 +1246,7 @@
                       <object class="GtkLabel" id="label6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Show satisfacted requeriments</property>
+                        <property name="label" translatable="yes">Show satisfacted requirements</property>
                       </object>
                     </child>
                     <child>
@@ -1308,14 +1308,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="chkRemoveOrphanRequeriments">
-                    <property name="label" translatable="yes">Delete orphan requeriments</property>
+                  <object class="GtkCheckButton" id="chkRemoveOrphanRequirements">
+                    <property name="label" translatable="yes">Delete orphan requirements</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_chkRemoveOrphanRequeriments_toggled" swapped="no"/>
+                    <signal name="toggled" handler="on_chkRemoveOrphanRequirements_toggled" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1419,13 +1419,13 @@
     <property name="upper">59</property>
     <property name="step_increment">1</property>
   </object>
-  <object class="GtkAdjustment" id="adjRequerimentH">
+  <object class="GtkAdjustment" id="adjRequirementH">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
     <property name="page_size">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjRequerimentV">
+  <object class="GtkAdjustment" id="adjRequirementV">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -1457,7 +1457,7 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="lstRequeriment">
+  <object class="GtkListStore" id="lstRequirement">
     <columns>
       <!-- column-name objective_id -->
       <column type="gint"/>
@@ -1573,5 +1573,5 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <object class="GtkTextBuffer" id="txtbufRequeriments"/>
+  <object class="GtkTextBuffer" id="txtbufRequirements"/>
 </interface>

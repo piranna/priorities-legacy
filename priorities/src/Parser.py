@@ -58,13 +58,13 @@ class Parser(cmd.Cmd):
 		objective = line[0].strip()
 		quantity = 0
 		expiration = None
-		requeriments = []
+		requirements = []
 
 		if len(line)>1:
-			# Requeriments
+			# Requirements
 			line = line[1].split('[',1)
 			if len(line)>1:
-				requeriments = eval('['+line[1].strip())
+				requirements = eval('['+line[1].strip())
 
 			# Options
 			for option in line[0].split():
@@ -73,7 +73,7 @@ class Parser(cmd.Cmd):
 				elif option[:2]=="-e":
 					expiration=option[2:]
 
-		self.__controller.AddObjective(objective, quantity, expiration, requeriments)
+		self.__controller.AddObjective(objective, quantity, expiration, requirements)
 
 
 	def do_EOF(self, line):
