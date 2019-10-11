@@ -9,7 +9,7 @@ class Controller:
 
 
 	def RecursiveRequeriments(self, name=None, export=False):
-		"""Get all the requeriments tree of an objective
+		"""Get all the requirements tree of an objective
 
 		If name is None defined return the full objectives tree
 		"""
