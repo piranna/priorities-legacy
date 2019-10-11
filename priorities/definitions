@@ -8,7 +8,7 @@ No tiene dependientes y su cantidad es mayor que 0 (¿cantidad necesaria?)
 dependents = self.__controller.DirectDependents(objective_id)
 quantity = self.__controller.GetObjective_byId(objective_id)['quantity']
 if dependents:
-	if quantity<dependents.fetchone()['min_requeriment_quantity']:
+	if quantity<dependents.fetchone()['min_requirement_quantity']:
 		for dependent in dependents:
 			if not IsSatisfaced(dependent['dependent_id']):
 				return False
@@ -21,15 +21,15 @@ Available:
 Todos sus requisitos estan satisfechos o no tiene ninguno
 
 req_alt = {}
-for requeriment in self.__controller.DirectDependencies(objective_id):
-	if requeriment['priority']:
-		if not req_alt[requeriment['requeriment']]:
-			req_alt[requeriment['requeriment']] = IsSatisfacted(requeriment['alternative'])
+for requirement in self.__controller.DirectDependencies(objective_id):
+	if requirement['priority']:
+		if not req_alt[requirement['requirement']]:
+			req_alt[requirement['requirement']] = IsSatisfacted(requirement['alternative'])
 	else:
-		if not IsSatisfacted(requeriment['alternative']):
+		if not IsSatisfacted(requirement['alternative']):
 			return False
-for requeriment in req_alt:
-	if not requeriment:
+for requirement in req_alt:
+	if not requirement:
 		return False
 return True
 
@@ -38,8 +38,8 @@ In Progress:
 ============
 Al menos uno de sus requisitos esta satisfecho
 
-for requeriment in self.__controller.DirectDependencies(objective_id):
-	if IsSatisfacted(requeriment['alternative']):
+for requirement in self.__controller.DirectDependencies(objective_id):
+	if IsSatisfacted(requirement['alternative']):
 		return True
 return False
 

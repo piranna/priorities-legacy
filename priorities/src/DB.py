@@ -27,7 +27,7 @@ class DB:
 				PRIMARY KEY(name)
 			);
 
-			CREATE TABLE IF NOT EXISTS requeriments
+			CREATE TABLE IF NOT EXISTS requirements
 			(
 				objective VARCHAR(32) NOT NULL,
 				id        INTEGER     NOT NULL,
@@ -43,20 +43,20 @@ class DB:
 			CREATE TABLE IF NOT EXISTS alternatives
 			(
 				objective   VARCHAR(32) NOT NULL,
-				requeriment INTEGER     NOT NULL,
+				requirement INTEGER     NOT NULL,
 				priority    INTEGER     NOT NULL DEFAULT 0,
 				alternative VARCHAR(32) NOT NULL,
 				quantity    FLOAT       NOT NULL DEFAULT 1,
 
-				FOREIGN KEY(objective,requeriment)
-					REFERENCES requeriments(objective,id)
+				FOREIGN KEY(objective,requirement)
+					REFERENCES requirements(objective,id)
 					ON UPDATE CASCADE ON DELETE CASCADE,
 
 				FOREIGN KEY(alternative)
 					REFERENCES objectives(name)
 					ON UPDATE CASCADE ON DELETE CASCADE,
 
-				PRIMARY KEY(objective,requeriment,priority)
+				PRIMARY KEY(objective,requirement,priority)
 			);
 			''')
 
@@ -75,14 +75,14 @@ class DB:
 														  VALUES(:name,:quantity,:expiration)""",
 										self.__connection.execute("SELECT * FROM objectives"))
 
-		# requeriments
-		backup.__connection.executemany("""INSERT INTO requeriments(objective, requeriment, optional)
-															VALUES(:objective,:requeriment,:optional)""",
-										self.__connection.execute("SELECT * FROM requeriments"))
+		# requirements
+		backup.__connection.executemany("""INSERT INTO requirements(objective, requirement, optional)
+															VALUES(:objective,:requirement,:optional)""",
+										self.__connection.execute("SELECT * FROM requirements"))
 
 		# alternatives
-		backup.__connection.executemany("""INSERT INTO alternatives(objective, requeriment, priority, alternative, quantity)
-															VALUES(:objective,:requeriment,:priority,:alternative,:quantity)""",
+		backup.__connection.executemany("""INSERT INTO alternatives(objective, requirement, priority, alternative, quantity)
+															VALUES(:objective,:requirement,:priority,:alternative,:quantity)""",
 										self.__connection.execute("SELECT * FROM alternatives"))
 
 
@@ -116,21 +116,21 @@ class DB:
 													''')]
 
 
-	def Requeriments(self, objective=None, requeriment=None, export=False):
+	def Requirements(self, objective=None, requirement=None, export=False):
 		sql = '''
 			SELECT objectives.name AS name,objectives.quantity AS objective_quantity,objectives.expiration AS expiration,
-					requeriments.id AS requeriment,
+					requirements.id AS requirement,
 					priority,alternative,alternatives.quantity AS alternative_quantity
 			'''
 		if export:
 			sql += ",objectives2.name AS alternative_name"
 		sql += '''
 			FROM objectives
-				LEFT OUTER JOIN requeriments
-					ON objectives.name = requeriments.objective
+				LEFT OUTER JOIN requirements
+					ON objectives.name = requirements.objective
 				LEFT OUTER JOIN alternatives
-					ON  requeriments.objective = alternatives.objective
-					AND requeriments.id        = alternatives.requeriment
+					ON  requirements.objective = alternatives.objective
+					AND requirements.id        = alternatives.requirement
 			'''
 		if export:
 			sql += '''
@@ -140,28 +140,28 @@ class DB:
 
 		if objective:
 			sql += "WHERE objectives.name==:objective"
-			if requeriment:
-				sql += "AND requeriment==:requeriment"
+			if requirement:
+				sql += "AND requirement==:requirement"
 
 		sql += " ORDER BY "
 #		if not export:
 #			sql += """
 #				expiration ASC,
-#				(SELECT COUNT(*) FROM alternatives WHERE objective==name) ASC,		-- Requeriments
+#				(SELECT COUNT(*) FROM alternatives WHERE objective==name) ASC,		-- Requirements
 #				(SELECT COUNT(*) FROM alternatives WHERE alternative==name) DESC,	-- Dependencies
 #				alternative_quantity ASC,
 #				"""
-		sql += "name,requeriment,priority"
+		sql += "name,requirement,priority"
 
 #		print sql
 
 		return self.__connection.execute(sql,
 										{'objective':objective,
-										 'requeriment':requeriment}).fetchall()
+										 'requirement':requirement}).fetchall()
 
 
 	def Dependents(self, objective):
-		"Get the dependents of a requeriment"
+		"Get the dependents of a requirement"
 		return self.__connection.execute('''
 			SELECT * FROM alternatives
 			WHERE alternative==:objective
@@ -171,7 +171,7 @@ class DB:
 
 
 	def MinQuantity(self,objective):
-		"Get the min quantity needed by a objective to satisface a requeriment"
+		"Get the min quantity needed by a objective to satisface a requirement"
 		return self.__connection.execute('''
 			SELECT MIN(quantity) AS min_quantity FROM alternatives
 			WHERE alternative==:objective
@@ -209,23 +209,23 @@ class DB:
 				''',
 				(expiration, name))
 
-	def AddRequeriment(self, objective, id=None, optional=None):
+	def AddRequirement(self, objective, id=None, optional=None):
 		# Create objective (if needed)
 		self.AddObjective(objective)
 
-		# Create new requeriment id if no one was expecified
+		# Create new requirement id if no one was expecified
 		if id == None:
 			id = self.__connection.execute('''
 				SELECT COALESCE(MAX(id)+1,0) AS id
-				FROM requeriments
+				FROM requirements
 				WHERE objective==:objective
 				ORDER BY id
 				''',
 				{'objective':objective}).fetchone()['id']
 
-		# Create new requeriment
+		# Create new requirement
 		self.__connection.execute('''
-			INSERT OR IGNORE INTO requeriments(objective, id)
+			INSERT OR IGNORE INTO requirements(objective, id)
 									   VALUES(:objective,:id)
 			''',
 			{'objective':objective, 'id':id})
@@ -233,56 +233,56 @@ class DB:
 		# Set optional
 		if optional!=None:
 			self.__connection.execute('''
-				UPDATE requeriments
+				UPDATE requirements
 				SET optional=:optional
 				WHERE objective==:objective
 				AND id==:id
 				''',
 				{'objective':objective, 'id':id, 'optional':optional})
 
-	def AddAlternative(self, objective, requeriment, priority,
+	def AddAlternative(self, objective, requirement, priority,
 							 alternative, quantity=1):
 		# Create alternative (if needed)
 		self.AddObjective(alternative)
 
-		# Add requeriment to the objective
-		self.AddRequeriment(objective, requeriment)
+		# Add requirement to the objective
+		self.AddRequirement(objective, requirement)
 
-		# Add alternative to the requeriment
+		# Add alternative to the requirement
 		self.__connection.execute('''
-			INSERT INTO alternatives(objective,requeriment,priority,alternative,quantity)
+			INSERT INTO alternatives(objective,requirement,priority,alternative,quantity)
 				VALUES(?,?,?,?,?)
 			''',
-			(objective,requeriment,priority,alternative,quantity))
+			(objective,requirement,priority,alternative,quantity))
 
 
 	# Deleters
 
 	def DelObjective(self, name, delete_orphans = False):
-		# Get objective requeriments if we want to delete orphan ones
+		# Get objective requirements if we want to delete orphan ones
 		if delete_orphans:
-			requeriments = self.Requeriments(name)
+			requirements = self.Requirements(name)
 
 		# Re-adjust priorities
 		checked = []
 		for dependent in self.Dependents(name):
 
-			# If requeriment has alternatives
+			# If requirement has alternatives
 			# update its priority
 			if dependent['priority']:
 				dependent['count'] = 0
 
-				# If requeriment has not been checked
+				# If requirement has not been checked
 				# get it's number of alternatives
 				if dependent['objective'] not in checked:
 					checked.append(dependent['objective'])
 
 					# Get the number of alternatives for a objective
-					# and requeriment specifics
+					# and requirement specifics
 					dependent['count'] = self.__connection.execute('''
 						SELECT COUNT(*) AS count FROM alternatives
 						WHERE objective  ==:objective
-						  AND requeriment==:requeriment
+						  AND requirement==:requirement
 						''',
 						dependent).fetchone()['count']
 
@@ -302,7 +302,7 @@ class DB:
 								0
 						END
 					WHERE objective  ==:objective
-					  AND requeriment==:requeriment
+					  AND requirement==:requirement
 					''',
 					dependent)
 
@@ -314,32 +314,32 @@ class DB:
 			''',
 			(name,))
 
-		# Delete orphan requeriments (if any)
+		# Delete orphan requirements (if any)
 		if delete_orphans:
-			self.DelOrphans(requeriments)
+			self.DelOrphans(requirements)
 
 
-	def DelRequeriments(self, objective):
+	def DelRequirements(self, objective):
 		self.__connection.execute('''
-			DELETE FROM requeriments
+			DELETE FROM requirements
 			WHERE objective==?
 			''',
 			(objective,))
 
 
-	def DelOrphans(self, requeriments):
+	def DelOrphans(self, requirements):
 		"""Delete the objectives without dependents
-		defined in the `requeriments` list
+		defined in the `requirements` list
 		"""
-		for requeriment in requeriments:
-			for alternative in requeriment:
-				# If requeriment doesn't have a dependent,
+		for requirement in requirements:
+			for alternative in requirement:
+				# If requirement doesn't have a dependent,
 				# delete the orphan
 				if not self.Dependents(alternative):
 					self.DelObjective(alternative, True)
-	#			if(self.GetObjective(requeriment['alternative'])
-	#			and not self.Dependents(requeriment['alternative'])):
-	#				self.DelObjective(requeriment['alternative'], True)
+	#			if(self.GetObjective(requirement['alternative'])
+	#			and not self.Dependents(requirement['alternative'])):
+	#				self.DelObjective(requirement['alternative'], True)
 
 
 	def UpdateName(self, old, new):

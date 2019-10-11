@@ -43,7 +43,7 @@ class Config:
 
 		self.__config['showExceededDependencies']	= 1
 		self.__config['expirationWarning']			= 1
-		self.__config['removeOrphanRequeriments']	= True
+		self.__config['removeOrphanRequirements']	= True
 		self.__config['deleteCascade']				= True
 		self.__config['confirmDeleteCascade']		= True
 
@@ -77,7 +77,7 @@ class Config:
 			self.__config['showSharp']					= self.__config['showSharp']=="True"
 			self.__config['showArrowHeads']				= self.__config['showArrowHeads']=="True"
 			self.__config['showLayoutBorders']			= self.__config['showLayoutBorders']=="True"
-			self.__config['removeOrphanRequeriments']	= self.__config['removeOrphanRequeriments']=="True"
+			self.__config['removeOrphanRequirements']	= self.__config['removeOrphanRequirements']=="True"
 			self.__config['deleteCascade']				= self.__config['deleteCascade']=="True"
 			self.__config['confirmDeleteCascade']		= self.__config['confirmDeleteCascade']=="True"
 			self.__config['maximized']					= self.__config['maximized']=="True"

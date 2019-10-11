@@ -12,12 +12,12 @@ class TextmodeParser(Parser.Parser):
 
 	# Actions
 	def do_ShowTree(self, line):
-		for level in self.__controller.RecursiveRequeriments(line):
+		for level in self.__controller.RecursiveRequirements(line):
 			level_objectives = []
 
 			# Alternatives
 			for objective in level:
-				if objective['requeriment']:
+				if objective['requirement']:
 					if objective['priority']:
 						print "\talternative",objective['alternative']
 

@@ -4,7 +4,7 @@ import gtk
 from datetime import datetime,timedelta
 
 
-class Requeriment(gtk.Button):
+class Requirement(gtk.Button):
 	margin_x = 20
 
 	def __init__(self, objective, parent):
@@ -18,7 +18,7 @@ class Requeriment(gtk.Button):
 		self.connect('leave_notify_event',parent.IncreaseLineWidth)
 
 		self.prev = None
-		self.requeriments = []
+		self.requirements = []
 		self.__dependents = []
 
 		self.__parent = parent
@@ -26,9 +26,9 @@ class Requeriment(gtk.Button):
 		self.__x = 0
 		self.__y = 0
 
-	def Add_Requeriment(self, requeriment):
-		self.requeriments.append(requeriment)
-		requeriment.__dependents.append(self)
+	def Add_Requirement(self, requirement):
+		self.requirements.append(requirement)
+		requirement.__dependents.append(self)
 
 	def Adjust(self, positions, y):
 #		def Get_Middle(array):
@@ -49,7 +49,7 @@ class Requeriment(gtk.Button):
 		x = 0
 		div = 0
 
-#		x_req = Get_Middle(self.requeriments)
+#		x_req = Get_Middle(self.requirements)
 #		if x_req:
 #			x += x_req
 #			div += 1
@@ -62,21 +62,21 @@ class Requeriment(gtk.Button):
 		if div:
 			x = x/div - self.allocation.width/2
 
-		# Prevent overlapping with previous requeriment at the same level
+		# Prevent overlapping with previous requirement at the same level
 		if(self.prev
 		and x < positions[self.prev][0]+self.prev.allocation.width):
 			x = positions[self.prev][0]+self.prev.allocation.width
 
 			# Increase distance between "groups"
-			if(self.prev.requeriments != self.requeriments
+			if(self.prev.requirements != self.requirements
 			or self.prev.__dependents != self.__dependents):
 				x += 20
 
-		# Ensure all requeriments are showed in layout
+		# Ensure all requirements are showed in layout
 		if  x < 0:
 			x = 0
 
-		# Update requeriment position
+		# Update requirement position
 		if self.__x != x or self.__y != y:
 			self.__x = x
 			self.__y = y
@@ -94,12 +94,12 @@ class Requeriment(gtk.Button):
 
 
 #import gobject
-#gobject.type_register(Requeriment)
+#gobject.type_register(Requirement)
 
 
-class Objective(Requeriment):
+class Objective(Requirement):
 	def __init__(self, name, parent, objective, color):
-		Requeriment.__init__(self, name, parent)
+		Requirement.__init__(self, name, parent)
 
 #		self.connect('button-press-event',parent.__on_objective_clicked)
 

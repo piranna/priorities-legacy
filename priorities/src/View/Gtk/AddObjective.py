@@ -31,11 +31,11 @@ class AddObjective(Gtk):
 		self.sbMinute = self.builder.get_object("sbMinute")
 		self.sbSecond = self.builder.get_object("sbSecond")
 
-		# Requeriments
-		self.requeriments = RequerimentList(self.builder.get_object("vbRequeriments"))
-		self.__btnDel = self.builder.get_object("btnDel_Requeriment")
+		# Requirements
+		self.requirements = RequirementList(self.builder.get_object("vbRequirements"))
+		self.__btnDel = self.builder.get_object("btnDel_Requirement")
 
-		self.oldRequeriments = []
+		self.oldRequirements = []
 
 		# Set data
 		if objective:
@@ -68,11 +68,11 @@ class AddObjective(Gtk):
 					self.sbMinute.set_value(self.expiration.minute)
 					self.sbSecond.set_value(self.expiration.second)
 
-				# Requeriments
-				self.oldRequeriments = self.controller.Requeriments(self.oldName)
+				# Requirements
+				self.oldRequirements = self.controller.Requirements(self.oldName)
 
-				self.requeriments.Fill(self.controller.ObjectivesNames(),
-									   self.oldRequeriments)
+				self.requirements.Fill(self.controller.ObjectivesNames(),
+									   self.oldRequirements)
 
 		# Old data
 		self.oldObjective = self.txtObjective.get_text()
@@ -105,16 +105,16 @@ class AddObjective(Gtk):
 			self.controller.AddObjective(name, self.spnQuantity.get_value(),
 										self.expiration)
 
-			# Requeriments and alternatives
-			requeriments = self.requeriments.GetData()
+			# Requirements and alternatives
+			requirements = self.requirements.GetData()
 
-			if requeriments != self.oldRequeriments:
+			if requirements != self.oldRequirements:
 				orphans = None
 
-				if self.config.Get('removeOrphanRequeriments'):
-					orphans = self.controller.Requeriments(name)
+				if self.config.Get('removeOrphanRequirements'):
+					orphans = self.controller.Requirements(name)
 
-				self.controller.SetRequeriments(name, requeriments)
+				self.controller.SetRequirements(name, requirements)
 				self.controller.DelOrphans(orphans)
 
 			return True
@@ -125,7 +125,7 @@ class AddObjective(Gtk):
 
 			# Delete in cascade
 			if(self.config.Get('deleteCascade')
-			and len(self.controller.Requeriments(self.__objective)) > 1):
+			and len(self.controller.Requirements(self.__objective)) > 1):
 				dialog = DeleteCascade(self.__objective)
 
 				dialog.window.set_transient_for(self.window)
@@ -195,23 +195,23 @@ class AddObjective(Gtk):
 		self.vbCalendarHour.set_sensitive(widget.get_active())
 
 
-	def on_btnAdd_Requeriment_clicked(self, widget):
+	def on_btnAdd_Requirement_clicked(self, widget):
 		objectives = self.controller.ObjectivesNames()
 
-		requeriment = Requeriment(objectives, True)
-#		requeriment.id = self.requeriments.GetMaxID() + 1
-		self.requeriments.elem.pack_start(requeriment, False)
+		requirement = Requirement(objectives, True)
+#		requirement.id = self.requirements.GetMaxID() + 1
+		self.requirements.elem.pack_start(requirement, False)
 
 
-class RequerimentList:
+class RequirementList:
 	def __init__(self, elem):
 		self.elem = elem
 
 	def GetData(self):
 		result = []
 
-		def ForEach(requeriment):
-			data = requeriment.GetData()
+		def ForEach(requirement):
+			data = requirement.GetData()
 			if data:
 				result.append(data)
 
@@ -219,24 +219,24 @@ class RequerimentList:
 
 		return result
 
-	def Fill(self, objectives, requeriments):
-		for requeriment in requeriments:
-			req = Requeriment(objectives, False)
+	def Fill(self, objectives, requirements):
+		for requirement in requirements:
+			req = Requirement(objectives, False)
 			self.elem.pack_start(req, False)
 
-			for alternative in requeriment.items():
+			for alternative in requirement.items():
 				req.Add(alternative)
 
 #	def GetMaxID(self):
-#		"""Get the bigger requeriment ID inside the requeriment list
+#		"""Get the bigger requirement ID inside the requirement list
 #
-#		If requeriment list is empty, return -1
+#		If requirement list is empty, return -1
 #		"""
 #		result = -1
 #
-#		for requeriment in self.elem.get_children():
-#			if  result < requeriment.id:
-#				result = requeriment.id
+#		for requirement in self.elem.get_children():
+#			if  result < requirement.id:
+#				result = requirement.id
 #
 #		return result
 
@@ -246,7 +246,7 @@ from gtk import Adjustment, Button, CellRendererCombo, CellRendererSpin
 from gtk import Expander, HBox, HButtonBox, Image, Label, ListStore, TreeView
 from gtk import TreeViewColumn, VBox
 
-class Requeriment(Expander):
+class Requirement(Expander):
 
 	def __init__(self, objectives, new):
 		Expander.__init__(self)
@@ -319,17 +319,17 @@ class Requeriment(Expander):
 #		button.set_use_stock(True)
 #		hButtonBox.pack_start(button)
 
-		# Expand the requeriment and add an alternative if it's new
+		# Expand the requirement and add an alternative if it's new
 		if new:
 			self.set_expanded(True)
 			self.model.append((None,1.0))
 
-		# Show requeriment
+		# Show requirement
 		self.show_all()
 
-		# Delete requeriment button (default is hidden)
+		# Delete requirement button (default is hidden)
 		self.imgRemove = Image()
-		self.imgRemove.connect("button-press-event",self.onDelRequeriment)
+		self.imgRemove.connect("button-press-event",self.onDelRequirement)
 		self.imgRemove.set_from_stock("gtk-cancel", ICON_SIZE_MENU)
 		hBox.pack_start(self.imgRemove)
 
@@ -363,7 +363,7 @@ class Requeriment(Expander):
 		return result
 
 
-	def onDelRequeriment(self, widget):
+	def onDelRequirement(self, widget):
 		self.get_parent().remove(self)
 
 

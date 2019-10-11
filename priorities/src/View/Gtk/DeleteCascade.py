@@ -43,11 +43,11 @@ class DeleteCascade(Gtk):
 		if self.__model.get_value(iterator,2):
 			if not self.__model.get_value(iterator,3):
 				self.controller.DeleteObjective(self.__model.get_value(iterator,0),
-												self.config.Get('removeOrphanRequeriments'))
+												self.config.Get('removeOrphanRequirements'))
 
 			deleted += 1
 
-		# Delete objective marqued requeriments, if any
+		# Delete objective marqued requirements, if any
 		iterator = self.__model.iter_children(iterator)
 		while iterator:
 			deleted += self.DeleteObjective_recursive(iterator)
@@ -92,10 +92,10 @@ class DeleteCascade(Gtk):
 				iterator = self.__model.iter_next(iterator)
 
 		def Preserve(iterator, objective_id):
-			# Preserve requeriment
+			# Preserve requirement
 			self.__model.set_value(iterator,2, False)
 
-			# Preserve requeriment requeriments
+			# Preserve requirement requirements
 			iterator = self.__model.iter_children(iterator)
 			while iterator:
 				Preserve(iterator, self.__model.get_value(iterator,0))

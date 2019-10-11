@@ -20,7 +20,7 @@ class Test:
 				('Carnet',1)
 			])
 		self.controller.model.connection.executemany('''
-			INSERT INTO requeriments(objective)
+			INSERT INTO requirements(objective)
 				VALUES(?)
 			''',
 			[
@@ -31,7 +31,7 @@ class Test:
 				(6,)
 			])
 		self.controller.model.connection.executemany('''
-			INSERT INTO alternatives(requeriment,priority,alternative,quantity)
+			INSERT INTO alternatives(requirement,priority,alternative,quantity)
 				VALUES(?,?,?,?)
 			''',
 			[
@@ -73,26 +73,26 @@ class Test:
 
 		print ""
 
-		print "DirectRequeriments"
-		for objective in self.controller.DirectRequeriments():
+		print "DirectRequirements"
+		for objective in self.controller.DirectRequirements():
 			print objective
 
 		print ""
 
-		print "DirectRequeriments Coche"
-		for objective in self.controller.DirectRequeriments(7):
+		print "DirectRequirements Coche"
+		for objective in self.controller.DirectRequirements(7):
 			print objective
 
 		print ""
 
-		print "RecursiveRequeriments Coche"
-		for objective in self.controller.RecursiveRequeriments(7):
+		print "RecursiveRequirements Coche"
+		for objective in self.controller.RecursiveRequirements(7):
 			print objective
 
 		print ""
 
-		print "RecursiveRequeriments"
-		for objective in self.controller.RecursiveRequeriments():
+		print "RecursiveRequirements"
+		for objective in self.controller.RecursiveRequirements():
 			print objective
 
 		print ""
@@ -109,7 +109,7 @@ class Test:
 #
 #		print ""
 
-		for level in self.controller.RecursiveRequeriments():
+		for level in self.controller.RecursiveRequirements():
 			level_objectives = []
 			for objective in level:
 				if objective['alternative']:
